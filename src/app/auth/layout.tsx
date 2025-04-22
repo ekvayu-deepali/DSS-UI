@@ -1,17 +1,22 @@
-import React from "react";
-import { Metadata } from "next/types";
+"use client";
 
-export async function generateMetadata(): Promise<Metadata> {
-  return {
-    title: "Authentication | Phishing Admin",
-    description: "Login to access the Phishing Admin Dashboard",
-  };
-}
+import { CardContent } from "@mui/material";
 
-export default function LoginLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  return <main>{children}</main>;
-}
+import { AuthCard, AuthContainer, AuthTitle } from "./layout.style";
+
+const AuthForm = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <AuthContainer>
+      <AuthCard>
+        <AuthTitle variant="h5">
+          Log in to your account
+        </AuthTitle>
+        <CardContent>
+          {children}
+        </CardContent>
+      </AuthCard>
+    </AuthContainer>
+  );
+};
+
+export default AuthForm;
