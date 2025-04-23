@@ -2,9 +2,32 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Box, Button, Paper, Typography, Input, Stack } from "@mui/material";
+import { 
+  Box, 
+  Button, 
+  Paper, 
+  Typography, 
+  TextField, 
+  Stack, 
+  Checkbox, 
+  FormControlLabel, 
+  FormControl, 
+  InputLabel, 
+  Select, 
+  MenuItem, 
+  Grid, 
+  Divider,
+  Chip,
+  Radio,
+  RadioGroup
+} from "@mui/material";
+import { DateTimePicker } from "@mui/x-date-pickers/DateTimePicker";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import { DateTime } from "luxon";
 import UploadIcon from "@mui/icons-material/Upload";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import AttachFileIcon from "@mui/icons-material/AttachFile";
 
 import { PageHeader } from "@/components/common";
 
@@ -71,7 +94,7 @@ export default function UploadReport() {
 
   return (
     <>
-      {/* <PageHeader 
+      <PageHeader 
         title="Upload Report" 
         actions={
           <Button
@@ -82,7 +105,7 @@ export default function UploadReport() {
             Back
           </Button>
         } 
-      /> */}
+      />
       
       <Paper 
         elevation={3} 
@@ -247,13 +270,19 @@ export default function UploadReport() {
                 value={formData.description}
                 onChange={handleChange}
                 multiline
-                rows={4}
+                rows={5}
                 required
                 placeholder="Enter detailed description of the report"
                 sx={{ 
                   '& .MuiOutlinedInput-root': {
                     alignItems: 'flex-start'
-                  }
+                  },
+                  '& .MuiInputBase-input': {
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    fontFamily: 'inherit'
+                  },
+                  mb: 2
                 }}
               />
             </Grid>
@@ -267,9 +296,16 @@ export default function UploadReport() {
                 value={formData.summary}
                 onChange={handleChange}
                 multiline
-                rows={3}
+                rows={4}
                 required
                 placeholder="Provide a brief summary"
+                sx={{ 
+                  '& .MuiInputBase-input': {
+                    fontSize: '1rem',
+                    lineHeight: 1.6,
+                    fontFamily: 'inherit'
+                  }
+                }}
               />
             </Grid>
 
@@ -282,7 +318,8 @@ export default function UploadReport() {
                   p: 3, 
                   borderRadius: 1,
                   textAlign: 'center',
-                  bgcolor: 'action.hover'
+                  bgcolor: 'action.hover',
+                  mt: 2
                 }}
               >
                 <input
