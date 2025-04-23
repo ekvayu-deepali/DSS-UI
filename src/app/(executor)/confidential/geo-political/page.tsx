@@ -8,6 +8,7 @@ import { useContactsController } from "./geo-political.controller";
 
 import { Icon, PageHeader, TableComponent } from "@/components/common";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
+import { RoutePathEnum } from "@/enum";
 
 /**
  * @page {Contacts} - Display Contacts Information
@@ -70,9 +71,10 @@ export default function Confidential(): JSX.Element {
           actions={
             <Button
               variant="contained"
+              size="small"
               startIcon={<Icon icon={faUpload} />}
               onClick={() =>
-                router.push("/confidential/geo-political/upload-report")
+                router.push(RoutePathEnum.GEO_POLITICAL_UPLOAD_REPORT)
               }
             >
               Upload Report

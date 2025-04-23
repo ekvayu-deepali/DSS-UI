@@ -6,8 +6,6 @@ import { Typography, Tooltip } from "@mui/material";
 import { faCalendarAlt } from "@fortawesome/free-solid-svg-icons";
 import { DateTime } from "luxon";
 
-import { LuxonHelper } from "@/helpers";
-
 import {
   CalenderIcon,
   DateCellWrapper,
@@ -63,9 +61,12 @@ export function TableCellGenerator({
           <DateCellWrapper>
             <CalenderIcon icon={faCalendarAlt} color="default" />
             <Typography variant="body2">
-              {DateTime.fromJSDate(new Date(value as string)).toLocaleString(
-                LuxonHelper.getFormat()
-              )}
+              {DateTime.fromJSDate(new Date(value as string))
+                .setLocale("en-US")
+                .toLocaleString({
+                  ...DateTime.DATETIME_SHORT,
+                  hour12: true,
+                })}
             </Typography>
           </DateCellWrapper>
         );
