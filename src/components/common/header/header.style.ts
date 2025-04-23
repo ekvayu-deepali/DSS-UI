@@ -12,6 +12,8 @@ export const HeaderContainer = styled('header')(({ theme }) => ({
   backgroundColor: theme.palette.background.paper,
   borderBottom: `1px solid ${theme.palette.divider}`,
   zIndex: theme.zIndex.appBar,
+  width: '100%',
+  overflow: 'hidden',
 }));
 
 export const HeaderContent = styled('div')(({ theme }) => ({
@@ -31,4 +33,11 @@ export const HeaderActions = styled('div')(({ theme }) => ({
 export const HeaderTitle = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.primary,
   fontWeight: 600,
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  [theme.breakpoints.down('sm')]: {
+    fontSize: '1rem',
+    maxWidth: '180px',
+  },
 }));

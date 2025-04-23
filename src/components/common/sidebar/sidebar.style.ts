@@ -3,7 +3,7 @@ import { List, ListItem, ListItemIcon, ListItemText } from '@mui/material';
 
 export const SidebarContainer = styled('aside')(({ theme }) => ({
   width: '240px',
-  height: '100vh',
+  height: 'calc(100vh - 64px)',
   position: 'fixed',
   top: '64px',
   left: 0,
@@ -11,10 +11,23 @@ export const SidebarContainer = styled('aside')(({ theme }) => ({
   borderRight: `1px solid ${theme.palette.divider}`,
   overflowY: 'auto',
   overflowX: 'hidden',
-  transition: 'width 0.3s ease',
+  transition: 'width 0.3s ease, transform 0.3s ease',
   zIndex: theme.zIndex.drawer,
   '&.icon-only': {
     width: '64px',
+  },
+  [theme.breakpoints.down('sm')]: {
+    transform: 'translateX(-100%)',
+    '&.mobile-open': {
+      transform: 'translateX(0)',
+    },
+    '&.icon-only': {
+      transform: 'translateX(-100%)',
+      '&.mobile-open': {
+        transform: 'translateX(0)',
+        width: '240px',
+      },
+    },
   },
 }));
 

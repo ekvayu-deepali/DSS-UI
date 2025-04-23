@@ -1,7 +1,7 @@
 "use client";
 
-import React from 'react';
-import { List, Collapse, useTheme } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { List, Collapse, useTheme, useMediaQuery } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { 
   ExpandLess, 
@@ -78,11 +78,25 @@ const menuItems: MenuItem[] = [
 export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const router = useRouter();
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
+  
+  // Close mobile sidebar when component unmounts (route change)
+  useEffect(() => {
+    return () => {
+      if (isMobile) {
+        setMobileOpen(false);
+      }
+    };
+  }, [isMobile]);
 
   const handleClick = (path?: string, title?: string) => {
     if (path) {
       router.push(path);
+      if (isMobile) {
+        setMobileOpen(false);
+      }
     } else if (title) {
       setOpenSubMenu(openSubMenu === title ? null : title);
     }
@@ -132,8 +146,18 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
     );
   };
 
+  // Handle sidebar click on mobile to close it
+  const handleSidebarClick = () => {
+    if (isMobile) {
+      setMobileOpen(false);
+    }
+  };
+
   return (
-    <SidebarContainer className={isOpen ? '' : 'icon-only'}>
+    <SidebarContainer 
+      className={`${isOpen ? '' : 'icon-only'} ${mobileOpen ? 'mobile-open' : ''}`}
+      onClick={handleSidebarClick}
+    >
       <SidebarContent>
         <List component="nav">
           {menuItems.map(renderMenuItem)}

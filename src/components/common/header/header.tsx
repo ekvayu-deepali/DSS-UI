@@ -1,5 +1,5 @@
 import React from "react";
-import { IconButton, useTheme } from "@mui/material";
+import { IconButton, useTheme, useMediaQuery } from "@mui/material";
 import { faBars } from "@fortawesome/free-solid-svg-icons";
 
 import { Icon } from "../icon";
@@ -13,6 +13,7 @@ interface HeaderProps {
 
 export const Header: React.FC<HeaderProps> = ({ title, onToggleSidebar }) => {
   const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
   return (
     <HeaderContainer>
       <HeaderContent>
