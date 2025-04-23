@@ -1,11 +1,11 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import { ThemeProvider as MUIThemeProvider } from '@mui/material/styles';
-import CssBaseline from '@mui/material/CssBaseline';
-import { lightTheme, darkTheme } from '@/theme';
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { ThemeProvider as MUIThemeProvider } from "@mui/material/styles";
+import CssBaseline from "@mui/material/CssBaseline";
+import { lightTheme, darkTheme } from "@/theme";
 
-type ThemeMode = 'light' | 'dark';
+type ThemeMode = "light" | "dark";
 
 interface ThemeContextType {
   mode: ThemeMode;
@@ -14,30 +14,34 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [mode, setMode] = useState<ThemeMode>('light');
+export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const [mode, setMode] = useState<ThemeMode>("light");
 
   useEffect(() => {
     // Check if user has a theme preference in localStorage
-    const savedTheme = localStorage.getItem('theme') as ThemeMode;
+    const savedTheme = localStorage.getItem("theme") as ThemeMode;
     if (savedTheme) {
       setMode(savedTheme);
     } else {
       // Check system preference
-      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setMode(prefersDark ? 'dark' : 'light');
+      const prefersDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setMode(prefersDark ? "dark" : "light");
     }
   }, []);
 
   const toggleTheme = () => {
-    const newMode = mode === 'light' ? 'dark' : 'light';
+    const newMode = mode === "light" ? "dark" : "light";
     setMode(newMode);
-    localStorage.setItem('theme', newMode);
+    localStorage.setItem("theme", newMode);
   };
 
   return (
     <ThemeContext.Provider value={{ mode, toggleTheme }}>
-      <MUIThemeProvider theme={mode === 'light' ? lightTheme : darkTheme}>
+      <MUIThemeProvider theme={mode === "light" ? lightTheme : darkTheme}>
         <CssBaseline />
         {children}
       </MUIThemeProvider>
@@ -48,7 +52,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (context === undefined) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
-}; 
+};
