@@ -18,7 +18,7 @@ export const MainContent = styled('main')(({ theme }) => ({
   marginTop: '64px',
   padding: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
-  transition: 'margin-left 0.3s ease',
+  transition: 'none',
   overflow: 'hidden',
   '&.sidebar-icon-only': {
     marginLeft: '64px',

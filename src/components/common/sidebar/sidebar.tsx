@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { List, Collapse, useTheme, useMediaQuery } from '@mui/material';
+import React from 'react';
+import { List, Collapse, useTheme } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import { 
   ExpandLess, 
@@ -38,7 +38,7 @@ interface MenuItem {
 const menuItems: MenuItem[] = [
   {
     title: 'Dashboard',
-    path: '/executor/dashboard',
+    path: '/dashboard',
     icon: <Dashboard />,
   },
   {
@@ -47,12 +47,12 @@ const menuItems: MenuItem[] = [
     submenu: [
       {
         title: 'Geo Political',
-        path: '/executor/confidential/geo-political',
+        path: '/confidential/geo-political',
         faIcon: faGlobe
       },
       {
         title: 'Reports',
-        path: '/executor/confidential/reports',
+        path: '/confidential/reports',
         faIcon: faFileLines
       },
     ],
@@ -63,12 +63,12 @@ const menuItems: MenuItem[] = [
     submenu: [
       {
         title: 'All Documents',
-        path: '/executor/documents/all',
+        path: '/documents/all',
         faIcon: faFileLines
       },
       {
         title: 'Shared',
-        path: '/executor/documents/shared',
+        path: '/documents/shared',
         faIcon: faShareNodes
       },
     ],
@@ -78,25 +78,29 @@ const menuItems: MenuItem[] = [
 export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const router = useRouter();
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
-  
-  // Close mobile sidebar when component unmounts (route change)
-  useEffect(() => {
-    return () => {
-      if (isMobile) {
-        setMobileOpen(false);
+  const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
+
+  // Set the selected item based on the current path
+  React.useEffect(() => {
+    const path = window.location.pathname;
+    setSelectedItem(path);
+    
+    // Also open the submenu if the current path is in a submenu
+    menuItems.forEach(item => {
+      if (item.submenu) {
+        const hasSelectedChild = item.submenu.some(subItem => subItem.path === path);
+        if (hasSelectedChild) {
+          setOpenSubMenu(item.title);
+        }
       }
-    };
-  }, [isMobile]);
+    });
+  }, []);
 
   const handleClick = (path?: string, title?: string) => {
     if (path) {
+      setSelectedItem(path);
       router.push(path);
-      if (isMobile) {
-        setMobileOpen(false);
-      }
     } else if (title) {
       setOpenSubMenu(openSubMenu === title ? null : title);
     }
@@ -105,10 +109,14 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const renderMenuItem = (item: MenuItem) => {
     const hasSubmenu = item.submenu && item.submenu.length > 0;
     const isOpen = openSubMenu === item.title;
+    const isSelected = item.path === selectedItem;
 
     return (
       <React.Fragment key={item.title}>
-        <StyledListItem onClick={() => handleClick(item.path, item.title)}>
+        <StyledListItem 
+          onClick={() => handleClick(item.path, item.title)}
+          className={isSelected ? 'selected' : ''}
+        >
           {item.icon && <StyledListItemIcon>{item.icon}</StyledListItemIcon>}
           <StyledListItemText primary={item.title} />
           {hasSubmenu && (
@@ -121,24 +129,28 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
         {hasSubmenu && (
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <NestedList>
-              {item.submenu?.map((subItem) => (
-                <StyledListItem
-                  key={subItem.title}
-                  onClick={() => handleClick(subItem.path)}
-                >
-                  {subItem.faIcon && (
-                    <StyledListItemIcon>
-                      <Icon 
-                        icon={subItem.faIcon} 
-                        size="small" 
-                        onlyIcon 
-                        color={theme.palette.text.primary}
-                      />
-                    </StyledListItemIcon>
-                  )}
-                  <StyledListItemText primary={subItem.title} />
-                </StyledListItem>
-              ))}
+              {item.submenu?.map((subItem) => {
+                const isSubItemSelected = subItem.path === selectedItem;
+                return (
+                  <StyledListItem
+                    key={subItem.title}
+                    onClick={() => handleClick(subItem.path)}
+                    className={isSubItemSelected ? 'selected' : ''}
+                  >
+                    {subItem.faIcon && (
+                      <StyledListItemIcon>
+                        <Icon 
+                          icon={subItem.faIcon} 
+                          size="small" 
+                          onlyIcon 
+                          color={isSubItemSelected ? theme.palette.primary.main : theme.palette.text.primary}
+                        />
+                      </StyledListItemIcon>
+                    )}
+                    <StyledListItemText primary={subItem.title} />
+                  </StyledListItem>
+                );
+              })}
             </NestedList>
           </Collapse>
         )}
@@ -146,18 +158,8 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
     );
   };
 
-  // Handle sidebar click on mobile to close it
-  const handleSidebarClick = () => {
-    if (isMobile) {
-      setMobileOpen(false);
-    }
-  };
-
   return (
-    <SidebarContainer 
-      className={`${isOpen ? '' : 'icon-only'} ${mobileOpen ? 'mobile-open' : ''}`}
-      onClick={handleSidebarClick}
-    >
+    <SidebarContainer className={isOpen ? '' : 'icon-only'}>
       <SidebarContent>
         <List component="nav">
           {menuItems.map(renderMenuItem)}

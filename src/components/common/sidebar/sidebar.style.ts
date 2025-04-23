@@ -11,24 +11,12 @@ export const SidebarContainer = styled('aside')(({ theme }) => ({
   borderRight: `1px solid ${theme.palette.divider}`,
   overflowY: 'auto',
   overflowX: 'hidden',
-  transition: 'width 0.3s ease, transform 0.3s ease',
+  transition: 'none',
   zIndex: theme.zIndex.drawer,
   '&.icon-only': {
     width: '64px',
   },
-  [theme.breakpoints.down('sm')]: {
-    transform: 'translateX(-100%)',
-    '&.mobile-open': {
-      transform: 'translateX(0)',
-    },
-    '&.icon-only': {
-      transform: 'translateX(-100%)',
-      '&.mobile-open': {
-        transform: 'translateX(0)',
-        width: '240px',
-      },
-    },
-  },
+
 }));
 
 export const SidebarContent = styled('div')(({ theme }) => ({
@@ -40,12 +28,31 @@ export const StyledListItem = styled(ListItem)(({ theme }) => ({
   cursor: 'pointer',
   display: 'flex',
   alignItems: 'center',
+  transition: 'none',
+  position: 'relative',
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
+  },
+  '&.selected': {
+    backgroundColor: theme.palette.primary.main + '20', // 20% opacity
+    color: theme.palette.primary.main,
+    fontWeight: 600,
+    '&::before': {
+      content: '""',
+      position: 'absolute',
+      left: 0,
+      top: 0,
+      bottom: 0,
+      width: '4px',
+      backgroundColor: theme.palette.primary.main,
+    },
   },
   '.icon-only &': {
     padding: theme.spacing(1.5, 0),
     justifyContent: 'center',
+    '&.selected::before': {
+      width: '3px',
+    },
   },
 }));
 
@@ -57,6 +64,9 @@ export const StyledListItemIcon = styled(ListItemIcon)(({ theme }) => ({
   justifyContent: 'center',
   '& svg': {
     fontSize: '1.25rem',
+  },
+  '.selected &': {
+    color: theme.palette.primary.main,
   },
   '.icon-only &': {
     minWidth: '100%',

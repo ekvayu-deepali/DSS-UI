@@ -1,7 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { useMediaQuery, useTheme as useMuiTheme } from "@mui/material";
+import React, { useState } from "react";
 
 import { LayoutContainer, MainContent } from "./executorLayout.style";
 import { Header } from "@/components/common/header/header";
@@ -16,23 +15,12 @@ export default function ExecutorLayout({
   children,
   title,
 }: ExecutorLayoutProps) {
-  const theme = useMuiTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  const [sidebarOpen, setSidebarOpen] = useState(!isMobile);
-  const [mobileOpen, setMobileOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  // Update sidebar state when screen size changes
-  useEffect(() => {
-    setSidebarOpen(!isMobile);
-  }, [isMobile]);
-
-  const toggleSidebar = () => {
-    if (isMobile) {
-      setMobileOpen(!mobileOpen);
-    } else {
-      setSidebarOpen(!sidebarOpen);
-    }
-  };
+  // Use a callback ref to avoid recreating this function on every render
+  const toggleSidebar = React.useCallback(() => {
+    setSidebarOpen(prev => !prev);
+  }, []);
 
   return (
     <LayoutContainer>
