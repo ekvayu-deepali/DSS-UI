@@ -1,10 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
-import { useRouter } from "next/navigation";
-import { Box, Button, Paper, Typography, Input, Stack } from "@mui/material";
-import UploadIcon from "@mui/icons-material/Upload";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import React from "react";
 
 import { PageHeader } from "@/components/common";
 

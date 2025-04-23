@@ -13,6 +13,9 @@ export enum RoutePathEnum {
   ERROR_404 = "/404",
   ERROR_500 = "/500",
   ENVIRONMENT = "ENVIRONMENT",
+
+  GEO_POLITICAL = "/confidential/geo-political",
+  GEO_POLITICAL_UPLOAD_REPORT = "/confidential/geo-political/upload-report",
 }
 
 export default RoutePathEnum;
