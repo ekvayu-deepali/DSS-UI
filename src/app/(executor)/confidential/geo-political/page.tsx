@@ -71,6 +71,7 @@ export default function Confidential(): JSX.Element {
           actions={
             <Button
               variant="contained"
+              size="small"
               startIcon={<Icon icon={faUpload} />}
               onClick={() =>
                 router.push(RoutePathEnum.GEO_POLITICAL_UPLOAD_REPORT)
