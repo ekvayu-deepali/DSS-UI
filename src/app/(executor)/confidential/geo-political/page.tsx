@@ -1,19 +1,20 @@
 "use client";
 
 import React, { JSX, useMemo } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from "@mui/material";
 
 import { useContactsController } from "./geo-political.controller";
 
-import {
-  PageHeader,
-  TableComponent,
-} from "@/components/common";
+import { Icon, PageHeader, TableComponent } from "@/components/common";
+import { faUpload } from "@fortawesome/free-solid-svg-icons";
 
 /**
  * @page {Contacts} - Display Contacts Information
  * @return {JSX.Element}
  */
 export default function Confidential(): JSX.Element {
+  const router = useRouter();
   const { getters, handlers, ref } = useContactsController();
   const {
     headers,
@@ -66,11 +67,21 @@ export default function Confidential(): JSX.Element {
         <PageHeader
           title="Confidential"
           breadcrumbs={breadcrumbs}
-          actions={""}
+          actions={
+            <Button
+              variant="contained"
+              startIcon={<Icon icon={faUpload} />}
+              onClick={() =>
+                router.push("/confidential/geo-political/upload-report")
+              }
+            >
+              Upload Report
+            </Button>
+          }
         />
       </div>
     ),
-    [filter, getContactInformation, isMobileView, newApplication, ref]
+    [filter, getContactInformation, isMobileView, newApplication, ref, router]
   );
 
   return (
