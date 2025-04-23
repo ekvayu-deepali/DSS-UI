@@ -2,7 +2,7 @@
 
 import { CardContent } from "@mui/material";
 
-import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { ThemeToggle } from "@/components/common/themeToggel/themeToggle";
 
 import { AuthCard, AuthContainer, AuthTitle } from "./layout.style";
 
