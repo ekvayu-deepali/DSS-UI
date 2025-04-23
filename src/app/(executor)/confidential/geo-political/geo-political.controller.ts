@@ -1,4 +1,6 @@
+import { useCallback, useMemo } from "react";
 import useMeasure from "react-use-measure";
+import { Theme, useMediaQuery, useTheme } from "@mui/material";
 
 import { IHeader, TableComponentEnum } from "@/components/common";
 import { ChipComponent } from "@/components/common/chipComponent";
@@ -10,15 +12,15 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/redux";
-import { Theme, useMediaQuery, useTheme } from "@mui/material";
-import { useCallback, useMemo } from "react";
+
+import { AvatarMenu } from "@/components/common";
 
 export const useContactsController = () => {
   // Static data for the table
   const staticContactInfo = [
     {
       sn: 1,
-      documentId: "DOC-2023-001",
+      documentId: "DOC2023001",
       documentType: "Intelligence Report",
       creatorName: "Capt. Sharma",
       creatorId: "IAF-2345",
@@ -29,7 +31,7 @@ export const useContactsController = () => {
     },
     {
       sn: 2,
-      documentId: "DOC-2023-002",
+      documentId: "DOC2023002",
       documentType: "Border Activity Report",
       creatorName: "Lt. Col. Verma",
       creatorId: "IAF-3456",
@@ -40,7 +42,7 @@ export const useContactsController = () => {
     },
     {
       sn: 3,
-      documentId: "DOC-2023-003",
+      documentId: "DOC2023003",
       documentType: "Diplomatic Analysis",
       creatorName: "Maj. Singh",
       creatorId: "IAF-4567",
@@ -51,7 +53,7 @@ export const useContactsController = () => {
     },
     {
       sn: 4,
-      documentId: "DOC-2023-004",
+      documentId: "DOC2023004",
       documentType: "Regional Stability Assessment",
       creatorName: "Wing Cmdr. Patel",
       creatorId: "IAF-5678",
@@ -62,7 +64,7 @@ export const useContactsController = () => {
     },
     {
       sn: 5,
-      documentId: "DOC-2023-005",
+      documentId: "DOC2023005",
       documentType: "Threat Analysis",
       creatorName: "Grp. Capt. Kumar",
       creatorId: "IAF-6789",
@@ -73,7 +75,7 @@ export const useContactsController = () => {
     },
     {
       sn: 6,
-      documentId: "DOC-2023-006",
+      documentId: "DOC2023006",
       documentType: "Strategic Report",
       creatorName: "Air Cmdr. Gupta",
       creatorId: "IAF-7890",
@@ -84,7 +86,7 @@ export const useContactsController = () => {
     },
     {
       sn: 7,
-      documentId: "DOC-2023-007",
+      documentId: "DOC2023007",
       documentType: "Intelligence Report",
       creatorName: "Capt. Sharma",
       creatorId: "IAF-2345",
@@ -95,7 +97,7 @@ export const useContactsController = () => {
     },
     {
       sn: 8,
-      documentId: "DOC-2023-008",
+      documentId: "DOC2023008",
       documentType: "Border Activity Report",
       creatorName: "Lt. Col. Verma",
       creatorId: "IAF-3456",
@@ -106,7 +108,7 @@ export const useContactsController = () => {
     },
     {
       sn: 9,
-      documentId: "DOC-2023-009",
+      documentId: "DOC2023009",
       documentType: "Diplomatic Analysis",
       creatorName: "Maj. Singh",
       creatorId: "IAF-4567",
@@ -117,7 +119,7 @@ export const useContactsController = () => {
     },
     {
       sn: 10,
-      documentId: "DOC-2023-010",
+      documentId: "DOC2023010",
       documentType: "Regional Stability Assessment",
       creatorName: "Wing Cmdr. Patel",
       creatorId: "IAF-5678",
@@ -128,7 +130,7 @@ export const useContactsController = () => {
     },
     {
       sn: 11,
-      documentId: "DOC-2023-011",
+      documentId: "DOC2023011",
       documentType: "Threat Analysis",
       creatorName: "Grp. Capt. Kumar",
       creatorId: "IAF-6789",
@@ -139,7 +141,7 @@ export const useContactsController = () => {
     },
     {
       sn: 12,
-      documentId: "DOC-2023-012",
+      documentId: "DOC2023012",
       documentType: "Strategic Report",
       creatorName: "Air Cmdr. Gupta",
       creatorId: "IAF-7890",
@@ -228,8 +230,9 @@ export const useContactsController = () => {
       id: "creatorName",
       name: "Creator Name",
       hidden: false,
-      width: 150,
-      type: TableComponentEnum.STRING,
+      width: 180,
+      type: TableComponentEnum.COMPONENT,
+      component: AvatarMenu,
     },
     {
       id: "creatorId",
@@ -242,8 +245,8 @@ export const useContactsController = () => {
       id: "uploadedDate",
       name: "Uploaded Date",
       hidden: false,
-      width: 120,
-      type: TableComponentEnum.STRING,
+      width: 180,
+      type: TableComponentEnum.DATE,
     },
     {
       id: "approverId",
@@ -256,8 +259,8 @@ export const useContactsController = () => {
       id: "createdDate",
       name: "Created Date",
       hidden: false,
-      width: 120,
-      type: TableComponentEnum.STRING,
+      width: 180,
+      type: TableComponentEnum.DATE,
     },
     {
       id: "status",
