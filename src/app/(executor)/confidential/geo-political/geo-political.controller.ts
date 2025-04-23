@@ -1,6 +1,7 @@
 import useMeasure from "react-use-measure";
 
 import { IHeader, TableComponentEnum } from "@/components/common";
+import { ChipComponent } from "@/components/common/chipComponent";
 import { RoutePathEnum } from "@/enum";
 import { MeasureRefType } from "@/interfaces";
 import {
@@ -263,7 +264,8 @@ export const useContactsController = () => {
       name: "Status",
       hidden: false,
       width: 100,
-      type: TableComponentEnum.STRING,
+      type: TableComponentEnum.COMPONENT,
+      component: ChipComponent,
     },
   ];
 
