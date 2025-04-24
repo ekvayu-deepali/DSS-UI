@@ -16,6 +16,7 @@ interface IUploadReportControllerResponse {
     summary: string;
     documentName: string;
     documentType: string;
+    documentCategory: string;
     selectedDate: DateTime | null;
     breadcrumbs: IBreadcrumbDisplay[];
     classification: string;
@@ -31,6 +32,7 @@ interface IUploadReportControllerResponse {
     onClassificationChange: (value: string) => void;
     onTopicsChange: (value: string[]) => void;
     onDocumentTypeChange: (value: string) => void;
+    onDocumentCategoryChange: (value: string) => void;
     handleSubmit: () => Promise<void>;
     handleCancel: () => void;
   };
@@ -41,6 +43,7 @@ interface IUploadReportControllerResponse {
     summaryRef: RefObject<ITextInputFieldRef | null>;
     documentNameRef: RefObject<ITextInputFieldRef | null>;
     documentTypeRef: RefObject<ITextInputFieldRef | null>;
+    documentCategoryRef: RefObject<ITextInputFieldRef | null>;
     classificationRef: RefObject<ITextInputFieldRef | null>;
     topicsRef: RefObject<ITopicDropdownRef | null>;
   };
@@ -57,6 +60,7 @@ export const useUploadReportController =
     const [summary, setSummary] = useState<string>("");
     const [documentName, setDocumentName] = useState<string>("");
     const [documentType, setDocumentType] = useState<string>("");
+    const [documentCategory, setDocumentCategory] = useState<string>("");
     const [selectedDate, setSelectedDate] = useState<DateTime | null>(
       DateTime.now()
     );
@@ -70,6 +74,7 @@ export const useUploadReportController =
     const summaryRef = useRef<ITextInputFieldRef | null>(null);
     const documentNameRef = useRef<ITextInputFieldRef | null>(null);
     const documentTypeRef = useRef<ITextInputFieldRef | null>(null);
+    const documentCategoryRef = useRef<ITextInputFieldRef | null>(null);
     const classificationRef = useRef<ITextInputFieldRef>(null);
 
     // Breadcrumbs configuration
@@ -133,6 +138,10 @@ export const useUploadReportController =
       setDocumentType(value);
     }, []);
 
+    const onDocumentCategoryChange = useCallback((value: string): void => {
+      setDocumentCategory(value);
+    }, []);
+
     const isValidSubmittion = useCallback((): boolean => {
       const originError = originRef.current?.validateValue();
       const sourceError = sourceRef.current?.validateValue();
@@ -140,6 +149,7 @@ export const useUploadReportController =
       const summaryError = summaryRef.current?.validateValue();
       const documentNameError = documentNameRef.current?.validateValue();
       const documentTypeError = documentTypeRef.current?.validateValue();
+      const documentCategoryError = documentCategoryRef.current?.validateValue();
       const classificationValid = classificationRef.current?.validateValue();
 
       if (
@@ -150,6 +160,7 @@ export const useUploadReportController =
           summaryError &&
           documentNameError &&
           documentTypeError &&
+          documentCategoryError &&
           classificationValid
         )
       ) {
@@ -174,6 +185,7 @@ export const useUploadReportController =
           summary,
           documentName,
           documentType,
+          documentCategory,
           date: selectedDate?.toISO(),
         });
         enqueueSnackbar("Report uploaded successfully", { variant: "success" });
@@ -189,6 +201,7 @@ export const useUploadReportController =
       summary,
       documentName,
       documentType,
+      documentCategory,
       selectedDate,
     ]);
 
@@ -199,6 +212,7 @@ export const useUploadReportController =
       setSummary("");
       setDocumentName("");
       setDocumentType("");
+      setDocumentCategory("");
       setSelectedDate(DateTime.now());
     }, []);
 
@@ -210,6 +224,7 @@ export const useUploadReportController =
         summary,
         documentName,
         documentType,
+        documentCategory,
         selectedDate,
         breadcrumbs,
         classification,
@@ -225,6 +240,7 @@ export const useUploadReportController =
         onClassificationChange,
         onTopicsChange,
         onDocumentTypeChange,
+        onDocumentCategoryChange,
         handleSubmit,
         handleCancel,
       },
@@ -235,6 +251,7 @@ export const useUploadReportController =
         summaryRef,
         documentNameRef,
         documentTypeRef,
+        documentCategoryRef,
         classificationRef,
         topicsRef: useRef<ITopicDropdownRef>(null),
       },

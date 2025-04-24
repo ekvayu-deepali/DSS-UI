@@ -41,6 +41,7 @@ export default function UploadReport() {
     summary,
     documentName,
     documentType,
+    documentCategory,
     selectedDate,
     breadcrumbs,
   } = getters;
@@ -52,6 +53,7 @@ export default function UploadReport() {
     onSummaryChange,
     onDocumentNameChange,
     onDocumentTypeChange,
+    onDocumentCategoryChange,
     onDateChange,
     handleSubmit,
     handleCancel,
@@ -99,6 +101,36 @@ export default function UploadReport() {
                 </FormGroup>
               </Grid>
 
+              {/* Document Category Dropdown */}
+              <Grid item xs={12} md={6}>
+                <FormGroup>
+                  <FieldDescription>
+                    <Typography variant="subtitle2">Document Category</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Select the category of the document
+                    </Typography>
+                  </FieldDescription>
+                  <StyledTextFieldWrapper>
+                    <FormControl fullWidth>
+                      <InputLabel id="document-category-label">Document Category *</InputLabel>
+                      <Select
+                        labelId="document-category-label"
+                        id="document-category"
+                        value={documentCategory}
+                        label="Document Category *"
+                        onChange={(e) => onDocumentCategoryChange(e.target.value)}
+                        ref={ref.documentCategoryRef}
+                      >
+                        <MenuItem value="book">Book</MenuItem>
+                        <MenuItem value="journal">Journal</MenuItem>
+                        <MenuItem value="periodical">Periodical</MenuItem>
+                        <MenuItem value="press_report">Press Report</MenuItem>
+                      </Select>
+                    </FormControl>
+                  </StyledTextFieldWrapper>
+                </FormGroup>
+              </Grid>
+
               {/* Document Type Dropdown */}
               <Grid item xs={12} md={6}>
                 <FormGroup>
@@ -110,9 +142,7 @@ export default function UploadReport() {
                   </FieldDescription>
                   <StyledTextFieldWrapper>
                     <FormControl fullWidth>
-                      <InputLabel id="document-type-label">
-                        Document Type *
-                      </InputLabel>
+                      <InputLabel id="document-type-label">Document Type *</InputLabel>
                       <Select
                         labelId="document-type-label"
                         id="document-type"
