@@ -309,7 +309,7 @@ export const useContactsController = () => {
       forwardParam: false,
     },
     {
-      name: "Approver",
+      name: "Executor",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },

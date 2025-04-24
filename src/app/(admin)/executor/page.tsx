@@ -1,10 +1,10 @@
 "use client";
 import React, { JSX, useMemo } from "react";
 import { Button } from "@mui/material";
-import { useContactsController } from "./approver.controller";
+import { useContactsController } from "./executor.controller";
 import { Icon, PageHeader, TableComponent } from "@/components/common";
 import { faUserPlus } from "@fortawesome/free-solid-svg-icons";
-import AddApproverModal from "./add-approver-modal/AddApproverModal";
+import AddApproverModal from "./add-executor-modal/AddExecutorModal";
 
 /**
  * @page {Approver} - Display Approver Information
@@ -69,7 +69,7 @@ export default function Page(): JSX.Element {
     () => (
       <div ref={ref}>
         <PageHeader
-          title="Approvers"
+          title="Executors"
           breadcrumbs={breadcrumbs}
           actions={
             <Button
@@ -78,7 +78,7 @@ export default function Page(): JSX.Element {
               startIcon={<Icon icon={faUserPlus} />}
               onClick={openModal}
             >
-              Add New Approver
+              Add New Executor
             </Button>
           }
         />
