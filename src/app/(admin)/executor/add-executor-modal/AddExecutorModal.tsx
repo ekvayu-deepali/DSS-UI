@@ -37,7 +37,7 @@ const AddApproverModal: React.FC<AddApproverModalProps> = ({
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
       <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-        Add New Approver
+        Add New Executor
         <IconButton 
           edge="end" 
           color="inherit" 
