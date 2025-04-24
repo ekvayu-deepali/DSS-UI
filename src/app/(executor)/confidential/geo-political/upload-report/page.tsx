@@ -1,7 +1,7 @@
 "use client";
 
 import React from "react";
-import { FormGroup, Grid, Typography } from "@mui/material";
+import { FormGroup, Grid, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
 
 import { CardComponent } from "@/components/common/card";
 import { PageHeader, TextInputField } from "@/components/common";
@@ -9,6 +9,7 @@ import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
 import ClassificationDropdown from "@/components/common/classificationDropdown";
 import TopicDropdown from "@/components/common/topicDropdown";
+import { DocumentTypeOptions } from '@/enum/documentType.enum';
 
 import { useUploadReportController } from "./upload-report.controller";
 import {
@@ -25,14 +26,24 @@ import {
 
 export default function UploadReport() {
   const { getters, handlers, ref } = useUploadReportController();
-  const { origin, source, description, summary, documentName, selectedDate, breadcrumbs } =
-    getters;
+  const { 
+    origin, 
+    source, 
+    description, 
+    summary, 
+    documentName, 
+    documentType,
+    selectedDate, 
+    breadcrumbs 
+  } = getters;
+  
   const {
     onOriginChange,
     onSourceChange,
     onDescriptionChange,
     onSummaryChange,
     onDocumentNameChange,
+    onDocumentTypeChange,
     onDateChange,
     handleSubmit,
     handleCancel,
@@ -52,7 +63,7 @@ export default function UploadReport() {
           <FormSection>
             <Grid container spacing={4}>
               {/* Document Name Field */}
-              <Grid item xs={12}>
+              <Grid item xs={12} md={6}>
                 <FormGroup>
                   <FieldDescription>
                     <Typography variant="subtitle2">Document Name</Typography>
@@ -71,6 +82,37 @@ export default function UploadReport() {
                       ref={documentNameRef}
                       validation={ValidationHelper.validateNotEmpty}
                     />
+                  </StyledTextFieldWrapper>
+                </FormGroup>
+              </Grid>
+
+              {/* Document Type Dropdown */}
+              <Grid item xs={12} md={6}>
+                <FormGroup>
+                  <FieldDescription>
+                    <Typography variant="subtitle2">Document Type</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Select the type of document you are uploading
+                    </Typography>
+                  </FieldDescription>
+                  <StyledTextFieldWrapper>
+                    <FormControl fullWidth>
+                      <InputLabel id="document-type-label">Document Type *</InputLabel>
+                      <Select
+                        labelId="document-type-label"
+                        id="document-type"
+                        value={documentType}
+                        label="Document Type *"
+                        onChange={(e) => onDocumentTypeChange(e.target.value)}
+                        ref={ref.documentTypeRef}
+                      >
+                        {Object.values(DocumentTypeOptions).map((option) => (
+                          <MenuItem key={option.value} value={option.value}>
+                            {option.label}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
                   </StyledTextFieldWrapper>
                 </FormGroup>
               </Grid>

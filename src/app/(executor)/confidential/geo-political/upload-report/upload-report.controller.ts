@@ -6,6 +6,7 @@ import { IBreadcrumbDisplay } from "@/components/common/breadcrumb/interface";
 import { ITextInputFieldData, ITextInputFieldRef } from "@/components/common";
 import { RoutePathEnum } from "@/enum";
 import { ITopicDropdownRef } from "@/components/common/topicDropdown/topicDropdown.interface";
+import { DocumentTypeOptions } from '@/enum/documentType.enum';
 
 interface IUploadReportControllerResponse {
   getters: {
@@ -13,7 +14,8 @@ interface IUploadReportControllerResponse {
     source: string;
     description: string;
     summary: string;
-    documentName: string; // new field
+    documentName: string;
+    documentType: string;
     selectedDate: DateTime | null;
     breadcrumbs: IBreadcrumbDisplay[];
     classification: string;
@@ -24,10 +26,11 @@ interface IUploadReportControllerResponse {
     onSourceChange: (event: ITextInputFieldData) => void;
     onDescriptionChange: (event: ITextInputFieldData) => void;
     onSummaryChange: (event: ITextInputFieldData) => void;
-    onDocumentNameChange: (event: ITextInputFieldData) => void; // new handler
+    onDocumentNameChange: (event: ITextInputFieldData) => void;
     onDateChange: (date: DateTime | null) => void;
     onClassificationChange: (value: string) => void;
     onTopicsChange: (value: string[]) => void;
+    onDocumentTypeChange: (value: string) => void;
     handleSubmit: () => Promise<void>;
     handleCancel: () => void;
   };
@@ -36,7 +39,8 @@ interface IUploadReportControllerResponse {
     sourceRef: RefObject<ITextInputFieldRef | null>;
     descriptionRef: RefObject<ITextInputFieldRef | null>;
     summaryRef: RefObject<ITextInputFieldRef | null>;
-    documentNameRef: RefObject<ITextInputFieldRef | null>; // new ref
+    documentNameRef: RefObject<ITextInputFieldRef | null>;
+    documentTypeRef: RefObject<ITextInputFieldRef | null>;
     classificationRef: RefObject<ITextInputFieldRef | null>;
     topicsRef: RefObject<ITopicDropdownRef | null>;
   };
@@ -51,7 +55,8 @@ export const useUploadReportController =
     const [source, setSource] = useState<string>("");
     const [description, setDescription] = useState<string>("");
     const [summary, setSummary] = useState<string>("");
-    const [documentName, setDocumentName] = useState<string>(""); // new state
+    const [documentName, setDocumentName] = useState<string>("");
+    const [documentType, setDocumentType] = useState<string>("");
     const [selectedDate, setSelectedDate] = useState<DateTime | null>(
       DateTime.now()
     );
@@ -63,7 +68,8 @@ export const useUploadReportController =
     const sourceRef = useRef<ITextInputFieldRef | null>(null);
     const descriptionRef = useRef<ITextInputFieldRef | null>(null);
     const summaryRef = useRef<ITextInputFieldRef | null>(null);
-    const documentNameRef = useRef<ITextInputFieldRef | null>(null); // new ref
+    const documentNameRef = useRef<ITextInputFieldRef | null>(null);
+    const documentTypeRef = useRef<ITextInputFieldRef | null>(null);
     const classificationRef = useRef<ITextInputFieldRef>(null);
 
     // Breadcrumbs configuration
@@ -123,12 +129,17 @@ export const useUploadReportController =
       setTopics(value);
     }, []);
 
+    const onDocumentTypeChange = useCallback((value: string): void => {
+      setDocumentType(value);
+    }, []);
+
     const isValidSubmittion = useCallback((): boolean => {
       const originError = originRef.current?.validateValue();
       const sourceError = sourceRef.current?.validateValue();
       const descriptionError = descriptionRef.current?.validateValue();
       const summaryError = summaryRef.current?.validateValue();
-      const documentNameError = documentNameRef.current?.validateValue(); // new validation
+      const documentNameError = documentNameRef.current?.validateValue();
+      const documentTypeError = documentTypeRef.current?.validateValue();
       const classificationValid = classificationRef.current?.validateValue();
 
       if (
@@ -137,7 +148,8 @@ export const useUploadReportController =
           sourceError &&
           descriptionError &&
           summaryError &&
-          documentNameError && // add to validation check
+          documentNameError &&
+          documentTypeError &&
           classificationValid
         )
       ) {
@@ -160,7 +172,8 @@ export const useUploadReportController =
           source,
           description,
           summary,
-          documentName, // include in submission
+          documentName,
+          documentType,
           date: selectedDate?.toISO(),
         });
         enqueueSnackbar("Report uploaded successfully", { variant: "success" });
@@ -174,7 +187,8 @@ export const useUploadReportController =
       source,
       description,
       summary,
-      documentName, // add to dependencies
+      documentName,
+      documentType,
       selectedDate,
     ]);
 
@@ -183,7 +197,8 @@ export const useUploadReportController =
       setSource("");
       setDescription("");
       setSummary("");
-      setDocumentName(""); // clear document name
+      setDocumentName("");
+      setDocumentType("");
       setSelectedDate(DateTime.now());
     }, []);
 
@@ -193,7 +208,8 @@ export const useUploadReportController =
         source,
         description,
         summary,
-        documentName, // expose new field
+        documentName,
+        documentType,
         selectedDate,
         breadcrumbs,
         classification,
@@ -204,10 +220,11 @@ export const useUploadReportController =
         onSourceChange,
         onDescriptionChange,
         onSummaryChange,
-        onDocumentNameChange, // expose new handler
+        onDocumentNameChange,
         onDateChange,
         onClassificationChange,
         onTopicsChange,
+        onDocumentTypeChange,
         handleSubmit,
         handleCancel,
       },
@@ -216,7 +233,8 @@ export const useUploadReportController =
         sourceRef,
         descriptionRef,
         summaryRef,
-        documentNameRef, // expose new ref
+        documentNameRef,
+        documentTypeRef,
         classificationRef,
         topicsRef: useRef<ITopicDropdownRef>(null),
       },
