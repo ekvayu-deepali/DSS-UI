@@ -12,7 +12,8 @@ interface IUploadReportControllerResponse {
     origin: string;
     source: string;
     description: string;
-    summary: string; // new field
+    summary: string;
+    documentName: string; // new field
     selectedDate: DateTime | null;
     breadcrumbs: IBreadcrumbDisplay[];
     classification: string;
@@ -22,7 +23,8 @@ interface IUploadReportControllerResponse {
     onOriginChange: (event: ITextInputFieldData) => void;
     onSourceChange: (event: ITextInputFieldData) => void;
     onDescriptionChange: (event: ITextInputFieldData) => void;
-    onSummaryChange: (event: ITextInputFieldData) => void; // new handler
+    onSummaryChange: (event: ITextInputFieldData) => void;
+    onDocumentNameChange: (event: ITextInputFieldData) => void; // new handler
     onDateChange: (date: DateTime | null) => void;
     onClassificationChange: (value: string) => void;
     onTopicsChange: (value: string[]) => void;
@@ -33,7 +35,8 @@ interface IUploadReportControllerResponse {
     originRef: RefObject<ITextInputFieldRef | null>;
     sourceRef: RefObject<ITextInputFieldRef | null>;
     descriptionRef: RefObject<ITextInputFieldRef | null>;
-    summaryRef: RefObject<ITextInputFieldRef | null>; // new ref
+    summaryRef: RefObject<ITextInputFieldRef | null>;
+    documentNameRef: RefObject<ITextInputFieldRef | null>; // new ref
     classificationRef: RefObject<ITextInputFieldRef | null>;
     topicsRef: RefObject<ITopicDropdownRef | null>;
   };
@@ -47,7 +50,8 @@ export const useUploadReportController =
     const [origin, setOrigin] = useState<string>("");
     const [source, setSource] = useState<string>("");
     const [description, setDescription] = useState<string>("");
-    const [summary, setSummary] = useState<string>(""); // new state
+    const [summary, setSummary] = useState<string>("");
+    const [documentName, setDocumentName] = useState<string>(""); // new state
     const [selectedDate, setSelectedDate] = useState<DateTime | null>(
       DateTime.now()
     );
@@ -58,7 +62,8 @@ export const useUploadReportController =
     const originRef = useRef<ITextInputFieldRef | null>(null);
     const sourceRef = useRef<ITextInputFieldRef | null>(null);
     const descriptionRef = useRef<ITextInputFieldRef | null>(null);
-    const summaryRef = useRef<ITextInputFieldRef | null>(null); // new ref
+    const summaryRef = useRef<ITextInputFieldRef | null>(null);
+    const documentNameRef = useRef<ITextInputFieldRef | null>(null); // new ref
     const classificationRef = useRef<ITextInputFieldRef>(null);
 
     // Breadcrumbs configuration
@@ -102,6 +107,10 @@ export const useUploadReportController =
       setSummary(event.value);
     }, []);
 
+    const onDocumentNameChange = useCallback((event: ITextInputFieldData): void => {
+      setDocumentName(event.value);
+    }, []);
+
     const onDateChange = useCallback((date: DateTime | null): void => {
       setSelectedDate(date);
     }, []);
@@ -118,7 +127,8 @@ export const useUploadReportController =
       const originError = originRef.current?.validateValue();
       const sourceError = sourceRef.current?.validateValue();
       const descriptionError = descriptionRef.current?.validateValue();
-      const summaryError = summaryRef.current?.validateValue(); // new validation
+      const summaryError = summaryRef.current?.validateValue();
+      const documentNameError = documentNameRef.current?.validateValue(); // new validation
       const classificationValid = classificationRef.current?.validateValue();
 
       if (
@@ -127,6 +137,7 @@ export const useUploadReportController =
           sourceError &&
           descriptionError &&
           summaryError &&
+          documentNameError && // add to validation check
           classificationValid
         )
       ) {
@@ -148,7 +159,8 @@ export const useUploadReportController =
           origin,
           source,
           description,
-          summary, // include in submission
+          summary,
+          documentName, // include in submission
           date: selectedDate?.toISO(),
         });
         enqueueSnackbar("Report uploaded successfully", { variant: "success" });
@@ -162,6 +174,7 @@ export const useUploadReportController =
       source,
       description,
       summary,
+      documentName, // add to dependencies
       selectedDate,
     ]);
 
@@ -169,7 +182,8 @@ export const useUploadReportController =
       setOrigin("");
       setSource("");
       setDescription("");
-      setSummary(""); // clear summary
+      setSummary("");
+      setDocumentName(""); // clear document name
       setSelectedDate(DateTime.now());
     }, []);
 
@@ -178,7 +192,8 @@ export const useUploadReportController =
         origin,
         source,
         description,
-        summary, // expose new field
+        summary,
+        documentName, // expose new field
         selectedDate,
         breadcrumbs,
         classification,
@@ -188,7 +203,8 @@ export const useUploadReportController =
         onOriginChange,
         onSourceChange,
         onDescriptionChange,
-        onSummaryChange, // expose new handler
+        onSummaryChange,
+        onDocumentNameChange, // expose new handler
         onDateChange,
         onClassificationChange,
         onTopicsChange,
@@ -199,7 +215,8 @@ export const useUploadReportController =
         originRef,
         sourceRef,
         descriptionRef,
-        summaryRef, // expose new ref
+        summaryRef,
+        documentNameRef, // expose new ref
         classificationRef,
         topicsRef: useRef<ITopicDropdownRef>(null),
       },

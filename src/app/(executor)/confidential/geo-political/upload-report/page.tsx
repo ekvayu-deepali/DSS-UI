@@ -25,18 +25,19 @@ import {
 
 export default function UploadReport() {
   const { getters, handlers, ref } = useUploadReportController();
-  const { origin, source, description, summary, selectedDate, breadcrumbs } =
+  const { origin, source, description, summary, documentName, selectedDate, breadcrumbs } =
     getters;
   const {
     onOriginChange,
     onSourceChange,
     onDescriptionChange,
     onSummaryChange,
+    onDocumentNameChange,
     onDateChange,
     handleSubmit,
     handleCancel,
   } = handlers;
-  const { originRef, sourceRef, descriptionRef, summaryRef } = ref;
+  const { originRef, sourceRef, descriptionRef, summaryRef, documentNameRef } = ref;
 
   return (
     <PageContainer>
@@ -50,6 +51,30 @@ export default function UploadReport() {
         <FormContainer>
           <FormSection>
             <Grid container spacing={4}>
+              {/* Document Name Field */}
+              <Grid item xs={12}>
+                <FormGroup>
+                  <FieldDescription>
+                    <Typography variant="subtitle2">Document Name</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Enter a name for this document
+                    </Typography>
+                  </FieldDescription>
+                  <StyledTextFieldWrapper>
+                    <TextInputField
+                      type="text"
+                      fullWidth
+                      placeholder="e.g., Border Activity Report Q2 2023"
+                      label="Document Name"
+                      onChange={onDocumentNameChange}
+                      value={documentName}
+                      ref={documentNameRef}
+                      validation={ValidationHelper.validateNotEmpty}
+                    />
+                  </StyledTextFieldWrapper>
+                </FormGroup>
+              </Grid>
+
               {/* Origin Field */}
               <Grid item xs={12}>
                 <FormGroup>
