@@ -29,7 +29,7 @@ export const Icon: React.FC<IconProps> = ({
   };
 
   return (
-    <div
+    <span
       className={`inline-flex items-center justify-center ${
         onClick ? "cursor-pointer" : ""
       } ${className}`}
@@ -42,6 +42,6 @@ export const Icon: React.FC<IconProps> = ({
         style={{ color }}
       />
       {!onlyIcon && title && <span className="ml-2">{title}</span>}
-    </div>
+    </span>
   );
 };
