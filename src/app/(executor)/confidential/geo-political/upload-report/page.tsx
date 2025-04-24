@@ -126,9 +126,12 @@ export default function UploadReport() {
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
                 <FieldDescription>
-                  <Typography variant="subtitle2">Report Origin</Typography>
+                  <Typography variant="subtitle2">
+                    Classification Level
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Specify where this report originated from
+                    Select the appropriate security classification for this
+                    report
                   </Typography>
                 </FieldDescription>
                 <ClassificationDropdown
@@ -141,9 +144,9 @@ export default function UploadReport() {
               </Grid>
               <Grid item xs={12} md={6}>
                 <FieldDescription>
-                  <Typography variant="subtitle2">Report Origin</Typography>
+                  <Typography variant="subtitle2">Related Topics</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Specify where this report originated from
+                    Choose one or more topics that relate to this report
                   </Typography>
                 </FieldDescription>
                 <TopicDropdown
