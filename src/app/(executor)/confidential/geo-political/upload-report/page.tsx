@@ -8,6 +8,7 @@ import { PageHeader, TextInputField } from "@/components/common";
 import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
 import ClassificationDropdown from '@/components/common/classificationDropdown';
+import TopicDropdown from '@/components/common/topicDropdown';
 
 import { useUploadReportController } from "./upload-report.controller";
 import {
@@ -139,6 +140,15 @@ export default function UploadReport() {
                   ref={ref.classificationRef}
                   value={getters.classification}
                   onChange={handlers.onClassificationChange}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <TopicDropdown
+                  ref={ref.topicsRef}
+                  value={getters.topics}
+                  onChange={handlers.onTopicsChange}
                   fullWidth
                   required
                 />
