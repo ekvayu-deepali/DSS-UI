@@ -77,4 +77,15 @@ export const executorMenuItems: IMenuItem[] = [
       },
     ],
   },
+  {
+    title: "View Report",
+    path: "/view-report",
+    icon: faFile,
+  },
+  {
+    title: "Settings",
+    path: "/settings",
+    icon: faFileLines,
+  },
+
 ];
