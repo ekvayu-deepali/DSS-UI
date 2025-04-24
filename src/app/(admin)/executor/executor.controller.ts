@@ -26,7 +26,7 @@ export const useContactsController = () => {
   const staticContactInfo = [
     {
       sn: 1,
-      documentId: "DOC2023001",
+      documentId: "IAF2023001",
       documentType: "Intelligence Report",
       creatorName: "Capt. Sharma",
       creatorId: "IAF-2345",
@@ -37,7 +37,7 @@ export const useContactsController = () => {
     },
     {
       sn: 2,
-      documentId: "DOC2023002",
+      documentId: "IAF2023002",
       documentType: "Border Activity Report",
       creatorName: "Lt. Col. Verma",
       creatorId: "IAF-3456",
@@ -48,7 +48,7 @@ export const useContactsController = () => {
     },
     {
       sn: 3,
-      documentId: "DOC2023003",
+      documentId: "IAF2023003",
       documentType: "Diplomatic Analysis",
       creatorName: "Maj. Singh",
       creatorId: "IAF-4567",
@@ -59,7 +59,7 @@ export const useContactsController = () => {
     },
     {
       sn: 4,
-      documentId: "DOC2023004",
+      documentId: "IAF2023004",
       documentType: "Regional Stability Assessment",
       creatorName: "Wing Cmdr. Patel",
       creatorId: "IAF-5678",
@@ -70,7 +70,7 @@ export const useContactsController = () => {
     },
     {
       sn: 5,
-      documentId: "DOC2023005",
+      documentId: "IAF2023005",
       documentType: "Threat Analysis",
       creatorName: "Grp. Capt. Kumar",
       creatorId: "IAF-6789",
@@ -81,7 +81,7 @@ export const useContactsController = () => {
     },
     {
       sn: 6,
-      documentId: "DOC2023006",
+      documentId: "IAF2023006",
       documentType: "Strategic Report",
       creatorName: "Air Cmdr. Gupta",
       creatorId: "IAF-7890",
@@ -92,7 +92,7 @@ export const useContactsController = () => {
     },
     {
       sn: 7,
-      documentId: "DOC2023007",
+      documentId: "IAF2023007",
       documentType: "Intelligence Report",
       creatorName: "Capt. Sharma",
       creatorId: "IAF-2345",
@@ -103,7 +103,7 @@ export const useContactsController = () => {
     },
     {
       sn: 8,
-      documentId: "DOC2023008",
+      documentId: "IAF2023008",
       documentType: "Border Activity Report",
       creatorName: "Lt. Col. Verma",
       creatorId: "IAF-3456",
@@ -114,7 +114,7 @@ export const useContactsController = () => {
     },
     {
       sn: 9,
-      documentId: "DOC2023009",
+      documentId: "IAF2023009",
       documentType: "Diplomatic Analysis",
       creatorName: "Maj. Singh",
       creatorId: "IAF-4567",
@@ -125,7 +125,7 @@ export const useContactsController = () => {
     },
     {
       sn: 10,
-      documentId: "DOC2023010",
+      documentId: "IAF2023010",
       documentType: "Regional Stability Assessment",
       creatorName: "Wing Cmdr. Patel",
       creatorId: "IAF-5678",
@@ -136,7 +136,7 @@ export const useContactsController = () => {
     },
     {
       sn: 11,
-      documentId: "DOC2023011",
+      documentId: "IAF2023011",
       documentType: "Threat Analysis",
       creatorName: "Grp. Capt. Kumar",
       creatorId: "IAF-6789",
@@ -147,7 +147,7 @@ export const useContactsController = () => {
     },
     {
       sn: 12,
-      documentId: "DOC2023012",
+      documentId: "IAF2023012",
       documentType: "Strategic Report",
       creatorName: "Air Cmdr. Gupta",
       creatorId: "IAF-7890",
