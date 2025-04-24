@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
-import { List, Collapse, useTheme } from '@mui/material';
-import { useRouter, usePathname } from 'next/navigation';
+import React, { useEffect, useState } from "react";
+import { List, Collapse, useTheme } from "@mui/material";
+import { useRouter, usePathname } from "next/navigation";
 import {
   ExpandLess,
   ExpandMore,
@@ -10,17 +10,17 @@ import {
   Security,
   Description,
   AdminPanelSettings,
-  Assignment
-} from '@mui/icons-material';
+  Assignment,
+} from "@mui/icons-material";
 import {
   faGlobe,
   faFileLines,
-  faShareNodes
-} from '@fortawesome/free-solid-svg-icons';
+  faShareNodes,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { Icon } from '@/components/common/icon';
-import { LocalStorageEnum } from '@/enum';
-import { StorageHelper } from '@/utills';
+import { Icon } from "@/components/common/icon";
+import { LocalStorageEnum } from "@/enum";
+import { StorageHelper } from "@/utills";
 import {
   SidebarContainer,
   SidebarContent,
@@ -28,8 +28,8 @@ import {
   StyledListItemIcon,
   StyledListItemText,
   ExpandIconStyle,
-  NestedList
-} from './sidebar.style';
+  NestedList,
+} from "./sidebar.style";
 
 interface MenuItem {
   title: string;
@@ -42,39 +42,70 @@ interface MenuItem {
 // Regular menu items for executors
 const executorMenuItems: MenuItem[] = [
   {
-    title: 'Dashboard',
-    path: '/dashboard',
+    title: "Dashboard",
+    path: "/dashboard",
     icon: <Dashboard />,
   },
   {
-    title: 'Confidential',
+    title: "Confidential",
     icon: <Security />,
     submenu: [
       {
-        title: 'Geo Political',
-        path: '/confidential/geo-political',
-        faIcon: faGlobe
+        title: "Geo Political",
+        path: "/confidential/geo-political",
+        faIcon: faGlobe,
       },
       {
-        title: 'Reports',
-        path: '/confidential/reports',
-        faIcon: faFileLines
+        title: "Metrology",
+        path: "/confidential/metrology",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Miscellaneous",
+        path: "/confidential/miscellaneous",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Organization and Management",
+        path: "/confidential/organization-and-management",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Training",
+        path: "/confidential/training",
+        faIcon: faFileLines,
       },
     ],
   },
+
   {
-    title: 'Documents',
-    icon: <Description />,
+    title: "OSINT",
+    icon: <Security />,
     submenu: [
       {
-        title: 'All Documents',
-        path: '/documents/all',
-        faIcon: faFileLines
+        title: "Geo Political",
+        path: "/osint/geo-political",
+        faIcon: faGlobe,
       },
       {
-        title: 'Shared',
-        path: '/documents/shared',
-        faIcon: faShareNodes
+        title: "Metrology",
+        path: "/osint/metrology",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Miscellaneous",
+        path: "/osint/miscellaneous",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Organization and Management",
+        path: "/osint/organization-and-management",
+        faIcon: faFileLines,
+      },
+      {
+        title: "Training",
+        path: "/osint/training",
+        faIcon: faFileLines,
       },
     ],
   },
@@ -83,18 +114,18 @@ const executorMenuItems: MenuItem[] = [
 // Admin menu items
 const adminMenuItems: MenuItem[] = [
   {
-    title: 'Dashboard',
-    path: '/dashboard',
+    title: "Dashboard",
+    path: "/dashboard",
     icon: <Dashboard />,
   },
   {
-    title: 'Approver',
-    path: '/approver',
+    title: "Approver",
+    path: "/approver",
     icon: <AdminPanelSettings />,
   },
   {
-    title: 'Executor',
-    path: '/executor',
+    title: "Executor",
+    path: "/executor",
     icon: <Assignment />,
   },
 ];
@@ -108,19 +139,27 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
   useEffect(() => {
-    // Determine which menu to show based on the current path
-    const isAdminPath = pathname.startsWith('/admin');
-    setMenuItems(isAdminPath ? adminMenuItems : executorMenuItems);
-  }, [pathname]);
+    // Get user role from localStorage or your auth system
+    const userRole = localStorage.getItem("userRole"); // Replace with your actual role storage method
+
+    // Determine which menu to show based on user role
+    if (userRole === "admin" || userRole === "approver") {
+      setMenuItems(adminMenuItems);
+    } else if (userRole === "executor") {
+      setMenuItems(executorMenuItems);
+    }
+  }, []);
 
   // Set the selected item based on the current path
   useEffect(() => {
     setSelectedItem(pathname);
 
     // Also open the submenu if the current path is in a submenu
-    menuItems.forEach(item => {
+    menuItems.forEach((item) => {
       if (item.submenu) {
-        const hasSelectedChild = item.submenu.some(subItem => subItem.path === pathname);
+        const hasSelectedChild = item.submenu.some(
+          (subItem) => subItem.path === pathname
+        );
         if (hasSelectedChild) {
           setOpenSubMenu(item.title);
         }
@@ -146,7 +185,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
       <React.Fragment key={item.title}>
         <StyledListItem
           onClick={() => handleClick(item.path, item.title)}
-          className={isSelected ? 'selected' : ''}
+          className={isSelected ? "selected" : ""}
         >
           {item.icon && <StyledListItemIcon>{item.icon}</StyledListItemIcon>}
           <StyledListItemText primary={item.title} />
@@ -166,7 +205,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
                   <StyledListItem
                     key={subItem.title}
                     onClick={() => handleClick(subItem.path)}
-                    className={isSubItemSelected ? 'selected' : ''}
+                    className={isSubItemSelected ? "selected" : ""}
                   >
                     {subItem.faIcon && (
                       <StyledListItemIcon>
@@ -174,7 +213,11 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
                           icon={subItem.faIcon}
                           size="small"
                           onlyIcon
-                          color={isSubItemSelected ? theme.palette.primary.main : theme.palette.text.primary}
+                          color={
+                            isSubItemSelected
+                              ? theme.palette.primary.main
+                              : theme.palette.text.primary
+                          }
                         />
                       </StyledListItemIcon>
                     )}
@@ -190,11 +233,9 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   };
 
   return (
-    <SidebarContainer className={isOpen ? '' : 'icon-only'}>
+    <SidebarContainer className={isOpen ? "" : "icon-only"}>
       <SidebarContent>
-        <List component="nav">
-          {menuItems.map(renderMenuItem)}
-        </List>
+        <List component="nav">{menuItems.map(renderMenuItem)}</List>
       </SidebarContent>
     </SidebarContainer>
   );

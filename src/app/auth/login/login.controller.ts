@@ -125,14 +125,15 @@ export const LogInController = (): ILogInControllerResponse => {
       email: email.trim(),
       password: password.trim(),
     };
-
-    try {
-      await dispatch(AuthenticationThunk.adminSignIn(payload)).unwrap();
-      enqueueSnackbar(SIGNIN_SUCCESSFUL, SnackbarTypeEnum.SUCCESS);
-      dispatch(authActions.setFormState(AuthFormStateEnum.OTP));
-    } catch (error) {
-      enqueueSnackbar(SOMETHING_WENT_WRONG, SnackbarTypeEnum.ERROR);
-    }
+    localStorage.setItem("userRole", "executor");
+    router.push("/confidential/geo-political");
+    // try {
+    //   await dispatch(AuthenticationThunk.adminSignIn(payload)).unwrap();
+    //   enqueueSnackbar(SIGNIN_SUCCESSFUL, SnackbarTypeEnum.SUCCESS);
+    //   dispatch(authActions.setFormState(AuthFormStateEnum.OTP));
+    // } catch (error) {
+    //   enqueueSnackbar(SOMETHING_WENT_WRONG, SnackbarTypeEnum.ERROR);
+    // }
   }, [dispatch, email, enqueueSnackbar, isValidSubmittion, password, router]);
 
   const sendForgetPassword = () => {
