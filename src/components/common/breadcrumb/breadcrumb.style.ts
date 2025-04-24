@@ -9,9 +9,7 @@ export const BaseBreadcrumbCard = styled(Box)(() => ({
 
 export const BreadcrumbText = styled(Typography, {
   shouldForwardProp: (props) => props !== 'clickable',
-})<{ clickable?: boolean }>(({ theme, clickable = false }) => {
-  if (!clickable) {
-    return null;
-  }
-  return { cursor: 'pointer', color: theme.palette.primary.main };
-});
+})<{ clickable?: boolean }>(({ theme, clickable = false }) => ({
+  cursor: clickable ? 'pointer' : 'default',
+  color: clickable ? theme.palette.primary.main : theme.palette.text.primary,
+}));
