@@ -7,8 +7,8 @@ import { CardComponent } from "@/components/common/card";
 import { PageHeader, TextInputField } from "@/components/common";
 import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
-import ClassificationDropdown from '@/components/common/classificationDropdown';
-import TopicDropdown from '@/components/common/topicDropdown';
+import ClassificationDropdown from "@/components/common/classificationDropdown";
+import TopicDropdown from "@/components/common/topicDropdown";
 
 import { useUploadReportController } from "./upload-report.controller";
 import {
@@ -46,16 +46,9 @@ export default function UploadReport() {
         actions={""}
       />
 
-      <CardComponent title="Upload Report Form">
+      <CardComponent>
         <FormContainer>
-          {/* Basic Information Section */}
           <FormSection>
-            <FormSectionTitle>
-              <Typography variant="h6">Basic Information</Typography>
-              <Typography variant="body2" color="textSecondary">
-                Please provide the fundamental details of your report
-              </Typography>
-            </FormSectionTitle>
             <Grid container spacing={4}>
               {/* Origin Field */}
               <Grid item xs={12}>
@@ -129,13 +122,15 @@ export default function UploadReport() {
             </Grid>
           </FormSection>
 
-          {/* Classification Section */}
           <FormSection>
-            <FormSectionTitle>
-              <Typography variant="h6">Classification</Typography>
-            </FormSectionTitle>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
+                <FieldDescription>
+                  <Typography variant="subtitle2">Report Origin</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Specify where this report originated from
+                  </Typography>
+                </FieldDescription>
                 <ClassificationDropdown
                   ref={ref.classificationRef}
                   value={getters.classification}
@@ -145,6 +140,12 @@ export default function UploadReport() {
                 />
               </Grid>
               <Grid item xs={12} md={6}>
+                <FieldDescription>
+                  <Typography variant="subtitle2">Report Origin</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Specify where this report originated from
+                  </Typography>
+                </FieldDescription>
                 <TopicDropdown
                   ref={ref.topicsRef}
                   value={getters.topics}

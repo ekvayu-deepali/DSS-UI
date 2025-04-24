@@ -4,7 +4,7 @@ import { faTimes } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "../icon";
 
 interface CardComponentProps {
-  title: string;
+  title?: string;
   children: React.ReactNode;
   onClose?: () => void;
 }
@@ -16,17 +16,19 @@ export const CardComponent: React.FC<CardComponentProps> = ({
 }) => {
   return (
     <Card>
-      <CardHeader
-        title={title}
-        action={
-          onClose && (
-            <IconButton onClick={onClose} size="small">
-              <Icon icon={faTimes} size="small" onlyIcon />
-            </IconButton>
-          )
-        }
-      />
-      <CardContent>{children}</CardContent>
+      {title && (
+        <CardHeader
+          title={title}
+          action={
+            onClose && (
+              <IconButton onClick={onClose} size="small">
+                <Icon icon={faTimes} size="small" onlyIcon />
+              </IconButton>
+            )
+          }
+        />
+      )}
+      <CardContent sx={{ pt: title ? 2 : 3, pb: 3 }}>{children}</CardContent>
     </Card>
   );
 };
