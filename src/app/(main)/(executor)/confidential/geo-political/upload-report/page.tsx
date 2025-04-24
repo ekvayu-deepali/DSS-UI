@@ -1,7 +1,15 @@
 "use client";
 
 import React from "react";
-import { FormGroup, Grid, Typography, FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import {
+  FormGroup,
+  Grid,
+  Typography,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+} from "@mui/material";
 
 import { CardComponent } from "@/components/common/card";
 import { PageHeader, TextInputField } from "@/components/common";
@@ -9,7 +17,7 @@ import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
 import ClassificationDropdown from "@/components/common/classificationDropdown";
 import TopicDropdown from "@/components/common/topicDropdown";
-import { DocumentTypeOptions } from '@/enum/documentType.enum';
+import { DocumentTypeOptions } from "@/enum/documentType.enum";
 
 import { useUploadReportController } from "./upload-report.controller";
 import {
@@ -26,17 +34,17 @@ import {
 
 export default function UploadReport() {
   const { getters, handlers, ref } = useUploadReportController();
-  const { 
-    origin, 
-    source, 
-    description, 
-    summary, 
-    documentName, 
+  const {
+    origin,
+    source,
+    description,
+    summary,
+    documentName,
     documentType,
-    selectedDate, 
-    breadcrumbs 
+    selectedDate,
+    breadcrumbs,
   } = getters;
-  
+
   const {
     onOriginChange,
     onSourceChange,
@@ -48,7 +56,8 @@ export default function UploadReport() {
     handleSubmit,
     handleCancel,
   } = handlers;
-  const { originRef, sourceRef, descriptionRef, summaryRef, documentNameRef } = ref;
+  const { originRef, sourceRef, descriptionRef, summaryRef, documentNameRef } =
+    ref;
 
   return (
     <PageContainer>
@@ -60,7 +69,11 @@ export default function UploadReport() {
 
       <CardComponent>
         <FormContainer>
+          {/* Basic Document Details Section */}
           <FormSection>
+            <FormSectionTitle>
+              <Typography variant="h6">Basic Document Details</Typography>
+            </FormSectionTitle>
             <Grid container spacing={4}>
               {/* Document Name Field */}
               <Grid item xs={12} md={6}>
@@ -97,7 +110,9 @@ export default function UploadReport() {
                   </FieldDescription>
                   <StyledTextFieldWrapper>
                     <FormControl fullWidth>
-                      <InputLabel id="document-type-label">Document Type *</InputLabel>
+                      <InputLabel id="document-type-label">
+                        Document Type *
+                      </InputLabel>
                       <Select
                         labelId="document-type-label"
                         id="document-type"
@@ -117,6 +132,34 @@ export default function UploadReport() {
                 </FormGroup>
               </Grid>
 
+              {/* Date Field */}
+              <Grid item xs={12} md={6}>
+                <FormGroup>
+                  <FieldDescription>
+                    <Typography variant="subtitle2">Report Date</Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Select the date when this report was created
+                    </Typography>
+                  </FieldDescription>
+                  <StyledTextFieldWrapper>
+                    <SimpleDatePicker
+                      fullWidth
+                      label="Report Date"
+                      value={selectedDate}
+                      onChange={onDateChange}
+                    />
+                  </StyledTextFieldWrapper>
+                </FormGroup>
+              </Grid>
+            </Grid>
+          </FormSection>
+
+          {/* Source Information Section */}
+          <FormSection>
+            <FormSectionTitle>
+              <Typography variant="h6"> Information Tags</Typography>
+            </FormSectionTitle>
+            <Grid container spacing={4}>
               {/* Origin Field */}
               <Grid item xs={12}>
                 <FormGroup>
@@ -166,29 +209,10 @@ export default function UploadReport() {
                   </StyledTextFieldWrapper>
                 </FormGroup>
               </Grid>
-
-              {/* Date Field */}
-              <Grid item xs={12}>
-                <FormGroup>
-                  <FieldDescription>
-                    <Typography variant="subtitle2">Report Date</Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Select the date when this report was created
-                    </Typography>
-                  </FieldDescription>
-                  <StyledTextFieldWrapper>
-                    <SimpleDatePicker
-                      fullWidth
-                      label="Report Date"
-                      value={selectedDate}
-                      onChange={onDateChange}
-                    />
-                  </StyledTextFieldWrapper>
-                </FormGroup>
-              </Grid>
             </Grid>
           </FormSection>
 
+          {/* Classification Section */}
           <FormSection>
             <Grid container spacing={3}>
               <Grid item xs={12} md={6}>
@@ -229,6 +253,9 @@ export default function UploadReport() {
 
           {/* Report Content Section */}
           <FormSection>
+            <FormSectionTitle>
+              <Typography variant="h6">Report Content</Typography>
+            </FormSectionTitle>
             <Grid container spacing={4}>
               {/* Summary Field */}
               <Grid item xs={12}>
