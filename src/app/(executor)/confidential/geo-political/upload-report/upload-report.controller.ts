@@ -14,6 +14,7 @@ interface IUploadReportControllerResponse {
     summary: string;  // new field
     selectedDate: DateTime | null;
     breadcrumbs: IBreadcrumbDisplay[];
+    classification: string;
   };
   handlers: {
     onOriginChange: (event: ITextInputFieldData) => void;
@@ -21,6 +22,7 @@ interface IUploadReportControllerResponse {
     onDescriptionChange: (event: ITextInputFieldData) => void;
     onSummaryChange: (event: ITextInputFieldData) => void;  // new handler
     onDateChange: (date: DateTime | null) => void;
+    onClassificationChange: (value: string) => void;
     handleSubmit: () => Promise<void>;
     handleCancel: () => void;
   };
@@ -29,6 +31,7 @@ interface IUploadReportControllerResponse {
     sourceRef: RefObject<ITextInputFieldRef | null>;
     descriptionRef: RefObject<ITextInputFieldRef | null>;
     summaryRef: RefObject<ITextInputFieldRef | null>;  // new ref
+    classificationRef: RefObject<ITextInputFieldRef | null>;
   };
 }
 
@@ -41,12 +44,14 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
   const [description, setDescription] = useState<string>("");
   const [summary, setSummary] = useState<string>("");  // new state
   const [selectedDate, setSelectedDate] = useState<DateTime | null>(DateTime.now());
+  const [classification, setClassification] = useState<string>('');
 
   // Refs
   const originRef = useRef<ITextInputFieldRef | null>(null);
   const sourceRef = useRef<ITextInputFieldRef | null>(null);
   const descriptionRef = useRef<ITextInputFieldRef | null>(null);
   const summaryRef = useRef<ITextInputFieldRef | null>(null);  // new ref
+  const classificationRef = useRef<ITextInputFieldRef>(null);
 
   // Breadcrumbs configuration
   const breadcrumbs: IBreadcrumbDisplay[] = useMemo(
@@ -90,13 +95,18 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     setSelectedDate(date);
   }, []);
 
+  const onClassificationChange = useCallback((value: string) => {
+    setClassification(value);
+  }, []);
+
   const isValidSubmittion = useCallback((): boolean => {
     const originError = originRef.current?.validateValue();
     const sourceError = sourceRef.current?.validateValue();
     const descriptionError = descriptionRef.current?.validateValue();
     const summaryError = summaryRef.current?.validateValue();  // new validation
+    const classificationValid = classificationRef.current?.validateValue();
 
-    if (!(originError && sourceError && descriptionError && summaryError)) {  // updated validation
+    if (!(originError && sourceError && descriptionError && summaryError && classificationValid)) {
       return false;
     }
     return true;
@@ -140,6 +150,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       summary,  // expose new field
       selectedDate,
       breadcrumbs,
+      classification,
     },
     handlers: {
       onOriginChange,
@@ -147,6 +158,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       onDescriptionChange,
       onSummaryChange,  // expose new handler
       onDateChange,
+      onClassificationChange,
       handleSubmit,
       handleCancel,
     },
@@ -155,6 +167,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       sourceRef,
       descriptionRef,
       summaryRef,  // expose new ref
+      classificationRef,
     },
   };
 };

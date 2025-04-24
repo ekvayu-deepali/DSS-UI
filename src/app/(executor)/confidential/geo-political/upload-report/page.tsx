@@ -7,6 +7,7 @@ import { CardComponent } from "@/components/common/card";
 import { PageHeader, TextInputField } from "@/components/common";
 import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
+import ClassificationDropdown from '@/components/common/classificationDropdown';
 
 import { useUploadReportController } from "./upload-report.controller";
 import {
@@ -123,6 +124,24 @@ export default function UploadReport() {
                     />
                   </StyledTextFieldWrapper>
                 </FormGroup>
+              </Grid>
+            </Grid>
+          </FormSection>
+
+          {/* Classification Section */}
+          <FormSection>
+            <FormSectionTitle>
+              <Typography variant="h6">Classification</Typography>
+            </FormSectionTitle>
+            <Grid container spacing={3}>
+              <Grid item xs={12} md={6}>
+                <ClassificationDropdown
+                  ref={ref.classificationRef}
+                  value={getters.classification}
+                  onChange={handlers.onClassificationChange}
+                  fullWidth
+                  required
+                />
               </Grid>
             </Grid>
           </FormSection>
