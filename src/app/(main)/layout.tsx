@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 
-import { LayoutContainer, MainContent } from "./executorLayout.style";
+import { LayoutContainer, MainContent } from "./layout.style"
 import { Header } from "@/components/common/header/header";
 import { Sidebar } from "@/components/common/sidebar/sidebar";
 
