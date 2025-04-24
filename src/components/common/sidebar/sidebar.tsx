@@ -1,22 +1,26 @@
 "use client";
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { List, Collapse, useTheme } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import { 
-  ExpandLess, 
-  ExpandMore, 
+import {
+  ExpandLess,
+  ExpandMore,
   Dashboard,
   Security,
-  Description
+  Description,
+  AdminPanelSettings,
+  Assignment
 } from '@mui/icons-material';
-import { 
-  faGlobe, 
-  faFileLines, 
+import {
+  faGlobe,
+  faFileLines,
   faShareNodes
 } from '@fortawesome/free-solid-svg-icons';
 
 import { Icon } from '@/components/common/icon';
+import { LocalStorageEnum } from '@/enum';
+import { StorageHelper } from '@/utills';
 import {
   SidebarContainer,
   SidebarContent,
@@ -35,7 +39,8 @@ interface MenuItem {
   submenu?: MenuItem[];
 }
 
-const menuItems: MenuItem[] = [
+// Regular menu items for normal users
+const regularMenuItems: MenuItem[] = [
   {
     title: 'Dashboard',
     path: '/dashboard',
@@ -75,17 +80,45 @@ const menuItems: MenuItem[] = [
   },
 ];
 
+// Admin menu items - only Dashboard, Approver, and Executor
+const adminMenuItems: MenuItem[] = [
+  {
+    title: 'Dashboard',
+    path: '/dashboard',
+    icon: <Dashboard />,
+  },
+  {
+    title: 'Approver',
+    path: '/approver',
+    icon: <AdminPanelSettings />,
+  },
+  {
+    title: 'Executor',
+    path: '/executor',
+    icon: <Assignment />,
+  },
+];
+
 export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const router = useRouter();
   const theme = useTheme();
   const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
   const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>(regularMenuItems);
+
+  // Check if user is admin
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      // For demo purposes, always show admin menu
+      setMenuItems(adminMenuItems);
+    }
+  }, []);
 
   // Set the selected item based on the current path
   React.useEffect(() => {
     const path = window.location.pathname;
     setSelectedItem(path);
-    
+
     // Also open the submenu if the current path is in a submenu
     menuItems.forEach(item => {
       if (item.submenu) {
@@ -95,7 +128,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
         }
       }
     });
-  }, []);
+  }, [menuItems]);
 
   const handleClick = (path?: string, title?: string) => {
     if (path) {
@@ -113,7 +146,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
 
     return (
       <React.Fragment key={item.title}>
-        <StyledListItem 
+        <StyledListItem
           onClick={() => handleClick(item.path, item.title)}
           className={isSelected ? 'selected' : ''}
         >
@@ -125,7 +158,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
             </ExpandIconStyle>
           )}
         </StyledListItem>
-        
+
         {hasSubmenu && (
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <NestedList>
@@ -139,10 +172,10 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
                   >
                     {subItem.faIcon && (
                       <StyledListItemIcon>
-                        <Icon 
-                          icon={subItem.faIcon} 
-                          size="small" 
-                          onlyIcon 
+                        <Icon
+                          icon={subItem.faIcon}
+                          size="small"
+                          onlyIcon
                           color={isSubItemSelected ? theme.palette.primary.main : theme.palette.text.primary}
                         />
                       </StyledListItemIcon>
