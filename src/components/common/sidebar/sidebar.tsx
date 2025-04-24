@@ -2,7 +2,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { List, Collapse, useTheme } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import {
   ExpandLess,
   ExpandMore,
@@ -35,12 +35,12 @@ interface MenuItem {
   title: string;
   path?: string;
   icon?: React.ReactNode;
-  faIcon?: any; // FontAwesome icon
+  faIcon?: any;
   submenu?: MenuItem[];
 }
 
-// Regular menu items for normal users
-const regularMenuItems: MenuItem[] = [
+// Regular menu items for executors
+const executorMenuItems: MenuItem[] = [
   {
     title: 'Dashboard',
     path: '/dashboard',
@@ -80,7 +80,7 @@ const regularMenuItems: MenuItem[] = [
   },
 ];
 
-// Admin menu items - only Dashboard, Approver, and Executor
+// Admin menu items
 const adminMenuItems: MenuItem[] = [
   {
     title: 'Dashboard',
@@ -101,34 +101,32 @@ const adminMenuItems: MenuItem[] = [
 
 export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const theme = useTheme();
-  const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
-  const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
-  const [menuItems, setMenuItems] = useState<MenuItem[]>(regularMenuItems);
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
 
-  // Check if user is admin
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      // For demo purposes, always show admin menu
-      setMenuItems(adminMenuItems);
-    }
-  }, []);
+    // Determine which menu to show based on the current path
+    const isAdminPath = pathname.startsWith('/admin');
+    setMenuItems(isAdminPath ? adminMenuItems : executorMenuItems);
+  }, [pathname]);
 
   // Set the selected item based on the current path
-  React.useEffect(() => {
-    const path = window.location.pathname;
-    setSelectedItem(path);
+  useEffect(() => {
+    setSelectedItem(pathname);
 
     // Also open the submenu if the current path is in a submenu
     menuItems.forEach(item => {
       if (item.submenu) {
-        const hasSelectedChild = item.submenu.some(subItem => subItem.path === path);
+        const hasSelectedChild = item.submenu.some(subItem => subItem.path === pathname);
         if (hasSelectedChild) {
           setOpenSubMenu(item.title);
         }
       }
     });
-  }, [menuItems]);
+  }, [pathname, menuItems]);
 
   const handleClick = (path?: string, title?: string) => {
     if (path) {
