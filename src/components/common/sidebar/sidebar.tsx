@@ -4,16 +4,6 @@ import React, { useEffect, useState } from "react";
 import { List, Collapse, useTheme } from "@mui/material";
 import { useRouter, usePathname } from "next/navigation";
 import { ExpandLess, ExpandMore } from "@mui/icons-material";
-import {
-  faGlobe,
-  faFileLines,
-  faShareNodes,
-  faDashboard,
-  faShieldAlt,
-  faFile,
-  faUserShield,
-  faUsers,
-} from "@fortawesome/free-solid-svg-icons";
 
 import { Icon } from "@/components/common/icon";
 import {

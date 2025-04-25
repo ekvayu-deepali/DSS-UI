@@ -34,13 +34,18 @@ export const executorMenuItems: IMenuItem[] = [
         icon: faFileLines,
       },
       {
-        title: "Organization and Management",
-        path: "/confidential/organization-and-management",
+        title: "Organisation and Management",
+        path: "/confidential/organisation-and-management",
         icon: faFileLines,
       },
       {
         title: "Training",
         path: "/confidential/training",
+        icon: faFileLines,
+      },
+      {
+        title: "Intelligence",
+        path: "/confidential/intelligence",
         icon: faFileLines,
       },
     ],
@@ -66,13 +71,18 @@ export const executorMenuItems: IMenuItem[] = [
         icon: faFileLines,
       },
       {
-        title: "Organization and Management",
-        path: "/osint/organization-and-management",
+        title: "Organisation and Management",
+        path: "/osint/organisation-and-management",
         icon: faFileLines,
       },
       {
         title: "Training",
         path: "/osint/training",
+        icon: faFileLines,
+      },
+      {
+        title: "Intelligence",
+        path: "/confidential/intelligence",
         icon: faFileLines,
       },
     ],
