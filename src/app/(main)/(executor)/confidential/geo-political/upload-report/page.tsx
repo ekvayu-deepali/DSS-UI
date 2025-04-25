@@ -3,11 +3,6 @@
 import React, { useState, useRef } from "react";
 import {
   Typography,
-  FormControl,
-  FormGroup,
-  InputLabel,
-  MenuItem,
-  Select,
   Box,
   Chip,
   Modal,
@@ -160,9 +155,15 @@ export default function UploadReport() {
               <Typography variant="h5">Basic Document Details</Typography>
             </FormSectionTitle>
 
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: 3,
+              }}
+            >
               {/* Document Name Field */}
-              <Box sx={{ flex: '0 0 40%' }}>
+              <Box sx={{ flex: "0 0 50%" }}>
                 <FieldDescription>
                   <Typography variant="subtitle2">Document Name</Typography>
                   <Typography variant="body2" color="textSecondary">
@@ -183,39 +184,8 @@ export default function UploadReport() {
                 </StyledTextFieldWrapper>
               </Box>
 
-              {/* Document Type Dropdown */}
-              <Box sx={{ flex: '0 0 30%' }}>
-                <FieldDescription>
-                  <Typography variant="subtitle2">Document Type</Typography>
-                  <Typography variant="body2" color="textSecondary">
-                    Select the type of document
-                  </Typography>
-                </FieldDescription>
-                <StyledTextFieldWrapper>
-                  <FormControl fullWidth>
-                    <InputLabel id="document-type-label">
-                      Document Type *
-                    </InputLabel>
-                    <Select
-                      labelId="document-type-label"
-                      id="document-type"
-                      value={documentType}
-                      label="Document Type *"
-                      onChange={(e) => onDocumentTypeChange(e.target.value)}
-                      ref={ref.documentTypeRef}
-                    >
-                      {Object.values(DocumentTypeOptions).map((option) => (
-                        <MenuItem key={option.value} value={option.value}>
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </StyledTextFieldWrapper>
-              </Box>
-
               {/* Report Date Field */}
-              <Box sx={{ flex: '0 0 30%' }}>
+              <Box sx={{ flex: "0 0 50%" }}>
                 <FieldDescription>
                   <Typography variant="subtitle2">Report Date</Typography>
                   <Typography variant="body2" color="textSecondary">
@@ -232,129 +202,170 @@ export default function UploadReport() {
                 </StyledTextFieldWrapper>
               </Box>
             </Box>
-            <Spacing spacing={2} variant={SpacingEnum.TOP} />
+            <Spacing spacing={4} variant={SpacingEnum.TOP} />
 
-            {/* Document Category */}
-            <FormGroup>
-              <FieldDescription>
-                <Typography variant="subtitle2">Document Category</Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Select the category of the document
-                </Typography>
-              </FieldDescription>
-              <ChipsWrapper>
-                {getters.documentCategoryOptions.map((option) => (
-                  <ChipComponent
-                    key={option.value}
-                    value={option.value}
-                    label={option.label}
-                    onClick={() => onDocumentCategoryChange(option.value)}
-                    variant={
-                      documentCategory === option.value ? "filled" : "outlined"
-                    }
-                    color={option.color}
-                  />
-                ))}
-                <AddNewChip
-                  icon={<AddIcon />}
-                  label="Add New"
-                  onClick={handleAddNewClick}
-                  variant="outlined"
-                />
-              </ChipsWrapper>
-            </FormGroup>
-            <Spacing spacing={2} variant={SpacingEnum.TOP} />
-
-            {/* File Upload Field */}
-            <FormGroup>
-              <FieldDescription>
-                <Typography variant="subtitle2">
-                  Supporting Documents
-                </Typography>
-                <Typography variant="body2" color="textSecondary">
-                  Upload any relevant files or documents
-                </Typography>
-              </FieldDescription>
-
-              <input
-                type="file"
-                multiple
-                id="file-upload"
-                style={{ display: "none" }}
-                onChange={(e) =>
-                  e.target.files && handlers.handleFileUpload(e.target.files)
-                }
-                ref={fileInputRef}
-              />
-
-              <FileUploadContainer
-                onClick={() => fileInputRef.current?.click()}
-                sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  minHeight: "56px",
-                }}
-              >
-                <CloudUploadIcon sx={{ mb: 1, color: "primary.main" }} />
-                <Typography variant="body2" color="textSecondary">
-                  Click to upload files
-                </Typography>
-              </FileUploadContainer>
-
-              {/* File Preview Section */}
-              {getters.uploadedFiles.length > 0 && (
-                <FilePreviewContainer>
-                  {getters.uploadedFiles.map((fileInfo, index) => (
-                    <FilePreviewItem key={`${fileInfo.file.name}-${index}`}>
-                      <Box
-                        sx={{
-                          display: "flex",
-                          alignItems: "center",
-                          gap: 1,
-                          flex: 1,
-                        }}
-                      >
-                        <InsertDriveFileIcon color="primary" />
-                        <Box sx={{ minWidth: 0, flex: 1 }}>
-                          <Typography
-                            variant="body2"
-                            noWrap
-                            title={fileInfo.file.name}
-                          >
-                            {fileInfo.file.name}
-                          </Typography>
-                          <Typography variant="caption" color="textSecondary">
-                            {formatBytes(fileInfo.file.size)}
-                          </Typography>
-                        </Box>
-                      </Box>
-                      <IconButton
-                        size="small"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handlers.removeFile(index);
-                        }}
-                      >
-                        <DeleteIcon fontSize="small" />
-                      </IconButton>
-                    </FilePreviewItem>
+            {/* Document Type and Category in one row */}
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+              {/* Document Type */}
+              <Box sx={{ flex: '0 0 50%' }}>
+                <FieldDescription>
+                  <Typography variant="subtitle2">Document Type</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Select the type of document
+                  </Typography>
+                </FieldDescription>
+                <ChipsWrapper>
+                  {Object.values(DocumentTypeOptions).map((option) => (
+                    <ChipComponent
+                      key={option.value}
+                      value={option.value}
+                      label={option.label}
+                      onClick={() => onDocumentTypeChange(option.value)}
+                      variant={
+                        documentType === option.value ? "filled" : "outlined"
+                      }
+                      color="primary"
+                    />
                   ))}
-                </FilePreviewContainer>
-              )}
+                </ChipsWrapper>
+              </Box>
 
-              {/* Error Message */}
-              {getters.uploadError && (
-                <Alert
-                  severity="error"
-                  onClose={handlers.clearUploadError}
-                  sx={{ mt: 1 }}
+              {/* Document Category */}
+              <Box sx={{ flex: '0 0 50%' }}>
+                <FieldDescription>
+                  <Typography variant="subtitle2">Document Category</Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Select the category of the document
+                  </Typography>
+                </FieldDescription>
+                <ChipsWrapper>
+                  {getters.documentCategoryOptions.map((option) => (
+                    <ChipComponent
+                      key={option.value}
+                      value={option.value}
+                      label={option.label}
+                      onClick={() => onDocumentCategoryChange(option.value)}
+                      variant={
+                        documentCategory === option.value ? "filled" : "outlined"
+                      }
+                      color={option.color}
+                    />
+                  ))}
+                  <AddNewChip
+                    icon={<AddIcon />}
+                    label="Add New"
+                    onClick={handleAddNewClick}
+                    variant="outlined"
+                  />
+                </ChipsWrapper>
+              </Box>
+            </Box>
+            <Spacing spacing={2} variant={SpacingEnum.TOP} />
+
+            {/* Supporting Documents in one row */}
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
+              {/* File Upload Field */}
+              <Box sx={{ flex: getters.uploadedFiles.length > 0 ? '0 0 40%' : '1' }}>
+                <FieldDescription>
+                  <Typography variant="subtitle2">
+                    Supporting Documents
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Upload any relevant files or documents
+                  </Typography>
+                </FieldDescription>
+
+                <input
+                  type="file"
+                  multiple
+                  id="file-upload"
+                  style={{ display: "none" }}
+                  onChange={(e) =>
+                    e.target.files && handlers.handleFileUpload(e.target.files)
+                  }
+                  ref={fileInputRef}
+                />
+
+                <FileUploadContainer
+                  onClick={() => fileInputRef.current?.click()}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "120px",
+                  }}
                 >
-                  {getters.uploadError}
-                </Alert>
+                  <CloudUploadIcon sx={{ mb: 1, color: "primary.main" }} />
+                  <Typography variant="body2" color="textSecondary">
+                    Click to upload files
+                  </Typography>
+                </FileUploadContainer>
+
+                {/* Error Message */}
+                {getters.uploadError && (
+                  <Alert
+                    severity="error"
+                    onClose={handlers.clearUploadError}
+                    sx={{ mt: 1 }}
+                  >
+                    {getters.uploadError}
+                  </Alert>
+                )}
+              </Box>
+
+              {/* File Preview Section - Only shown when files are uploaded */}
+              {getters.uploadedFiles.length > 0 && (
+                <Box sx={{ flex: '0 0 60%' }}>
+                  <FieldDescription>
+                    <Typography variant="subtitle2">
+                      Uploaded Files
+                    </Typography>
+                    <Typography variant="body2" color="textSecondary">
+                      Files that will be attached to this report
+                    </Typography>
+                  </FieldDescription>
+
+                  <FilePreviewContainer>
+                    {getters.uploadedFiles.map((fileInfo, index) => (
+                      <FilePreviewItem key={`${fileInfo.file.name}-${index}`}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            flex: 1,
+                          }}
+                        >
+                          <InsertDriveFileIcon color="primary" />
+                          <Box sx={{ minWidth: 0, flex: 1 }}>
+                            <Typography
+                              variant="body2"
+                              noWrap
+                              title={fileInfo.file.name}
+                            >
+                              {fileInfo.file.name}
+                            </Typography>
+                            <Typography variant="caption" color="textSecondary">
+                              {formatBytes(fileInfo.file.size)}
+                            </Typography>
+                          </Box>
+                        </Box>
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlers.removeFile(index);
+                          }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </FilePreviewItem>
+                    ))}
+                  </FilePreviewContainer>
+                </Box>
               )}
-            </FormGroup>
+            </Box>
 
             <Modal
               open={isAddNewOpen}
@@ -394,7 +405,13 @@ export default function UploadReport() {
             <FormSectionTitle>
               <Typography variant="h5">Information Tags</Typography>
             </FormSectionTitle>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: 4,
+              }}
+            >
               {/* Origin Field */}
               <Box sx={{ flex: 1 }}>
                 <FieldDescription>
@@ -420,7 +437,9 @@ export default function UploadReport() {
               {/* Source Field */}
               <Box sx={{ flex: 1 }}>
                 <FieldDescription>
-                  <Typography variant="subtitle2">Information Source</Typography>
+                  <Typography variant="subtitle2">
+                    Information Source
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
                     Indicate the primary source of the information
                   </Typography>
@@ -443,13 +462,22 @@ export default function UploadReport() {
 
           {/* Classification and Topics Section */}
           <FormSection>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: 4,
+              }}
+            >
               {/* Classification Level */}
               <Box sx={{ flex: 1 }}>
                 <FieldDescription>
-                  <Typography variant="subtitle2">Classification Level</Typography>
+                  <Typography variant="subtitle2">
+                    Classification Level
+                  </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Select the appropriate security classification for this report
+                    Select the appropriate security classification for this
+                    report
                   </Typography>
                 </FieldDescription>
                 <ChipsWrapper>
@@ -458,7 +486,9 @@ export default function UploadReport() {
                       key={option.value}
                       value={option.value}
                       label={option.label}
-                      onClick={() => handlers.onClassificationChange(option.value)}
+                      onClick={() =>
+                        handlers.onClassificationChange(option.value)
+                      }
                       variant={
                         getters.classification === option.value
                           ? "filled"
@@ -486,10 +516,14 @@ export default function UploadReport() {
                       label={topic.label}
                       onClick={() => handlers.onTopicToggle(topic.value)}
                       variant={
-                        getters.topics.includes(topic.value) ? "filled" : "outlined"
+                        getters.topics.includes(topic.value)
+                          ? "filled"
+                          : "outlined"
                       }
                       color={
-                        getters.topics.includes(topic.value) ? "primary" : "default"
+                        getters.topics.includes(topic.value)
+                          ? "primary"
+                          : "default"
                       }
                     />
                   ))}
@@ -504,9 +538,16 @@ export default function UploadReport() {
               <Typography variant="h5">Severity Assessment</Typography>
             </FormSectionTitle>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
-              Assess the severity of the report on a scale from 0 (low) to 10 (high).
+              Assess the severity of the report on a scale from 0 (low) to 10
+              (high).
             </Typography>
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: 4,
+              }}
+            >
               <Box sx={{ flex: 1 }}>
                 <SeveritySlider
                   label="Source Severity"
@@ -532,13 +573,20 @@ export default function UploadReport() {
               <Typography variant="h5">Report Content</Typography>
             </FormSectionTitle>
             {/* Summary and Description Fields in one row */}
-            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: { xs: "column", md: "row" },
+                gap: 4,
+              }}
+            >
               {/* Summary Field */}
               <Box sx={{ flex: 1 }}>
                 <FieldDescription>
                   <Typography variant="subtitle2">Executive Summary</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Provide a brief overview of the key points (max 3 paragraphs)
+                    Provide a brief overview of the key points (max 3
+                    paragraphs)
                   </Typography>
                 </FieldDescription>
                 <StyledTextFieldWrapper>
@@ -563,8 +611,8 @@ export default function UploadReport() {
                     Detailed Description
                   </Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Provide comprehensive details of the report including analysis
-                    and findings
+                    Provide comprehensive details of the report including
+                    analysis and findings
                   </Typography>
                 </FieldDescription>
                 <StyledTextFieldWrapper>
