@@ -75,7 +75,11 @@ const TOPICS = [
 
 export default function UploadReport() {
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
+  const [isAddClassificationOpen, setIsAddClassificationOpen] = useState(false);
+  const [isAddTopicOpen, setIsAddTopicOpen] = useState(false);
   const [newChipLabel, setNewChipLabel] = useState("");
+  const [newClassificationLabel, setNewClassificationLabel] = useState("");
+  const [newTopicLabel, setNewTopicLabel] = useState("");
   const { getters, handlers, ref } = useUploadReportController();
   const {
     origin,
@@ -115,6 +119,7 @@ export default function UploadReport() {
     fileInputRef,
   } = ref;
 
+  // Document Category handlers
   const handleAddNewClick = () => {
     setIsAddNewOpen(true);
   };
@@ -136,6 +141,44 @@ export default function UploadReport() {
         color: "primary",
       });
       handleCloseAddNew();
+    }
+  };
+
+  // Classification handlers
+  const handleAddClassificationClick = () => {
+    setIsAddClassificationOpen(true);
+  };
+
+  const handleCloseAddClassification = () => {
+    setIsAddClassificationOpen(false);
+    setNewClassificationLabel("");
+  };
+
+  const handleAddNewClassification = () => {
+    if (newClassificationLabel.trim()) {
+      // This would typically call a handler from the controller
+      // For now, we'll just log it since we don't have a handler for this
+      console.log("New classification added:", newClassificationLabel);
+      handleCloseAddClassification();
+    }
+  };
+
+  // Topic handlers
+  const handleAddTopicClick = () => {
+    setIsAddTopicOpen(true);
+  };
+
+  const handleCloseAddTopic = () => {
+    setIsAddTopicOpen(false);
+    setNewTopicLabel("");
+  };
+
+  const handleAddNewTopic = () => {
+    if (newTopicLabel.trim()) {
+      // This would typically call a handler from the controller
+      // For now, we'll just log it since we don't have a handler for this
+      console.log("New topic added:", newTopicLabel);
+      handleCloseAddTopic();
     }
   };
 
@@ -367,6 +410,7 @@ export default function UploadReport() {
               )}
             </Box>
 
+            {/* Document Category Modal */}
             <Modal
               open={isAddNewOpen}
               onClose={handleCloseAddNew}
@@ -398,18 +442,87 @@ export default function UploadReport() {
                 </Box>
               </AddChipDialog>
             </Modal>
+
+            {/* Classification Modal */}
+            <Modal
+              open={isAddClassificationOpen}
+              onClose={handleCloseAddClassification}
+              aria-labelledby="add-new-classification"
+            >
+              <AddChipDialog>
+                <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                  Add New Classification
+                </Typography>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  label="Classification Name"
+                  value={newClassificationLabel}
+                  onChange={(e) => setNewClassificationLabel(e.target.value)}
+                  sx={{ mb: 3 }}
+                />
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
+                >
+                  <Button onClick={handleCloseAddClassification}>Cancel</Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleAddNewClassification}
+                    disabled={!newClassificationLabel.trim()}
+                  >
+                    Add
+                  </Button>
+                </Box>
+              </AddChipDialog>
+            </Modal>
+
+            {/* Topic Modal */}
+            <Modal
+              open={isAddTopicOpen}
+              onClose={handleCloseAddTopic}
+              aria-labelledby="add-new-topic"
+            >
+              <AddChipDialog>
+                <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                  Add New Topic
+                </Typography>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  label="Topic Name"
+                  value={newTopicLabel}
+                  onChange={(e) => setNewTopicLabel(e.target.value)}
+                  sx={{ mb: 3 }}
+                />
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
+                >
+                  <Button onClick={handleCloseAddTopic}>Cancel</Button>
+                  <Button
+                    variant="contained"
+                    onClick={handleAddNewTopic}
+                    disabled={!newTopicLabel.trim()}
+                  >
+                    Add
+                  </Button>
+                </Box>
+              </AddChipDialog>
+            </Modal>
           </FormSection>
 
-          {/* Source Information Section */}
+          {/* Information Tags Section */}
           <FormSection>
             <FormSectionTitle>
               <Typography variant="h5">Information Tags</Typography>
             </FormSectionTitle>
+
+            {/* Origin and Source in one row */}
             <Box
               sx={{
                 display: "flex",
                 flexDirection: { xs: "column", md: "row" },
                 gap: 4,
+                mb: 4,
               }}
             >
               {/* Origin Field */}
@@ -458,10 +571,8 @@ export default function UploadReport() {
                 </StyledTextFieldWrapper>
               </Box>
             </Box>
-          </FormSection>
 
-          {/* Classification and Topics Section */}
-          <FormSection>
+            {/* Classification and Topics in one row */}
             <Box
               sx={{
                 display: "flex",
@@ -497,6 +608,12 @@ export default function UploadReport() {
                       color={option.color}
                     />
                   ))}
+                  <AddNewChip
+                    icon={<AddIcon />}
+                    label="Add New"
+                    onClick={handleAddClassificationClick}
+                    variant="outlined"
+                  />
                 </ChipsWrapper>
               </Box>
 
@@ -527,6 +644,12 @@ export default function UploadReport() {
                       }
                     />
                   ))}
+                  <AddNewChip
+                    icon={<AddIcon />}
+                    label="Add New"
+                    onClick={handleAddTopicClick}
+                    variant="outlined"
+                  />
                 </ChipsWrapper>
               </Box>
             </Box>

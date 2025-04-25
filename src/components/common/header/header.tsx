@@ -76,7 +76,7 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   title,
   onToggleSidebar,
-  username = "Abhinandan",
+  username = "Abhinandan@gmail.com",
   role = "Admin",
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
