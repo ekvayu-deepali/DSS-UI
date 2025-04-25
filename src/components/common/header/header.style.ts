@@ -1,7 +1,7 @@
 "use client";
 
 import { styled } from "@mui/material";
-import { Typography } from "@mui/material";
+import { Typography, Box } from "@mui/material";
 
 export const HeaderContainer = styled("header")(({ theme }) => ({
   position: "fixed",
@@ -41,6 +41,35 @@ export const AppTitle = styled(Typography)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   [theme.breakpoints.down("sm")]: {
+    display: "none",
+  },
+}));
+
+// User profile related styled components
+export const UserInfo = styled(Box)(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  cursor: "pointer",
+  padding: theme.spacing(0.5, 1),
+  borderRadius: theme.shape.borderRadius,
+  transition: "background-color 0.2s",
+  "&:hover": {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+export const UserName = styled(Typography)(({ theme }) => ({
+  fontWeight: 600,
+  color: theme.palette.text.primary,
+  [theme.breakpoints.down("md")]: {
+    display: "none",
+  },
+}));
+
+export const UserRole = styled(Typography)(({ theme }) => ({
+  color: theme.palette.text.secondary,
+  fontSize: "0.75rem",
+  [theme.breakpoints.down("md")]: {
     display: "none",
   },
 }));

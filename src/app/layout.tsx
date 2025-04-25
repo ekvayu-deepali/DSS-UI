@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Phishing Admin Dashboard",
-  description: "Admin dashboard for phishing campaign management",
+  title: "DSS",
+  description: "Decision Support System",
 };
 
 export default function RootLayout({

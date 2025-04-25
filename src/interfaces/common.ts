@@ -1,3 +1,5 @@
+import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
+
 /**
  * @param T Send the type you want as Value
  *
@@ -34,4 +36,13 @@ export interface IMetadataPayload {
 
 export interface ITableWithLoadingPayload extends IMetadataPayload {
   isLoading: boolean;
+}
+
+
+
+export interface IMenuItem {
+  title: string;
+  path?: string;
+  icon: any; // FontAwesome icon
+  submenu?: IMenuItem[];
 }

@@ -1,22 +1,21 @@
 "use client";
 
-import React from 'react';
-import { List, Collapse, useTheme } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import { 
-  ExpandLess, 
-  ExpandMore, 
-  Dashboard,
-  Security,
-  Description
-} from '@mui/icons-material';
-import { 
-  faGlobe, 
-  faFileLines, 
-  faShareNodes
-} from '@fortawesome/free-solid-svg-icons';
+import React, { useEffect, useState } from "react";
+import { List, Collapse, useTheme } from "@mui/material";
+import { useRouter, usePathname } from "next/navigation";
+import { ExpandLess, ExpandMore } from "@mui/icons-material";
+import {
+  faGlobe,
+  faFileLines,
+  faShareNodes,
+  faDashboard,
+  faShieldAlt,
+  faFile,
+  faUserShield,
+  faUsers,
+} from "@fortawesome/free-solid-svg-icons";
 
-import { Icon } from '@/components/common/icon';
+import { Icon } from "@/components/common/icon";
 import {
   SidebarContainer,
   SidebarContent,
@@ -24,78 +23,45 @@ import {
   StyledListItemIcon,
   StyledListItemText,
   ExpandIconStyle,
-  NestedList
-} from './sidebar.style';
-
-interface MenuItem {
-  title: string;
-  path?: string;
-  icon?: React.ReactNode;
-  faIcon?: any; // FontAwesome icon
-  submenu?: MenuItem[];
-}
-
-const menuItems: MenuItem[] = [
-  {
-    title: 'Dashboard',
-    path: '/dashboard',
-    icon: <Dashboard />,
-  },
-  {
-    title: 'Confidential',
-    icon: <Security />,
-    submenu: [
-      {
-        title: 'Geo Political',
-        path: '/confidential/geo-political',
-        faIcon: faGlobe
-      },
-      {
-        title: 'Reports',
-        path: '/confidential/reports',
-        faIcon: faFileLines
-      },
-    ],
-  },
-  {
-    title: 'Documents',
-    icon: <Description />,
-    submenu: [
-      {
-        title: 'All Documents',
-        path: '/documents/all',
-        faIcon: faFileLines
-      },
-      {
-        title: 'Shared',
-        path: '/documents/shared',
-        faIcon: faShareNodes
-      },
-    ],
-  },
-];
+  NestedList,
+} from "./sidebar.style";
+import { executorMenuItems } from "@/json/sidebarData/executor";
+import { adminMenuItems } from "@/json/sidebarData/admin";
+import { IMenuItem } from "@/interfaces";
 
 export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   const router = useRouter();
+  const pathname = usePathname();
   const theme = useTheme();
-  const [openSubMenu, setOpenSubMenu] = React.useState<string | null>(null);
-  const [selectedItem, setSelectedItem] = React.useState<string | null>(null);
+  const [openSubMenu, setOpenSubMenu] = useState<string | null>(null);
+  const [selectedItem, setSelectedItem] = useState<string | null>(null);
+  const [menuItems, setMenuItems] = useState<IMenuItem[]>([]);
 
-  // Set the selected item based on the current path
-  React.useEffect(() => {
-    const path = window.location.pathname;
-    setSelectedItem(path);
-    
-    // Also open the submenu if the current path is in a submenu
-    menuItems.forEach(item => {
+  useEffect(() => {
+    // Get user role from localStorage
+    const userRole = localStorage.getItem("userRole");
+
+    // Determine which menu to show based on user role
+    if (userRole === "admin" || userRole === "approver") {
+      setMenuItems(adminMenuItems);
+    } else if (userRole === "executor") {
+      setMenuItems(executorMenuItems);
+    }
+  }, []);
+
+  useEffect(() => {
+    setSelectedItem(pathname);
+    menuItems.forEach((item) => {
       if (item.submenu) {
-        const hasSelectedChild = item.submenu.some(subItem => subItem.path === path);
+        const hasSelectedChild = item.submenu.some(
+          (subItem) => subItem.path === pathname
+        );
         if (hasSelectedChild) {
           setOpenSubMenu(item.title);
         }
       }
     });
-  }, []);
+  }, [pathname, menuItems]);
 
   const handleClick = (path?: string, title?: string) => {
     if (path) {
@@ -106,18 +72,29 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
     }
   };
 
-  const renderMenuItem = (item: MenuItem) => {
+  const renderMenuItem = (item: IMenuItem) => {
     const hasSubmenu = item.submenu && item.submenu.length > 0;
     const isOpen = openSubMenu === item.title;
     const isSelected = item.path === selectedItem;
 
     return (
       <React.Fragment key={item.title}>
-        <StyledListItem 
+        <StyledListItem
           onClick={() => handleClick(item.path, item.title)}
-          className={isSelected ? 'selected' : ''}
+          className={isSelected ? "selected" : ""}
         >
-          {item.icon && <StyledListItemIcon>{item.icon}</StyledListItemIcon>}
+          <StyledListItemIcon>
+            <Icon
+              icon={item.icon}
+              size="small"
+              onlyIcon
+              color={
+                isSelected
+                  ? theme.palette.primary.main
+                  : theme.palette.text.primary
+              }
+            />
+          </StyledListItemIcon>
           <StyledListItemText primary={item.title} />
           {hasSubmenu && (
             <ExpandIconStyle>
@@ -125,7 +102,7 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
             </ExpandIconStyle>
           )}
         </StyledListItem>
-        
+
         {hasSubmenu && (
           <Collapse in={isOpen} timeout="auto" unmountOnExit>
             <NestedList>
@@ -135,18 +112,20 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
                   <StyledListItem
                     key={subItem.title}
                     onClick={() => handleClick(subItem.path)}
-                    className={isSubItemSelected ? 'selected' : ''}
+                    className={isSubItemSelected ? "selected" : ""}
                   >
-                    {subItem.faIcon && (
-                      <StyledListItemIcon>
-                        <Icon 
-                          icon={subItem.faIcon} 
-                          size="small" 
-                          onlyIcon 
-                          color={isSubItemSelected ? theme.palette.primary.main : theme.palette.text.primary}
-                        />
-                      </StyledListItemIcon>
-                    )}
+                    <StyledListItemIcon>
+                      <Icon
+                        icon={subItem.icon}
+                        size="small"
+                        onlyIcon
+                        color={
+                          isSubItemSelected
+                            ? theme.palette.primary.main
+                            : theme.palette.text.primary
+                        }
+                      />
+                    </StyledListItemIcon>
                     <StyledListItemText primary={subItem.title} />
                   </StyledListItem>
                 );
@@ -159,11 +138,9 @@ export const Sidebar: React.FC<{ isOpen?: boolean }> = ({ isOpen = true }) => {
   };
 
   return (
-    <SidebarContainer className={isOpen ? '' : 'icon-only'}>
+    <SidebarContainer className={isOpen ? "" : "icon-only"}>
       <SidebarContent>
-        <List component="nav">
-          {menuItems.map(renderMenuItem)}
-        </List>
+        <List component="nav">{menuItems.map(renderMenuItem)}</List>
       </SidebarContent>
     </SidebarContainer>
   );
