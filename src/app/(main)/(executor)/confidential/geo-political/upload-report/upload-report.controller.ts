@@ -22,6 +22,11 @@ interface IUploadReportControllerResponse {
     classification: string;
     topics: string[];
     error: boolean;
+    documentCategoryOptions: Array<{
+      value: string;
+      label: string;
+      color: string;
+    }>;
   };
   handlers: {
     onOriginChange: (event: ITextInputFieldData) => void;
@@ -36,6 +41,11 @@ interface IUploadReportControllerResponse {
     handleSubmit: () => Promise<void>;
     handleCancel: () => void;
     onTopicToggle: (topicValue: string) => void;
+    onAddNewDocumentCategory: (newCategory: {
+      value: string;
+      label: string;
+      color: string;
+    }) => void;
   };
   ref: {
     originRef: RefObject<ITextInputFieldRef | null>;
@@ -67,6 +77,12 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
   const [classification, setClassification] = useState<string>("");
   const [topics, setTopics] = useState<string[]>([]);
   const [error, setError] = useState<boolean>(false);
+  const [documentCategoryOptions, setDocumentCategoryOptions] = useState([
+    { value: "book", label: "Book", color: "primary" },
+    { value: "journal", label: "Journal", color: "primary" },
+    { value: "periodical", label: "Periodical", color: "primary" },
+    { value: "press_report", label: "Press Report", color: "primary" },
+  ]);
 
   // Refs
   const originRef = useRef<ITextInputFieldRef | null>(null);
@@ -148,6 +164,26 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
 
   const onDocumentCategoryChange = useCallback((value: string): void => {
     setDocumentCategory(value);
+  }, []);
+
+  const onAddNewDocumentCategory = useCallback((newCategory: {
+    value: string;
+    label: string;
+    color: string;
+  }) => {
+    setDocumentCategoryOptions(prev => {
+      // Check if category with same value already exists
+      const categoryExists = prev.some(category => category.value === newCategory.value);
+      if (categoryExists) {
+        // If exists, generate a unique value by adding a timestamp
+        const uniqueValue = `${newCategory.value}_${Date.now()}`;
+        const uniqueCategory = { ...newCategory, value: uniqueValue };
+        return [...prev, uniqueCategory];
+      }
+      return [...prev, newCategory];
+    });
+    // Remove this line to prevent auto-selection of new category
+    // setDocumentCategory(newCategory.value);
   }, []);
 
   const isValidSubmittion = useCallback((): boolean => {
@@ -251,6 +287,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       classification,
       topics,
       error,
+      documentCategoryOptions,
     },
     handlers: {
       onOriginChange,
@@ -262,6 +299,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       onClassificationChange,
       onDocumentTypeChange,
       onDocumentCategoryChange,
+      onAddNewDocumentCategory,
       handleSubmit,
       handleCancel,
       onTopicToggle,

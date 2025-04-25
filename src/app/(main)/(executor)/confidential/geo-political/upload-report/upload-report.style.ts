@@ -1,4 +1,4 @@
-import { Box, Button, styled } from "@mui/material";
+import { Box, Button, Chip, styled } from "@mui/material";
 
 export const PageContainer = styled(Box)(({ theme }) => ({
   minHeight: "100vh",
@@ -95,5 +95,30 @@ export const ChipsWrapper = styled(Box)(({ theme }) => ({
   flexWrap: "wrap",
   gap: theme.spacing(1),
   marginTop: theme.spacing(2),
+}));
+
+export const AddNewChip = styled(Chip)(({ theme }) => ({
+  backgroundColor: theme.palette.background.paper,
+  border: `1px dashed ${theme.palette.primary.main}`,
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '& .MuiChip-label': {
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
+  },
+}));
+
+export const AddChipDialog = styled(Box)(({ theme }) => ({
+  position: 'absolute',
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  width: 400,
+  backgroundColor: theme.palette.background.paper,
+  boxShadow: theme.shadows[24],
+  padding: theme.spacing(4),
+  borderRadius: theme.shape.borderRadius,
 }));
 

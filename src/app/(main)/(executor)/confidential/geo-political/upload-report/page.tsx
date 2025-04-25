@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import {
   FormGroup,
   Grid,
@@ -11,7 +11,11 @@ import {
   Select,
   Box,
   Chip,
+  Modal,
+  TextField,
+  Button,
 } from "@mui/material";
+import AddIcon from '@mui/icons-material/Add';
 
 import { CardComponent } from "@/components/common/card";
 import {
@@ -38,6 +42,8 @@ import {
   StyledTextFieldWrapper,
   FieldDescription,
   ChipsWrapper,
+  AddNewChip,
+  AddChipDialog,
 } from "./upload-report.style";
 
 const ChipComponent = ({ value, label, onClick, variant, color }: any) => (
@@ -72,6 +78,8 @@ const DocumentCategoryOptions = [
 ];
 
 export default function UploadReport() {
+  const [isAddNewOpen, setIsAddNewOpen] = useState(false);
+  const [newChipLabel, setNewChipLabel] = useState('');
   const { getters, handlers, ref } = useUploadReportController();
   const {
     origin,
@@ -96,9 +104,34 @@ export default function UploadReport() {
     onDateChange,
     handleSubmit,
     handleCancel,
+    onAddNewDocumentCategory,
   } = handlers;
   const { originRef, sourceRef, descriptionRef, summaryRef, documentNameRef } =
     ref;
+
+  const handleAddNewClick = () => {
+    setIsAddNewOpen(true);
+  };
+
+  const handleCloseAddNew = () => {
+    setIsAddNewOpen(false);
+    setNewChipLabel('');
+  };
+
+  const handleAddNewCategory = () => {
+    if (newChipLabel.trim()) {
+      // Generate a unique value by combining sanitized label with timestamp
+      const baseValue = newChipLabel.toLowerCase().replace(/\s+/g, '_');
+      const uniqueValue = `${baseValue}_${Date.now()}`;
+      
+      onAddNewDocumentCategory({
+        value: uniqueValue,
+        label: newChipLabel.trim(),
+        color: 'primary'
+      });
+      handleCloseAddNew();
+    }
+  };
 
   return (
     <PageContainer>
@@ -147,7 +180,7 @@ export default function UploadReport() {
                 </Typography>
               </FieldDescription>
               <ChipsWrapper>
-                {DocumentCategoryOptions.map((option) => (
+                {getters.documentCategoryOptions.map((option) => (
                   <ChipComponent
                     key={option.value}
                     value={option.value}
@@ -161,8 +194,43 @@ export default function UploadReport() {
                     color={option.color}
                   />
                 ))}
+                <AddNewChip
+                  icon={<AddIcon />}
+                  label="Add New"
+                  onClick={handleAddNewClick}
+                  variant="outlined"
+                />
               </ChipsWrapper>
             </FormGroup>
+            <Modal
+              open={isAddNewOpen}
+              onClose={handleCloseAddNew}
+              aria-labelledby="add-new-category"
+            >
+              <AddChipDialog>
+                <Typography variant="h6" component="h2" sx={{ mb: 2 }}>
+                  Add New Category
+                </Typography>
+                <TextField
+                  autoFocus
+                  fullWidth
+                  label="Category Name"
+                  value={newChipLabel}
+                  onChange={(e) => setNewChipLabel(e.target.value)}
+                  sx={{ mb: 3 }}
+                />
+                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                  <Button onClick={handleCloseAddNew}>Cancel</Button>
+                  <Button 
+                    variant="contained" 
+                    onClick={handleAddNewCategory}
+                    disabled={!newChipLabel.trim()}
+                  >
+                    Add
+                  </Button>
+                </Box>
+              </AddChipDialog>
+            </Modal>
             <Spacing spacing={2} variant={SpacingEnum.TOP} />
             {/* Document Type Dropdown */}
             <FormGroup>
