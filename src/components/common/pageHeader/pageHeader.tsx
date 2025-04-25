@@ -2,15 +2,16 @@
 
 import React, { ReactElement, ReactNode } from "react";
 import { Grid, Typography } from "@mui/material";
-
 import { Breadcrumb, IBreadcrumbDisplay } from "@/components/common/breadcrumb";
-
+import SearchBar from "@/components/common/searchbar/searchbar";
 import { GridActionItem, PageHeaderBox } from "./pageHeader.style";
 
 interface IPageHeader {
   title: string;
   breadcrumbs?: IBreadcrumbDisplay[];
-  actions: ReactNode;
+  actions?: ReactNode;
+  showSearch?: boolean;
+  onSearch?: (searchTerm: string, filters: string[]) => void;
 }
 
 /**
@@ -19,12 +20,12 @@ interface IPageHeader {
  * @return {ReactElement}
  */
 export function PageHeader(props: IPageHeader): ReactElement {
-  const { title, actions, breadcrumbs } = props;
+  const { title, actions, breadcrumbs, showSearch = false, onSearch } = props;
 
   return (
     <PageHeaderBox>
-      <Grid container justifyContent="space-between">
-        <Grid item>
+      <Grid container justifyContent="space-between" alignItems="center">
+        <Grid>
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {title}
           </Typography>
@@ -32,7 +33,10 @@ export function PageHeader(props: IPageHeader): ReactElement {
             <Breadcrumb breadcrumbs={breadcrumbs ? breadcrumbs : []} />
           )}
         </Grid>
-        <GridActionItem item>{actions}</GridActionItem>
+        <GridActionItem sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+          {showSearch && <SearchBar onSearch={onSearch} />}
+          {actions}
+        </GridActionItem>
       </Grid>
     </PageHeaderBox>
   );

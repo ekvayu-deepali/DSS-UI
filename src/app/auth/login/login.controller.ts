@@ -134,7 +134,7 @@ export const LogInController = (): ILogInControllerResponse => {
     // } catch (error) {
     //   enqueueSnackbar(SOMETHING_WENT_WRONG, SnackbarTypeEnum.ERROR);
     // }
-  }, [dispatch, email, enqueueSnackbar, isValidSubmittion, password, router]);
+  }, []);
 
   const sendForgetPassword = () => {
     dispatch(authActions.setFormState(AuthFormStateEnum.FORGOT_PASSWORD));

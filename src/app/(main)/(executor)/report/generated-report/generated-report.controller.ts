@@ -160,9 +160,9 @@ export const useContactsController = () => {
   const [activeFilters, setActiveFilters] = useState<string[]>([
     'documentId',
     'documentType',
-    'creatorName',
-    'creatorId',
-    'status'
+    // 'creatorName',
+    // 'creatorId',
+    // 'status'
   ]);
 
   /**
@@ -207,12 +207,12 @@ export const useContactsController = () => {
         sn: item.sn,
         documentId: item.documentId,
         documentType: item.documentType,
-        creatorName: item.creatorName,
-        creatorId: item.creatorId,
+        // creatorName: item.creatorName,
+        // creatorId: item.creatorId,
         uploadedDate: item.uploadedDate,
-        approverId: item.approverId,
+        // approverId: item.approverId,
         createdDate: item.createdDate,
-        status: item.status,
+        // status: item.status,
       })),
     [filteredData]
   );
@@ -248,21 +248,21 @@ export const useContactsController = () => {
       width: 150,
       type: TableComponentEnum.STRING,
     },
-    {
-      id: "creatorName",
-      name: "Creator Name",
-      hidden: false,
-      width: 180,
-      type: TableComponentEnum.COMPONENT,
-      component: AvatarMenu,
-    },
-    {
-      id: "creatorId",
-      name: "Creator ID",
-      hidden: false,
-      width: 120,
-      type: TableComponentEnum.STRING,
-    },
+    // {
+    //   id: "creatorName",
+    //   name: "Creator Name",
+    //   hidden: false,
+    //   width: 180,
+    //   type: TableComponentEnum.COMPONENT,
+    //   component: AvatarMenu,
+    // },
+    // {
+    //   id: "creatorId",
+    //   name: "Creator ID",
+    //   hidden: false,
+    //   width: 120,
+    //   type: TableComponentEnum.STRING,
+    // },
     {
       id: "uploadedDate",
       name: "Uploaded Date",
@@ -270,13 +270,13 @@ export const useContactsController = () => {
       width: 180,
       type: TableComponentEnum.DATE,
     },
-    {
-      id: "approverId",
-      name: "Approver ID",
-      hidden: false,
-      width: 120,
-      type: TableComponentEnum.STRING,
-    },
+    // {
+    //   id: "approverId",
+    //   name: "Approver ID",
+    //   hidden: false,
+    //   width: 120,
+    //   type: TableComponentEnum.STRING,
+    // },
     {
       id: "createdDate",
       name: "Created Date",
@@ -284,14 +284,14 @@ export const useContactsController = () => {
       width: 180,
       type: TableComponentEnum.DATE,
     },
-    {
-      id: "status",
-      name: "Status",
-      hidden: false,
-      width: 100,
-      type: TableComponentEnum.COMPONENT,
-      component: ChipComponent,
-    },
+    // {
+    //   id: "status",
+    //   name: "Status",
+    //   hidden: false,
+    //   width: 100,
+    //   type: TableComponentEnum.COMPONENT,
+    //   component: ChipComponent,
+    // },
   ];
 
   const breadcrumbs = [
@@ -301,12 +301,12 @@ export const useContactsController = () => {
       forwardParam: false,
     },
     {
-      name: "Confidential",
+      name: "Report",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },
     {
-      name: "Geo Political",
+      name: "Generated Report",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },
