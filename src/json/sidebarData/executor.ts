@@ -6,6 +6,11 @@ import {
   faFile,
   faShareNodes,
   faShieldAlt,
+  faCloudSunRain,
+  faBoxArchive,
+  faSitemap,
+  faGraduationCap,
+  faBrain,
 } from "@fortawesome/free-solid-svg-icons";
 
 export const executorMenuItems: IMenuItem[] = [
@@ -26,26 +31,30 @@ export const executorMenuItems: IMenuItem[] = [
       {
         title: "Metrology",
         path: "/confidential/metrology",
-        icon: faFileLines,
+        icon: faCloudSunRain,
       },
       {
         title: "Miscellaneous",
         path: "/confidential/miscellaneous",
-        icon: faFileLines,
+        icon: faBoxArchive,
       },
       {
-        title: "Organization and Management",
-        path: "/confidential/organization-and-management",
-        icon: faFileLines,
+        title: "Organisation and Management",
+        path: "/confidential/organisation-and-management",
+        icon: faSitemap,
       },
       {
         title: "Training",
         path: "/confidential/training",
-        icon: faFileLines,
+        icon: faGraduationCap,
+      },
+      {
+        title: "Intelligence",
+        path: "/confidential/intelligence",
+        icon: faBrain,
       },
     ],
   },
-
   {
     title: "OSINT",
     icon: faShareNodes,
@@ -58,22 +67,27 @@ export const executorMenuItems: IMenuItem[] = [
       {
         title: "Metrology",
         path: "/osint/metrology",
-        icon: faFileLines,
+        icon: faCloudSunRain,
       },
       {
         title: "Miscellaneous",
         path: "/osint/miscellaneous",
-        icon: faFileLines,
+        icon: faBoxArchive,
       },
       {
-        title: "Organization and Management",
-        path: "/osint/organization-and-management",
-        icon: faFileLines,
+        title: "Organisation and Management",
+        path: "/osint/organisation-and-management",
+        icon: faSitemap,
       },
       {
         title: "Training",
         path: "/osint/training",
-        icon: faFileLines,
+        icon: faGraduationCap,
+      },
+      {
+        title: "Intelligence",
+        path: "/osint/intelligence",
+        icon: faBrain,
       },
     ],
   },
@@ -87,5 +101,4 @@ export const executorMenuItems: IMenuItem[] = [
     path: "/settings",
     icon: faFileLines,
   },
-
 ];

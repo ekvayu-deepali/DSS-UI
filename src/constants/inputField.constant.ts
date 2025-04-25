@@ -9,7 +9,7 @@ export const CURRENT_PASSWORD = "Current Password";
 export const NEW_PASSWORD = "New Password";
 export const NEW_PASSWORD_CONFIRMATION = "New Password Confirmation";
 export const PASSWORD_MUST_BE_SAME = "Passwords must be same";
-export const ORGANIZAION = "Organization";
+export const ORGANISAION = "Organisation";
 export const ADDRESS = "Address";
 export const PHONE_NUMBER = "Phone Number";
 
