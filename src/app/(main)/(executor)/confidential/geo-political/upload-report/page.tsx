@@ -17,10 +17,10 @@ import {
   Alert,
   IconButton,
 } from "@mui/material";
-import AddIcon from '@mui/icons-material/Add';
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
-import DeleteIcon from '@mui/icons-material/Delete';
-import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFile';
+import AddIcon from "@mui/icons-material/Add";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import DeleteIcon from "@mui/icons-material/Delete";
+import InsertDriveFileIcon from "@mui/icons-material/InsertDriveFile";
 
 import { CardComponent } from "@/components/common/card";
 import {
@@ -89,7 +89,7 @@ const DocumentCategoryOptions = [
 
 export default function UploadReport() {
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
-  const [newChipLabel, setNewChipLabel] = useState('');
+  const [newChipLabel, setNewChipLabel] = useState("");
   const { getters, handlers, ref } = useUploadReportController();
   const {
     origin,
@@ -116,13 +116,13 @@ export default function UploadReport() {
     handleCancel,
     onAddNewDocumentCategory,
   } = handlers;
-  const { 
-    originRef, 
-    sourceRef, 
-    descriptionRef, 
-    summaryRef, 
+  const {
+    originRef,
+    sourceRef,
+    descriptionRef,
+    summaryRef,
     documentNameRef,
-    fileInputRef
+    fileInputRef,
   } = ref;
 
   const handleAddNewClick = () => {
@@ -131,19 +131,19 @@ export default function UploadReport() {
 
   const handleCloseAddNew = () => {
     setIsAddNewOpen(false);
-    setNewChipLabel('');
+    setNewChipLabel("");
   };
 
   const handleAddNewCategory = () => {
     if (newChipLabel.trim()) {
       // Generate a unique value by combining sanitized label with timestamp
-      const baseValue = newChipLabel.toLowerCase().replace(/\s+/g, '_');
+      const baseValue = newChipLabel.toLowerCase().replace(/\s+/g, "_");
       const uniqueValue = `${baseValue}_${Date.now()}`;
-      
+
       onAddNewDocumentCategory({
         value: uniqueValue,
         label: newChipLabel.trim(),
-        color: 'primary'
+        color: "primary",
       });
       handleCloseAddNew();
     }
@@ -203,9 +203,7 @@ export default function UploadReport() {
                     label={option.label}
                     onClick={() => onDocumentCategoryChange(option.value)}
                     variant={
-                      documentCategory === option.value
-                        ? "filled"
-                        : "outlined"
+                      documentCategory === option.value ? "filled" : "outlined"
                     }
                     color={option.color}
                   />
@@ -235,10 +233,12 @@ export default function UploadReport() {
                   onChange={(e) => setNewChipLabel(e.target.value)}
                   sx={{ mb: 3 }}
                 />
-                <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", gap: 2 }}
+                >
                   <Button onClick={handleCloseAddNew}>Cancel</Button>
-                  <Button 
-                    variant="contained" 
+                  <Button
+                    variant="contained"
                     onClick={handleAddNewCategory}
                     disabled={!newChipLabel.trim()}
                   >
@@ -282,101 +282,113 @@ export default function UploadReport() {
 
             {/* Date and File Upload Section */}
             <FormGroup>
-              <DateAndFileSection>
-                {/* Date Field */}
-                <Box>
-                  <FieldDescription>
-                    <Typography variant="subtitle2">Report Date</Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Select the date when this report was created
-                    </Typography>
-                  </FieldDescription>
-                  <StyledTextFieldWrapper>
-                    <SimpleDatePicker
-                      fullWidth
-                      label="Report Date"
-                      value={selectedDate}
-                      onChange={onDateChange}
-                    />
-                  </StyledTextFieldWrapper>
-                </Box>
+              <FieldDescription>
+                <Typography variant="subtitle2">Report Date</Typography>
+                <Typography variant="body2" color="textSecondary">
+                  Select the date when this report was created
+                </Typography>
+              </FieldDescription>
+              <StyledTextFieldWrapper>
+                <SimpleDatePicker
+                  fullWidth
+                  label="Report Date"
+                  value={selectedDate}
+                  onChange={onDateChange}
+                />
+              </StyledTextFieldWrapper>
+            </FormGroup>
+            <Spacing spacing={2} variant={SpacingEnum.TOP} />
+            {/* File Upload Field */}
+            <FormGroup>
+             
+                <FieldDescription>
+                  <Typography variant="subtitle2">
+                    Supporting Documents
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Upload any relevant files or documents
+                  </Typography>
+                </FieldDescription>
 
-                {/* File Upload Field */}
-                <Box>
-                  <FieldDescription>
-                    <Typography variant="subtitle2">Supporting Documents</Typography>
-                    <Typography variant="body2" color="textSecondary">
-                      Upload any relevant files or documents
-                    </Typography>
-                  </FieldDescription>
-                  
-                  <input
-                    type="file"
-                    multiple
-                    id="file-upload"
-                    style={{ display: 'none' }}
-                    onChange={(e) => e.target.files && handlers.handleFileUpload(e.target.files)}
-                    ref={fileInputRef}
-                  />
-                  
-                  <FileUploadContainer
-                    onClick={() => fileInputRef.current?.click()}
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'column',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      minHeight: '56px', // Match height with DatePicker
-                    }}
-                  >
-                    <CloudUploadIcon sx={{ mb: 1, color: 'primary.main' }} />
-                    <Typography variant="body2" color="textSecondary">
-                      Click to upload files
-                    </Typography>
-                  </FileUploadContainer>
+                <input
+                  type="file"
+                  multiple
+                  id="file-upload"
+                  style={{ display: "none" }}
+                  onChange={(e) =>
+                    e.target.files && handlers.handleFileUpload(e.target.files)
+                  }
+                  ref={fileInputRef}
+                />
 
-                  {/* File Preview Section */}
-                  {getters.uploadedFiles.length > 0 && (
-                    <FilePreviewContainer>
-                      {getters.uploadedFiles.map((fileInfo, index) => (
-                        <FilePreviewItem key={`${fileInfo.file.name}-${index}`}>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, flex: 1 }}>
-                            <InsertDriveFileIcon color="primary" />
-                            <Box sx={{ minWidth: 0, flex: 1 }}>
-                              <Typography variant="body2" noWrap title={fileInfo.file.name}>
-                                {fileInfo.file.name}
-                              </Typography>
-                              <Typography variant="caption" color="textSecondary">
-                                {formatBytes(fileInfo.file.size)}
-                              </Typography>
-                            </Box>
+                <FileUploadContainer
+                  onClick={() => fileInputRef.current?.click()}
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    minHeight: "56px", // Match height with DatePicker
+                  }}
+                >
+                  <CloudUploadIcon sx={{ mb: 1, color: "primary.main" }} />
+                  <Typography variant="body2" color="textSecondary">
+                    Click to upload files
+                  </Typography>
+                </FileUploadContainer>
+
+                {/* File Preview Section */}
+                {getters.uploadedFiles.length > 0 && (
+                  <FilePreviewContainer>
+                    {getters.uploadedFiles.map((fileInfo, index) => (
+                      <FilePreviewItem key={`${fileInfo.file.name}-${index}`}>
+                        <Box
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            gap: 1,
+                            flex: 1,
+                          }}
+                        >
+                          <InsertDriveFileIcon color="primary" />
+                          <Box sx={{ minWidth: 0, flex: 1 }}>
+                            <Typography
+                              variant="body2"
+                              noWrap
+                              title={fileInfo.file.name}
+                            >
+                              {fileInfo.file.name}
+                            </Typography>
+                            <Typography variant="caption" color="textSecondary">
+                              {formatBytes(fileInfo.file.size)}
+                            </Typography>
                           </Box>
-                          <IconButton
-                            size="small"
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              handlers.removeFile(index);
-                            }}
-                          >
-                            <DeleteIcon fontSize="small" />
-                          </IconButton>
-                        </FilePreviewItem>
-                      ))}
-                    </FilePreviewContainer>
-                  )}
+                        </Box>
+                        <IconButton
+                          size="small"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            handlers.removeFile(index);
+                          }}
+                        >
+                          <DeleteIcon fontSize="small" />
+                        </IconButton>
+                      </FilePreviewItem>
+                    ))}
+                  </FilePreviewContainer>
+                )}
 
-                  {/* Error Message */}
-                  {getters.uploadError && (
-                    <Alert 
-                      severity="error" 
-                      onClose={handlers.clearUploadError}
-                      sx={{ mt: 1 }}
-                    >
-                      {getters.uploadError}
-                    </Alert>
-                  )}
-                </Box>
-              </DateAndFileSection>
+                {/* Error Message */}
+                {getters.uploadError && (
+                  <Alert
+                    severity="error"
+                    onClose={handlers.clearUploadError}
+                    sx={{ mt: 1 }}
+                  >
+                    {getters.uploadError}
+                  </Alert>
+                )}
+              {/* </DateAndFileSection> */}
             </FormGroup>
           </FormSection>
 
