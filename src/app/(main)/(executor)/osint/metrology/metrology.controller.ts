@@ -279,7 +279,7 @@ export const useContactsController = () => {
       forwardParam: false,
     },
     {
-      name: "Confidential",
+      name: "OSINT",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },

@@ -284,7 +284,7 @@ export const useContactsController = () => {
       forwardParam: true,
     },
     {
-      name: "Geo Political",
+      name: "Training",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },
