@@ -26,7 +26,7 @@ export const AvatarMenu = (props: IProps): JSX.Element => {
           {value ? value.trimStart().substring(0, 1).toUpperCase() : "U"}
         </UserPrefix>
       </ListAvatar>
-      <Typography>{value}</Typography>
+      <Typography variant="body2">{value}</Typography>
     </ActionWrapper>
   );
 };
