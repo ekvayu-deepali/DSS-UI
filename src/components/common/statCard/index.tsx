@@ -1,43 +1,72 @@
 "use client";
 
 import React from "react";
-import { Card, CardContent, Typography, Box } from "@mui/material";
-import { styles } from "./styles";
+import { Box } from "@mui/material";
+import {
+  StyledCard,
+  CardContent,
+  HeaderContainer,
+  StatName,
+  StatValue,
+  IconContainer,
+  FooterContainer,
+  ChangeText,
+  PeriodText
+} from "./styles";
 
 interface StatCardProps {
   name: string;
   value: string;
   icon: React.ReactNode;
   change: string;
+  iconColor?: string;
 }
 
-const StatCard: React.FC<StatCardProps> = ({ name, value, icon, change }) => {
+const StatCard: React.FC<StatCardProps> = ({ name, value, icon, change, iconColor }) => {
+  // Extract color from icon props if not provided directly
+  const extractIconColor = () => {
+    if (iconColor) return iconColor;
+
+    // Try to extract color from icon props if it's a React element
+    if (React.isValidElement(icon) && icon.props) {
+      // Use type assertion to access color property
+      const props = icon.props as { color?: string };
+      if (props.color) {
+        return props.color;
+      }
+    }
+
+    return undefined;
+  };
+
+  const color = extractIconColor();
+
   return (
-    <Card sx={styles.card}>
-      <CardContent sx={styles.cardContent}>
-        <Box sx={styles.headerContainer}>
+    <StyledCard>
+      <CardContent>
+        <HeaderContainer>
           <Box>
-            <Typography variant="body2" color="text.secondary" sx={styles.name}>
+            <StatName variant="body2">
               {name}
-            </Typography>
-            <Typography variant="h4" sx={styles.value}>
+            </StatName>
+            <StatValue variant="h4">
               {value}
-            </Typography>
+            </StatValue>
           </Box>
-          <Box sx={styles.iconContainer}>
+          <IconContainer color={color}>
             {icon}
-          </Box>
-        </Box>
-        <Box sx={styles.footerContainer}>
-          <Typography variant="body2" color="success.main" sx={styles.change}>
+          </IconContainer>
+        </HeaderContainer>
+        <FooterContainer>
+          <ChangeText variant="body2">
             {change}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={styles.period}>
+          </ChangeText>
+          <PeriodText variant="body2">
             from last month
-          </Typography>
-        </Box>
+          </PeriodText>
+        </FooterContainer>
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 };
 
