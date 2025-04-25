@@ -16,7 +16,7 @@ import {
 export const executorMenuItems: IMenuItem[] = [
   {
     title: "Dashboard",
-    path: "/dashboard",
+    path: "/executor-dashboard",
     icon: faDashboard,
   },
   {

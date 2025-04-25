@@ -1,57 +1,67 @@
 "use client";
 
 import React from "react";
-import { Box, Typography, Grid, Paper } from "@mui/material";
-import { styled } from "@mui/material/styles";
+import { Box } from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import {
+  faFileAlt,
+  faMapMarkerAlt,
+  faSearch,
+  faUsers
+} from "@fortawesome/free-solid-svg-icons";
+import StatCard from "../../../../components/common/statCard";
+import PageHeader from "../../../../components/common/pageHeader";
+import { styles } from "./styles";
 
-const DashboardItem = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  textAlign: "center",
-  color: theme.palette.text.secondary,
-  height: "100%",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-}));
+const stats = [
+  {
+    name: 'Documents',
+    value: '143',
+    icon: <FontAwesomeIcon icon={faFileAlt} size="lg" color="#3b82f6" />,
+    change: '+12%'
+  },
+  {
+    name: 'Geo Data',
+    value: '28',
+    icon: <FontAwesomeIcon icon={faMapMarkerAlt} size="lg" color="#22c55e" />,
+    change: '+5%'
+  },
+  {
+    name: 'Searches',
+    value: '1,254',
+    icon: <FontAwesomeIcon icon={faSearch} size="lg" color="#a855f7" />,
+    change: '+18%'
+  },
+  {
+    name: 'Users',
+    value: '15',
+    icon: <FontAwesomeIcon icon={faUsers} size="lg" color="#f59e0b" />,
+    change: '+2%'
+  },
+];
 
 export default function Dashboard() {
   return (
-    <Box sx={{ flexGrow: 1, p: 3 }}>
-      <Typography variant="h4" gutterBottom>
-        Dashboard
-      </Typography>
-      <Grid container spacing={3}>
-        <Grid item xs={12} md={4}>
-          <DashboardItem elevation={3}>
-            <Typography variant="h5" color="primary" gutterBottom>
-              Approver
-            </Typography>
-            <Typography variant="body1">
-              Manage document approval process
-            </Typography>
-          </DashboardItem>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <DashboardItem elevation={3}>
-            <Typography variant="h5" color="primary" gutterBottom>
-              Executor
-            </Typography>
-            <Typography variant="body1">
-              Manage execution of approved documents
-            </Typography>
-          </DashboardItem>
-        </Grid>
-        <Grid item xs={12} md={4}>
-          <DashboardItem elevation={3}>
-            <Typography variant="h5" color="primary" gutterBottom>
-              Reports
-            </Typography>
-            <Typography variant="body1">
-              View and generate system reports
-            </Typography>
-          </DashboardItem>
-        </Grid>
-      </Grid>
+    <Box sx={styles.container}>
+      <PageHeader
+        title="Dashboard"
+        actions={null}
+      />
+
+      <Box sx={styles.statsContainer}>
+        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 3, sm: 4 }, width: '100%' }}>
+          {stats.map((stat, index) => (
+            <Box key={index} sx={{ width: { xs: '100%', sm: '47%', md: '47%', lg: '23%' }, flexGrow: 1 }}>
+              <StatCard
+                name={stat.name}
+                value={stat.value}
+                icon={stat.icon}
+                change={stat.change}
+              />
+            </Box>
+          ))}
+        </Box>
+      </Box>
     </Box>
   );
 }

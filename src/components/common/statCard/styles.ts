@@ -1,0 +1,73 @@
+export const styles = {
+    card: {
+      transition: "all 0.3s ease",
+      height: "100%",
+      width: "100%",
+      display: "flex",
+      flexDirection: "column",
+      borderRadius: 2,
+      overflow: "hidden",
+      boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+      "&:hover": {
+        boxShadow: "0 8px 24px rgba(0,0,0,0.12)",
+        transform: "translateY(-4px)",
+      },
+    },
+    cardContent: {
+      p: 3,
+      flex: 1,
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+    },
+    headerContainer: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      width: "100%",
+    },
+    name: {
+      fontWeight: 500,
+      mb: 0.5,
+      fontSize: "0.875rem",
+      textTransform: "uppercase",
+      letterSpacing: "0.5px",
+      opacity: 0.8,
+    },
+    value: {
+      fontWeight: 700,
+      fontSize: {
+        xs: "1.75rem",
+        sm: "2rem",
+        md: "2.125rem",
+      },
+      lineHeight: 1.2,
+    },
+    iconContainer: {
+      height: 48,
+      width: 48,
+      borderRadius: 2,
+      bgcolor: "action.hover",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+    },
+    footerContainer: {
+      mt: 2,
+      display: "flex",
+      alignItems: "center",
+      pt: 2,
+      borderTop: "1px solid",
+      borderColor: "divider",
+    },
+    change: {
+      fontWeight: 600,
+      fontSize: "0.75rem",
+    },
+    period: {
+      ml: 0.5,
+      fontSize: "0.75rem",
+      opacity: 0.7,
+    },
+  };
