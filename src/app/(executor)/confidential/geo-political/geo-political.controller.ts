@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 import useMeasure from "react-use-measure";
 import { Theme, useMediaQuery, useTheme } from "@mui/material";
 
@@ -156,6 +156,14 @@ export const useContactsController = () => {
   const theme: Theme = useTheme();
   const isMobileView: boolean = useMediaQuery(theme.breakpoints.down("sm"));
   const dispatch = useAppDispatch();
+  const [searchTerm, setSearchTerm] = useState("");
+  const [activeFilters, setActiveFilters] = useState<string[]>([
+    'documentId',
+    'documentType',
+    'creatorName',
+    'creatorId',
+    'status'
+  ]);
 
   /**
    * @funtions {changeRows} - Update Rows to Show
@@ -179,9 +187,23 @@ export const useContactsController = () => {
     [dispatch]
   );
 
+  const filteredData = useMemo(
+    () =>
+      staticContactInfo.filter((item) => {
+        if (!searchTerm) return true;
+        
+        const searchLower = searchTerm.toLowerCase();
+        return activeFilters.some(filter => {
+          const value = item[filter as keyof typeof item];
+          return value?.toString().toLowerCase().includes(searchLower);
+        });
+      }),
+    [searchTerm, activeFilters]
+  );
+
   const newApplication = useMemo(
     () =>
-      staticContactInfo.map((item) => ({
+      filteredData.map((item) => ({
         sn: item.sn,
         documentId: item.documentId,
         documentType: item.documentType,
@@ -192,7 +214,7 @@ export const useContactsController = () => {
         createdDate: item.createdDate,
         status: item.status,
       })),
-    []
+    [filteredData]
   );
 
   const tablePaginationData = useAppSelector(GET_TABLE_PAGINATION_DATA);
@@ -200,7 +222,7 @@ export const useContactsController = () => {
   const { page, limit, isLoading } = tablePaginationData;
 
   const contactPagination = {
-    totalCount: staticContactInfo.length,
+    totalCount: filteredData.length,
   };
 
   // Rest of your code remains same
@@ -290,6 +312,13 @@ export const useContactsController = () => {
     },
   ];
 
+  const handleSearch = useCallback((term: string, filters: string[]) => {
+    setSearchTerm(term);
+    setActiveFilters(filters);
+    // Reset to first page when searching
+    dispatch(tableActions.setTablePage(0));
+  }, [dispatch]);
+
   return {
     getters: {
       breadcrumbs,
@@ -306,6 +335,7 @@ export const useContactsController = () => {
     handlers: {
       changePage,
       changeRows,
+      handleSearch,
       getContactInformation: async () => () => {},
     },
 

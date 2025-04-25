@@ -16,6 +16,9 @@ export enum RoutePathEnum {
 
   GEO_POLITICAL = "/confidential/geo-political",
   GEO_POLITICAL_UPLOAD_REPORT = "/confidential/geo-political/upload-report",
+
+  // METROLOGY = "/confidential/metrology",
+  // METROLOGY_UPLOAD_REPORT = "/confidential/metrology/upload-report",
 }
 
 export default RoutePathEnum;

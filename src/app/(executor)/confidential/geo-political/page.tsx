@@ -2,7 +2,7 @@
 
 import React, { JSX, useMemo } from "react";
 import { useRouter } from "next/navigation";
-import { Button } from "@mui/material";
+import { Button, Box } from "@mui/material";
 
 import { useContactsController } from "./geo-political.controller";
 
@@ -27,12 +27,11 @@ export default function Confidential(): JSX.Element {
     isMobileView,
     breadcrumbs,
   } = getters;
-  const { changePage, changeRows, getContactInformation } = handlers;
+  const { changePage, changeRows, handleSearch } = handlers;
 
   const table = useMemo(
     () => (
       <TableComponent<any>
-        // isLoading={tablePaginationData.isLoading}
         isLoading={false}
         headerField={headers}
         tableBody={newApplication}
@@ -50,7 +49,6 @@ export default function Confidential(): JSX.Element {
       />
     ),
     [
-      tablePaginationData.isLoading,
       tablePaginationData.page,
       tablePaginationData.limit,
       headers,
@@ -68,22 +66,26 @@ export default function Confidential(): JSX.Element {
         <PageHeader
           title="Confidential"
           breadcrumbs={breadcrumbs}
+          showSearch={true}
+          onSearch={handleSearch}
           actions={
-            <Button
-              variant="contained"
-              size="small"
-              startIcon={<Icon icon={faUpload} />}
-              onClick={() =>
-                router.push(RoutePathEnum.GEO_POLITICAL_UPLOAD_REPORT)
-              }
-            >
-              Upload Report
-            </Button>
+            <Box sx={{ ml: 2 }}>
+              <Button
+                variant="contained"
+                size="small"
+                startIcon={<Icon icon={faUpload} />}
+                onClick={() =>
+                  router.push(RoutePathEnum.GEO_POLITICAL_UPLOAD_REPORT)
+                }
+              >
+                Upload Report
+              </Button>
+            </Box>
           }
         />
       </div>
     ),
-    [filter, getContactInformation, isMobileView, newApplication, ref, router]
+    [breadcrumbs, handleSearch, ref, router]
   );
 
   return (
