@@ -122,3 +122,43 @@ export const AddChipDialog = styled(Box)(({ theme }) => ({
   borderRadius: theme.shape.borderRadius,
 }));
 
+export const FileUploadContainer = styled(Box)(({ theme }) => ({
+  border: `2px dashed ${theme.palette.divider}`,
+  borderRadius: theme.shape.borderRadius,
+  padding: theme.spacing(2),
+  backgroundColor: theme.palette.background.paper,
+  cursor: 'pointer',
+  transition: 'border-color 0.2s ease-in-out',
+  '&:hover': {
+    borderColor: theme.palette.primary.main,
+  },
+}));
+
+export const FilePreviewContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(2),
+  display: 'flex',
+  flexDirection: 'column',
+  gap: theme.spacing(1),
+}));
+
+export const FilePreviewItem = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  padding: theme.spacing(1),
+  backgroundColor: theme.palette.background.default,
+  borderRadius: theme.shape.borderRadius,
+  '&:hover': {
+    backgroundColor: theme.palette.action.hover,
+  },
+}));
+
+export const DateAndFileSection = styled(Box)(({ theme }) => ({
+  display: 'grid',
+  gridTemplateColumns: '1fr 1fr',
+  gap: theme.spacing(3),
+  [theme.breakpoints.down('md')]: {
+    gridTemplateColumns: '1fr',
+  },
+}));
+

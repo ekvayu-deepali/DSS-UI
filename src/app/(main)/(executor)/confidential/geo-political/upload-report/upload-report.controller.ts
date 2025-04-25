@@ -8,6 +8,12 @@ import { RoutePathEnum } from "@/enum";
 import { ITopicDropdownRef } from "@/components/common/topicDropdown/topicDropdown.interface";
 import { DocumentTypeOptions } from '@/enum/documentType.enum';
 
+interface FileInfo {
+  file: File;
+  preview?: string;
+  progress: number;
+}
+
 interface IUploadReportControllerResponse {
   getters: {
     origin: string;
@@ -27,6 +33,8 @@ interface IUploadReportControllerResponse {
       label: string;
       color: string;
     }>;
+    uploadedFiles: FileInfo[];
+    uploadError: string;
   };
   handlers: {
     onOriginChange: (event: ITextInputFieldData) => void;
@@ -46,6 +54,9 @@ interface IUploadReportControllerResponse {
       label: string;
       color: string;
     }) => void;
+    handleFileUpload: (files: FileList) => void;
+    removeFile: (index: number) => void;
+    clearUploadError: () => void;
   };
   ref: {
     originRef: RefObject<ITextInputFieldRef | null>;
@@ -57,6 +68,7 @@ interface IUploadReportControllerResponse {
     documentCategoryRef: RefObject<ITextInputFieldRef | null>;
     classificationRef: RefObject<ITextInputFieldRef | null>;
     topicsRef: RefObject<ITopicDropdownRef | null>;
+    fileInputRef: RefObject<HTMLInputElement>;
   };
 }
 
@@ -83,6 +95,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     { value: "periodical", label: "Periodical", color: "primary" },
     { value: "press_report", label: "Press Report", color: "primary" },
   ]);
+  const [uploadedFiles, setUploadedFiles] = useState<FileInfo[]>([]);
+  const [uploadError, setUploadError] = useState<string>('');
 
   // Refs
   const originRef = useRef<ITextInputFieldRef | null>(null);
@@ -93,6 +107,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
   const documentTypeRef = useRef<ITextInputFieldRef | null>(null);
   const documentCategoryRef = useRef<ITextInputFieldRef | null>(null);
   const classificationRef = useRef<ITextInputFieldRef>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Breadcrumbs configuration
   const breadcrumbs: IBreadcrumbDisplay[] = useMemo(
@@ -273,6 +288,28 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     setSelectedDate(DateTime.now());
   }, []);
 
+  const handleFileUpload = useCallback((files: FileList) => {
+    const newFiles = Array.from(files).map(file => ({
+      file,
+      progress: 0
+    }));
+
+    setUploadedFiles(prev => [...prev, ...newFiles]);
+    setUploadError('');
+  }, []);
+
+  const removeFile = useCallback((index: number) => {
+    setUploadedFiles(prev => {
+      const newFiles = [...prev];
+      newFiles.splice(index, 1);
+      return newFiles;
+    });
+  }, []);
+
+  const clearUploadError = useCallback(() => {
+    setUploadError('');
+  }, []);
+
   return {
     getters: {
       origin,
@@ -288,6 +325,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       topics,
       error,
       documentCategoryOptions,
+      uploadedFiles,
+      uploadError,
     },
     handlers: {
       onOriginChange,
@@ -303,6 +342,9 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       handleSubmit,
       handleCancel,
       onTopicToggle,
+      handleFileUpload,
+      removeFile,
+      clearUploadError,
     },
     ref: {
       originRef,
@@ -314,6 +356,7 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       documentCategoryRef,
       classificationRef,
       topicsRef: useRef<ITopicDropdownRef>(null),
+      fileInputRef,
     },
   };
 };
