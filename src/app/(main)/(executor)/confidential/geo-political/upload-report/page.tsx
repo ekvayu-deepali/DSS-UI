@@ -9,6 +9,8 @@ import {
   InputLabel,
   MenuItem,
   Select,
+  Box,
+  Chip,
 } from "@mui/material";
 
 import { CardComponent } from "@/components/common/card";
@@ -35,7 +37,39 @@ import {
   SubmitButton,
   StyledTextFieldWrapper,
   FieldDescription,
+  ChipsWrapper,
 } from "./upload-report.style";
+
+const ChipComponent = ({ value, label, onClick, variant, color }: any) => (
+  <Chip
+    label={label}
+    onClick={onClick}
+    variant={variant}
+    color={color}
+    sx={{ cursor: "pointer", mr: 1, mb: 1 }}
+  />
+);
+
+const ClassificationOptions = [
+  { value: "unclassified", label: "Unclassified", color: "default" },
+  { value: "confidential", label: "Confidential", color: "secondary" },
+  { value: "secret", label: "Secret", color: "primary" },
+  { value: "top_secret", label: "Top Secret", color: "error" },
+];
+
+const TOPICS = [
+  { value: "topic1", label: "Topic 1" },
+  { value: "topic2", label: "Topic 2" },
+  { value: "topic3", label: "Topic 3" },
+  { value: "topic4", label: "Topic 4" },
+];
+
+const DocumentCategoryOptions = [
+  { value: "book", label: "Book", color: "primary" },
+  { value: "journal", label: "Journal", color: "primary" },
+  { value: "periodical", label: "Periodical", color: "primary" },
+  { value: "press_report", label: "Press Report", color: "primary" },
+];
 
 export default function UploadReport() {
   const { getters, handlers, ref } = useUploadReportController();
@@ -104,7 +138,7 @@ export default function UploadReport() {
             </FormGroup>
             <Spacing spacing={2} variant={SpacingEnum.TOP} />
 
-            {/* Document Category Dropdown */}
+            {/* Document Category Chips */}
             <FormGroup>
               <FieldDescription>
                 <Typography variant="subtitle2">Document Category</Typography>
@@ -112,26 +146,22 @@ export default function UploadReport() {
                   Select the category of the document
                 </Typography>
               </FieldDescription>
-              <StyledTextFieldWrapper>
-                <FormControl fullWidth>
-                  <InputLabel id="document-category-label">
-                    Document Category *
-                  </InputLabel>
-                  <Select
-                    labelId="document-category-label"
-                    id="document-category"
-                    value={documentCategory}
-                    label="Document Category *"
-                    onChange={(e) => onDocumentCategoryChange(e.target.value)}
-                    ref={ref.documentCategoryRef}
-                  >
-                    <MenuItem value="book">Book</MenuItem>
-                    <MenuItem value="journal">Journal</MenuItem>
-                    <MenuItem value="periodical">Periodical</MenuItem>
-                    <MenuItem value="press_report">Press Report</MenuItem>
-                  </Select>
-                </FormControl>
-              </StyledTextFieldWrapper>
+              <ChipsWrapper>
+                {DocumentCategoryOptions.map((option) => (
+                  <ChipComponent
+                    key={option.value}
+                    value={option.value}
+                    label={option.label}
+                    onClick={() => onDocumentCategoryChange(option.value)}
+                    variant={
+                      documentCategory === option.value
+                        ? "filled"
+                        : "outlined"
+                    }
+                    color={option.color}
+                  />
+                ))}
+              </ChipsWrapper>
             </FormGroup>
             <Spacing spacing={2} variant={SpacingEnum.TOP} />
             {/* Document Type Dropdown */}
@@ -244,27 +274,48 @@ export default function UploadReport() {
                 Select the appropriate security classification for this report
               </Typography>
             </FieldDescription>
-            <ClassificationDropdown
-              ref={ref.classificationRef}
-              value={getters.classification}
-              onChange={handlers.onClassificationChange}
-              fullWidth
-              required
-            />
+            <ChipsWrapper>
+              {Object.values(ClassificationOptions).map((option) => (
+                <ChipComponent
+                  key={option.value}
+                  value={option.value}
+                  label={option.label}
+                  onClick={() => handlers.onClassificationChange(option.value)}
+                  variant={
+                    getters.classification === option.value
+                      ? "filled"
+                      : "outlined"
+                  }
+                  color={option.color}
+                />
+              ))}
+            </ChipsWrapper>
+
             <Spacing spacing={2} variant={SpacingEnum.TOP} />
+
+            {/* Related Topics Section */}
             <FieldDescription>
               <Typography variant="subtitle2">Related Topics</Typography>
               <Typography variant="body2" color="textSecondary">
                 Choose one or more topics that relate to this report
               </Typography>
             </FieldDescription>
-            <TopicDropdown
-              ref={ref.topicsRef}
-              value={getters.topics}
-              onChange={handlers.onTopicsChange}
-              fullWidth
-              required
-            />
+            <ChipsWrapper>
+              {TOPICS.map((topic) => (
+                <ChipComponent
+                  key={topic.value}
+                  value={topic.value}
+                  label={topic.label}
+                  onClick={() => handlers.onTopicToggle(topic.value)}
+                  variant={
+                    getters.topics.includes(topic.value) ? "filled" : "outlined"
+                  }
+                  color={
+                    getters.topics.includes(topic.value) ? "primary" : "default"
+                  }
+                />
+              ))}
+            </ChipsWrapper>
           </FormSection>
 
           {/* Report Content Section */}

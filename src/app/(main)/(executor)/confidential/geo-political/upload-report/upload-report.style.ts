@@ -90,3 +90,10 @@ export const StyledTextFieldWrapper = styled(Box)(({ theme }) => ({
   },
 }));
 
+export const ChipsWrapper = styled(Box)(({ theme }) => ({
+  display: "flex",
+  flexWrap: "wrap",
+  gap: theme.spacing(1),
+  marginTop: theme.spacing(2),
+}));
+
