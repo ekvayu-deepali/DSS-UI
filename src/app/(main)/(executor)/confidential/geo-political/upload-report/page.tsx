@@ -3,7 +3,6 @@
 import React, { useState, useRef } from "react";
 import {
   FormGroup,
-  Grid,
   Typography,
   FormControl,
   InputLabel,
@@ -28,11 +27,11 @@ import {
   Spacing,
   SpacingEnum,
   TextInputField,
+  SeveritySlider,
 } from "@/components/common";
 import { SimpleDatePicker } from "@/components/common/simpleDatePicker";
 import { ValidationHelper } from "@/helpers";
-import ClassificationDropdown from "@/components/common/classificationDropdown";
-import TopicDropdown from "@/components/common/topicDropdown";
+
 import { DocumentTypeOptions } from "@/enum/documentType.enum";
 import { formatBytes } from "@/utils/file.utils";
 
@@ -53,10 +52,9 @@ import {
   FileUploadContainer,
   FilePreviewContainer,
   FilePreviewItem,
-  DateAndFileSection,
 } from "./upload-report.style";
 
-const ChipComponent = ({ value, label, onClick, variant, color }: any) => (
+const ChipComponent = ({ label, onClick, variant, color, value }: any) => (
   <Chip
     label={label}
     onClick={onClick}
@@ -80,13 +78,6 @@ const TOPICS = [
   { value: "topic4", label: "Topic 4" },
 ];
 
-const DocumentCategoryOptions = [
-  { value: "book", label: "Book", color: "primary" },
-  { value: "journal", label: "Journal", color: "primary" },
-  { value: "periodical", label: "Periodical", color: "primary" },
-  { value: "press_report", label: "Press Report", color: "primary" },
-];
-
 export default function UploadReport() {
   const [isAddNewOpen, setIsAddNewOpen] = useState(false);
   const [newChipLabel, setNewChipLabel] = useState("");
@@ -101,6 +92,8 @@ export default function UploadReport() {
     documentCategory,
     selectedDate,
     breadcrumbs,
+    sourceSeverity,
+    reviewSeverity,
   } = getters;
 
   const {
@@ -115,6 +108,8 @@ export default function UploadReport() {
     handleSubmit,
     handleCancel,
     onAddNewDocumentCategory,
+    onSourceSeverityChange,
+    onReviewSeverityChange,
   } = handlers;
   const {
     originRef,
@@ -300,7 +295,7 @@ export default function UploadReport() {
             <Spacing spacing={2} variant={SpacingEnum.TOP} />
             {/* File Upload Field */}
             <FormGroup>
-             
+
                 <FieldDescription>
                   <Typography variant="subtitle2">
                     Supporting Documents
@@ -493,6 +488,34 @@ export default function UploadReport() {
                 />
               ))}
             </ChipsWrapper>
+          </FormSection>
+
+          {/* Severity Section */}
+          <FormSection>
+            <FormSectionTitle>
+              <Typography variant="h5">Severity Assessment</Typography>
+            </FormSectionTitle>
+            <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
+              Assess the severity of the report on a scale from 0 (low) to 10 (high).
+            </Typography>
+            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 4 }}>
+              <Box sx={{ flex: 1 }}>
+                <SeveritySlider
+                  label="Source Severity"
+                  description="Rate the severity level as reported by the source"
+                  value={sourceSeverity}
+                  onChange={onSourceSeverityChange}
+                />
+              </Box>
+              <Box sx={{ flex: 1 }}>
+                <SeveritySlider
+                  label="Review Severity"
+                  description="Rate the severity level based on your assessment"
+                  value={reviewSeverity}
+                  onChange={onReviewSeverityChange}
+                />
+              </Box>
+            </Box>
           </FormSection>
 
           {/* Report Content Section */}

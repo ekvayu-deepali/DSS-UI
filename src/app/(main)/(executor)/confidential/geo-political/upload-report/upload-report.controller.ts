@@ -35,6 +35,8 @@ interface IUploadReportControllerResponse {
     }>;
     uploadedFiles: FileInfo[];
     uploadError: string;
+    sourceSeverity: number;
+    reviewSeverity: number;
   };
   handlers: {
     onOriginChange: (event: ITextInputFieldData) => void;
@@ -57,6 +59,8 @@ interface IUploadReportControllerResponse {
     handleFileUpload: (files: FileList) => void;
     removeFile: (index: number) => void;
     clearUploadError: () => void;
+    onSourceSeverityChange: (value: number) => void;
+    onReviewSeverityChange: (value: number) => void;
   };
   ref: {
     originRef: RefObject<ITextInputFieldRef | null>;
@@ -68,7 +72,7 @@ interface IUploadReportControllerResponse {
     documentCategoryRef: RefObject<ITextInputFieldRef | null>;
     classificationRef: RefObject<ITextInputFieldRef | null>;
     topicsRef: RefObject<ITopicDropdownRef | null>;
-    fileInputRef: RefObject<HTMLInputElement>;
+    fileInputRef: RefObject<HTMLInputElement | null>;
   };
 }
 
@@ -97,6 +101,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
   ]);
   const [uploadedFiles, setUploadedFiles] = useState<FileInfo[]>([]);
   const [uploadError, setUploadError] = useState<string>('');
+  const [sourceSeverity, setSourceSeverity] = useState<number>(5);
+  const [reviewSeverity, setReviewSeverity] = useState<number>(5);
 
   // Refs
   const originRef = useRef<ITextInputFieldRef | null>(null);
@@ -259,6 +265,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
         documentType,
         documentCategory,
         date: selectedDate?.toISO(),
+        sourceSeverity,
+        reviewSeverity,
       });
       enqueueSnackbar("Report uploaded successfully", { variant: "success" });
     } catch (error) {
@@ -275,6 +283,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     documentType,
     documentCategory,
     selectedDate,
+    sourceSeverity,
+    reviewSeverity,
   ]);
 
   const handleCancel = useCallback((): void => {
@@ -286,6 +296,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     setDocumentType("");
     setDocumentCategory("");
     setSelectedDate(DateTime.now());
+    setSourceSeverity(5);
+    setReviewSeverity(5);
   }, []);
 
   const handleFileUpload = useCallback((files: FileList) => {
@@ -310,6 +322,14 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
     setUploadError('');
   }, []);
 
+  const onSourceSeverityChange = useCallback((value: number): void => {
+    setSourceSeverity(value);
+  }, []);
+
+  const onReviewSeverityChange = useCallback((value: number): void => {
+    setReviewSeverity(value);
+  }, []);
+
   return {
     getters: {
       origin,
@@ -327,6 +347,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       documentCategoryOptions,
       uploadedFiles,
       uploadError,
+      sourceSeverity,
+      reviewSeverity,
     },
     handlers: {
       onOriginChange,
@@ -345,6 +367,8 @@ export const useUploadReportController = (): IUploadReportControllerResponse => 
       handleFileUpload,
       removeFile,
       clearUploadError,
+      onSourceSeverityChange,
+      onReviewSeverityChange,
     },
     ref: {
       originRef,
