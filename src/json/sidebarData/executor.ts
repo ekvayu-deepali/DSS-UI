@@ -91,4 +91,26 @@ export const executorMenuItems: IMenuItem[] = [
       },
     ],
   },
+  {
+    title: "Report",
+    icon: faFile,
+    submenu: [
+      {
+        title: "Merge Report",
+        path: "/report/merge-report",
+        icon: faGlobe,
+      },
+      {
+        title: "Generated Report",
+        path: "/report/generated-report",
+        icon: faFileLines,
+      },
+    ],
+  },
+  {
+    title: "Settings",
+    path: "/settings",
+    icon: faFileLines,
+  },
+
 ];

@@ -17,6 +17,10 @@ export enum RoutePathEnum {
   GEO_POLITICAL = "/confidential/geo-political",
   GEO_POLITICAL_UPLOAD_REPORT = "/confidential/geo-political/upload-report",
 
+
+  GENERATED_REPORT = "/view-report/generated-report",
+  GENERATED_REPORT_UPLOAD_REPORT = "/view-report/generated-report/upload-report",
+
   ADMIN_APPROVER = "/admin/approver",
   ADMIN_EXECUTOR = "/admin/executor",
 }
