@@ -6,11 +6,7 @@ import { PageHeader } from "@/components";
 
 export default function Dashboard() {
   const header = useMemo(
-    () => (
-      <div>
-        <PageHeader title="Dashboard" actions={""} />
-      </div>
-    ),
+    () => <PageHeader title="Dashboard" actions={""} />,
     []
   );
 
