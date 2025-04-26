@@ -1,7 +1,7 @@
 // Disabled cause of non null assertion used due to defaultProps
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 
-import React, { JSX, memo } from "react";
+import React, { JSX, memo, useState } from "react";
 import { IconDefinition } from "@fortawesome/free-solid-svg-icons";
 import { Box, Typography, Divider, useTheme, CardActions } from "@mui/material";
 
@@ -27,8 +27,21 @@ export function QuickDetails(props: IQuickDetail): JSX.Element {
 
   const theme = useTheme();
 
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseEnter = () => {
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovered(false);
+  };
+
   return (
-    <QuickDetailsCard>
+    <QuickDetailsCard
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+    >
       <CardContent>
         <Box>
           <Typography
@@ -46,6 +59,9 @@ export function QuickDetails(props: IQuickDetail): JSX.Element {
             {count}
           </Typography>
         </Box>
+        <AvatarIcon background={backgroundColor} isHovered={isHovered}>
+          <Icon icon={icon} size="medium" color="inherit" onlyIcon />
+        </AvatarIcon>
       </CardContent>
       <Divider />
       <CardActions
@@ -53,18 +69,23 @@ export function QuickDetails(props: IQuickDetail): JSX.Element {
           {
             alignItems: "center",
             display: "flex",
+            justifyContent: "flex-start",
+            padding: theme.spacing(1, 3),
           },
         ]}
       >
-        <AvatarIcon background={backgroundColor}>
-          <Icon icon={icon} size="small" color="inherit" onlyIcon />
-        </AvatarIcon>
         <Typography
-          color={theme.palette.dashboardCard.textSecondary}
-          sx={{ ml: 1 }}
           variant="body2"
+          sx={{ color: backgroundColor, fontWeight: 600 }}
         >
           {percentage}%
+        </Typography>
+        <Typography
+          color={theme.palette.text.secondary}
+          variant="body2"
+          sx={{ ml: 0.5 }}
+        >
+          from last month
         </Typography>
       </CardActions>
     </QuickDetailsCard>
