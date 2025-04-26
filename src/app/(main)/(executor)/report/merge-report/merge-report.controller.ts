@@ -4,6 +4,7 @@ import { SelectChangeEvent } from "@mui/material";
 import { ITextInputFieldData, ITextInputFieldRef } from "@/components/common";
 import { IBreadcrumbDisplay } from "@/components/common/breadcrumb/interface";
 import { RoutePathEnum } from "@/enum";
+import { DateTime } from "luxon";
 
 // Report categories and subcategories based on sidebar structure
 export const REPORT_CATEGORIES = [
@@ -40,6 +41,7 @@ interface IMergeReportControllerResponse {
     reportCategory: string;
     reportSubcategory: string;
     availableSubcategories: { value: string; label: string }[];
+    selectedMonth: DateTime | null;
   };
   handlers: {
     onDocumentNameChange: (event: ITextInputFieldData) => void;
@@ -49,6 +51,7 @@ interface IMergeReportControllerResponse {
     handleSubmit: () => Promise<void>;
     handleReportCategoryChange: (event: SelectChangeEvent<string>) => void;
     handleReportSubcategoryChange: (event: SelectChangeEvent<string>) => void;
+    handleMonthChange: (date: DateTime | null) => void;
   };
   ref: {
     documentNameRef: RefObject<ITextInputFieldRef | null>;
@@ -71,6 +74,7 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
   const [availableSubcategories, setAvailableSubcategories] = useState(
     REPORT_SUBCATEGORIES.confidential
   );
+  const [selectedMonth, setSelectedMonth] = useState<DateTime | null>(DateTime.now());
 
   // Update subcategories when report category changes
   useEffect(() => {
@@ -134,6 +138,10 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
     setReportSubcategory(event.target.value);
   }, []);
 
+  const handleMonthChange = useCallback((date: DateTime | null): void => {
+    setSelectedMonth(date);
+  }, []);
+
   const handleSubmit = useCallback(async (): Promise<void> => {
     try {
       console.log({
@@ -143,12 +151,13 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
         topic,
         reportCategory,
         reportSubcategory,
+        selectedMonth: selectedMonth ? selectedMonth.toFormat('MMMM yyyy') : null,
       });
       enqueueSnackbar("Documents merged successfully", { variant: "success" });
     } catch (error) {
       enqueueSnackbar("Failed to merge documents", { variant: "error" });
     }
-  }, [documentName, documentCategory, keywords, topic, reportCategory, reportSubcategory, enqueueSnackbar]);
+  }, [documentName, documentCategory, keywords, topic, reportCategory, reportSubcategory, selectedMonth, enqueueSnackbar]);
 
   return {
     getters: {
@@ -160,6 +169,7 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       reportCategory,
       reportSubcategory,
       availableSubcategories,
+      selectedMonth,
     },
     handlers: {
       onDocumentNameChange,
@@ -169,6 +179,7 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       handleSubmit,
       handleReportCategoryChange,
       handleReportSubcategoryChange,
+      handleMonthChange,
     },
     ref: {
       documentNameRef,

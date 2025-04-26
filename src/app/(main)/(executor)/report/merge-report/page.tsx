@@ -11,6 +11,8 @@ import {
   Select,
   Typography,
 } from "@mui/material";
+import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
+import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
 import { PageHeader } from "@/components/common";
 import {
@@ -31,18 +33,18 @@ const MergeReport: React.FC = () => {
     reportCategory,
     reportSubcategory,
     availableSubcategories,
+    selectedMonth,
   } = getters;
   const {
     handleReportCategoryChange,
     handleReportSubcategoryChange,
     handleSubmit,
+    handleMonthChange,
   } = handlers;
-
-  const header = <PageHeader title="Merge Report" breadcrumbs={breadcrumbs} />;
 
   return (
     <>
-      {header}
+      <PageHeader title="Merge Report" breadcrumbs={breadcrumbs} />
       <Card>
         <CardContent>
           <FormContainer>
@@ -55,7 +57,7 @@ const MergeReport: React.FC = () => {
 
             <FormSection>
               <Grid container spacing={3}>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={4}>
                   <FormControl fullWidth>
                     <InputLabel id="report-category-label">
                       Report Category
@@ -75,7 +77,7 @@ const MergeReport: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={3}>
+                <Grid item xs={12} md={4}>
                   <FormControl fullWidth>
                     <InputLabel id="report-subcategory-label">
                       Report Subcategory
@@ -98,6 +100,22 @@ const MergeReport: React.FC = () => {
                       ))}
                     </Select>
                   </FormControl>
+                </Grid>
+                <Grid item xs={12} md={4}>
+                  <LocalizationProvider dateAdapter={AdapterLuxon}>
+                    <DatePicker
+                      label="Select Month"
+                      value={selectedMonth}
+                      onChange={handleMonthChange}
+                      views={['month', 'year']}
+                      format="MMMM yyyy"
+                      slotProps={{
+                        textField: {
+                          fullWidth: true,
+                        },
+                      }}
+                    />
+                  </LocalizationProvider>
                 </Grid>
               </Grid>
             </FormSection>
