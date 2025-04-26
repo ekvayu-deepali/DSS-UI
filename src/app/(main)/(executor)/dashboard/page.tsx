@@ -135,7 +135,6 @@ export default function Dashboard() {
         actions={""}
       />
       <Spacing spacing={1.5} variant={SpacingEnum.BOTTOM} />
-
       <Grid container spacing={3}>
         {dashboardMetrics.map((metric, index) => (
           <Grid item xs={12} sm={6} md={3} key={index}>
@@ -149,9 +148,20 @@ export default function Dashboard() {
           </Grid>
         ))}
       </Grid>
-
       <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
+      {/* Charts Section */}
+      <Grid container spacing={3}>
+        {/* Top 5 Journeys Chart - Takes 2/3 width on large screens */}
+        <Grid item xs={12} lg={6}>
+          <Top5Journerys />
+        </Grid>
 
+        {/* Total Messages Chart - Takes full width */}
+        <Grid item xs={6}>
+          <TotalMessage />
+        </Grid>
+      </Grid>
+      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
       {/* Processing Queue and Journey Overview Section */}
       <Grid container spacing={0}>
         {/* Processing Queue - Takes 2/3 width on large screens */}
@@ -162,6 +172,7 @@ export default function Dashboard() {
           />
         </Grid>
 
+        <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
         {/* Journey Overview Chart - Takes 1/3 width on large screens */}
         <Grid
           item
@@ -170,25 +181,6 @@ export default function Dashboard() {
           sx={{ pl: { xs: 0, lg: 0 }, mt: { xs: 3, lg: 0 } }}
         >
           <JourneyOverview />
-        </Grid>
-      </Grid>
-
-      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
-      {/* Charts Section */}
-      <Grid container spacing={3}>
-        {/* Top 5 Journeys Chart - Takes 2/3 width on large screens */}
-        <Grid item xs={12} lg={8}>
-          <Top5Journerys />
-        </Grid>
-
-        {/* Journey Overview Chart - Takes 1/3 width on large screens */}
-        <Grid item xs={12} lg={4}>
-          <JourneyOverview />
-        </Grid>
-
-        {/* Total Messages Chart - Takes full width */}
-        <Grid item xs={12}>
-          <TotalMessage />
         </Grid>
       </Grid>
     </>

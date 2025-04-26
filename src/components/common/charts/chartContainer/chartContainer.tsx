@@ -6,7 +6,7 @@ import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
 import { Icon } from "@/components/common/icon/icon";
 
-import { ChartCard } from "./chartContainer.style";
+import { ChartCard, ChartTitle, ChartDescription } from "./chartContainer.style";
 import { useChart } from "../context/chart-context";
 
 export interface IChartsContainerProps {
@@ -39,8 +39,8 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
   const value = useChart();
 
   /**
-   * handle click
-   * @param  {MouseEvent<HTMLElement>} event
+   * Returns a handler function for click events
+   * @return {(event: MouseEvent<HTMLElement>) => void} Event handler function
    */
   const handleClick = () => (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -60,9 +60,11 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
         overflow: "visible",
       }}
     >
+
+
       <CardHeader
-        title={title}
-        subheader={description}
+        title={<ChartTitle>{title}</ChartTitle>}
+        subheader={description && <ChartDescription>{description}</ChartDescription>}
         action={
           <>
             {disableAction && (
