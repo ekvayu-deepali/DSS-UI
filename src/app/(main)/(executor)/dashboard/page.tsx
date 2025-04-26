@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useMemo } from "react";
-import { Grid } from "@mui/material";
+import { Grid, Box, CircularProgress } from "@mui/material";
+import dynamic from "next/dynamic";
 import {
   faUsers,
   faFileAlt,
@@ -16,6 +17,39 @@ import {
   ProcessingDashboard,
 } from "@/components/common";
 import QuickDetails from "@/components/pages/dashboard/quickDetail";
+
+// Dynamically import chart components with SSR disabled
+const Top5Journerys = dynamic(
+  () => import("@/components/pages/dashboard/charts/top5Journey/top5Journey"),
+  { ssr: false, loading: () => <ChartLoader height={400} /> }
+);
+
+const TotalMessage = dynamic(
+  () => import("@/components/pages/dashboard/charts/totalMessage/totalMessage"),
+  { ssr: false, loading: () => <ChartLoader height={300} /> }
+);
+
+const JourneyOverview = dynamic(
+  () => import("@/components/pages/dashboard/charts/journeyOverview/journeyOverview"),
+  { ssr: false, loading: () => <ChartLoader height={435} /> }
+);
+
+// Loading component for charts
+const ChartLoader = ({ height }: { height: number }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: height,
+      bgcolor: 'background.paper',
+      borderRadius: 1,
+      boxShadow: 1
+    }}
+  >
+    <CircularProgress />
+  </Box>
+);
 
 export default function Dashboard() {
   // Dashboard metrics data
@@ -133,6 +167,26 @@ export default function Dashboard() {
             />
           </Grid>
         ))}
+      </Grid>
+
+      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
+
+      {/* Charts Section */}
+      <Grid container spacing={3}>
+        {/* Top 5 Journeys Chart - Takes 2/3 width on large screens */}
+        <Grid item xs={12} lg={8}>
+          <Top5Journerys />
+        </Grid>
+
+        {/* Journey Overview Chart - Takes 1/3 width on large screens */}
+        <Grid item xs={12} lg={4}>
+          <JourneyOverview />
+        </Grid>
+
+        {/* Total Messages Chart - Takes full width */}
+        <Grid item xs={12}>
+          <TotalMessage />
+        </Grid>
       </Grid>
 
       <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />

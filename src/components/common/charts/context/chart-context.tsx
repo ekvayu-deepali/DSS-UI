@@ -8,9 +8,6 @@ import React, {
   useMemo,
 } from 'react';
 
-
-import ApexCharts from 'apexcharts';
-
 import { IChartContext, IChartProvider, IApexChartExport } from '../interfaces';
 
 export const ChartContext = createContext<IChartContext>({} as IChartContext);
@@ -22,24 +19,39 @@ export const ChartContext = createContext<IChartContext>({} as IChartContext);
  */
 export const ChartProvider: FC<IChartProvider> = ({ id, children }) => {
   const downloadSVG = useCallback(() => {
-    const { ctx } = ApexCharts.getChartByID(id)
-      ?.exports as unknown as IApexChartExport;
-
-    ctx.exports.exportToSVG();
+    if (typeof window !== 'undefined') {
+      // Only import and use ApexCharts on the client side
+      import('apexcharts').then((ApexChartsModule) => {
+        const ApexCharts = ApexChartsModule.default;
+        const { ctx } = ApexCharts.getChartByID(id)
+          ?.exports as unknown as IApexChartExport;
+        ctx.exports.exportToSVG();
+      });
+    }
   }, [id]);
 
   const downloadPNG = useCallback(() => {
-    const { ctx } = ApexCharts.getChartByID(id)
-      ?.exports as unknown as IApexChartExport;
-
-    ctx.exports.exportToPng();
+    if (typeof window !== 'undefined') {
+      // Only import and use ApexCharts on the client side
+      import('apexcharts').then((ApexChartsModule) => {
+        const ApexCharts = ApexChartsModule.default;
+        const { ctx } = ApexCharts.getChartByID(id)
+          ?.exports as unknown as IApexChartExport;
+        ctx.exports.exportToPng();
+      });
+    }
   }, [id]);
 
   const downloadCSV = useCallback(() => {
-    const { ctx } = ApexCharts.getChartByID(id)
-      ?.exports as unknown as IApexChartExport;
-
-    ctx.exportToCSV();
+    if (typeof window !== 'undefined') {
+      // Only import and use ApexCharts on the client side
+      import('apexcharts').then((ApexChartsModule) => {
+        const ApexCharts = ApexChartsModule.default;
+        const { ctx } = ApexCharts.getChartByID(id)
+          ?.exports as unknown as IApexChartExport;
+        ctx.exportToCSV();
+      });
+    }
   }, [id]);
 
   const value = useMemo(

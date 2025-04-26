@@ -1,11 +1,10 @@
 "use client";
 
 import React, { JSX, memo, MouseEvent, ReactNode, useState } from "react";
-import { useTranslations } from "next-intl";
 import { CardHeader, Divider, Menu, MenuItem } from "@mui/material";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 
-import { Icon } from "@/src/component";
+import { Icon } from "@/components/common/icon/icon";
 
 import { ChartCard } from "./chartContainer.style";
 import { useChart } from "../context/chart-context";
@@ -43,7 +42,7 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
    * handle click
    * @param  {MouseEvent<HTMLElement>} event
    */
-  const handleClick = (event: MouseEvent<HTMLElement>) => {
+  const handleClick = () => (event: MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
@@ -124,5 +123,4 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
     </ChartCard>
   );
 }
-
 export default memo(ChartContainer);
