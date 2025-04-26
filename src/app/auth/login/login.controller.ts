@@ -126,7 +126,7 @@ export const LogInController = (): ILogInControllerResponse => {
       password: password.trim(),
     };
     localStorage.setItem("userRole", "executor");
-    router.push("/confidential/geo-political");
+    router.push("/dashboard");
     // try {
     //   await dispatch(AuthenticationThunk.adminSignIn(payload)).unwrap();
     //   enqueueSnackbar(SIGNIN_SUCCESSFUL, SnackbarTypeEnum.SUCCESS);

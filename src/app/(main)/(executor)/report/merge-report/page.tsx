@@ -15,7 +15,7 @@ import {
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
-import { PageHeader, ProcessingDashboard } from "@/components/common";
+import { PageHeader, ProcessingDashboard, Spacing, SpacingEnum } from "@/components/common";
 import {
   useMergeReportController,
   REPORT_CATEGORIES,
@@ -24,7 +24,6 @@ import {
   FormContainer,
   FormSection,
   SubmitButton,
-  ButtonContainer,
   ReportContainer,
 } from "./merge-report.style";
 
@@ -61,8 +60,11 @@ const ReportExplorer: React.FC = () => {
             </Typography>
 
             <FormSection>
-              <Grid container spacing={3}>
-                <Grid item xs={12} md={4}>
+
+              <Grid container spacing={3} alignItems="center" paddingTop={"16px"}>
+
+                <Grid item xs={12} sm={6} md={3}>
+
                   <FormControl fullWidth>
                     <InputLabel id="report-category-label">
                       Report Category
@@ -82,7 +84,7 @@ const ReportExplorer: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} sm={6} md={3}>
                   <FormControl fullWidth>
                     <InputLabel id="report-subcategory-label">
                       Report Subcategory
@@ -106,13 +108,13 @@ const ReportExplorer: React.FC = () => {
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12} md={4}>
+                <Grid item xs={12} sm={6} md={3}>
                   <LocalizationProvider dateAdapter={AdapterLuxon}>
                     <DatePicker
                       label="Select Month"
                       value={selectedMonth}
                       onChange={handleMonthChange}
-                      views={['month', 'year']}
+                      views={["month", "year"]}
                       format="MMMM yyyy"
                       slotProps={{
                         textField: {
@@ -122,19 +124,27 @@ const ReportExplorer: React.FC = () => {
                     />
                   </LocalizationProvider>
                 </Grid>
+                <Grid item xs={12} sm={6} md={3}>
+                  <Box
+                    sx={{
+                      height: "56px",
+                      display: "flex",
+                      alignItems: "center",
+                    }}
+                  >
+                    <SubmitButton
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                      disabled={!reportCategory || !reportSubcategory}
+                      fullWidth
+                    >
+                      View Reports
+                    </SubmitButton>
+                  </Box>
+                </Grid>
               </Grid>
             </FormSection>
-
-            <ButtonContainer>
-              <SubmitButton
-                variant="contained"
-                color="primary"
-                onClick={handleSubmit}
-                disabled={!reportCategory || !reportSubcategory}
-              >
-                View Reports
-              </SubmitButton>
-            </ButtonContainer>
           </FormContainer>
         </CardContent>
       </Card>
@@ -144,7 +154,8 @@ const ReportExplorer: React.FC = () => {
           <Card>
             <CardContent>
               <Typography variant="h6" gutterBottom>
-                {reportCategory === "confidential" ? "Confidential" : "OSINT"} Reports - {reportSubcategory.replace(/-/g, " ")}
+                {reportCategory === "confidential" ? "Confidential" : "OSINT"}{" "}
+                Reports - {reportSubcategory.replace(/-/g, " ")}
               </Typography>
               <Typography variant="body2" color="textSecondary" paragraph>
                 {selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : ""}
