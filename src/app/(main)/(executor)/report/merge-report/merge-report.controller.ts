@@ -1,8 +1,34 @@
-import { RefObject, useCallback, useMemo, useRef, useState } from "react";
+import { RefObject, useCallback, useMemo, useRef, useState, useEffect } from "react";
 import { useSnackbar } from "notistack";
+import { SelectChangeEvent } from "@mui/material";
 import { ITextInputFieldData, ITextInputFieldRef } from "@/components/common";
 import { IBreadcrumbDisplay } from "@/components/common/breadcrumb/interface";
 import { RoutePathEnum } from "@/enum";
+
+// Report categories and subcategories based on sidebar structure
+export const REPORT_CATEGORIES = [
+  { value: "confidential", label: "Confidential" },
+  { value: "osint", label: "OSINT" },
+];
+
+export const REPORT_SUBCATEGORIES = {
+  confidential: [
+    { value: "geo-political", label: "Geo Political" },
+    { value: "metrology", label: "Metrology" },
+    { value: "miscellaneous", label: "Miscellaneous" },
+    { value: "organisation-and-management", label: "Organisation and Management" },
+    { value: "training", label: "Training" },
+    { value: "intelligence", label: "Intelligence" },
+  ],
+  osint: [
+    { value: "geo-political", label: "Geo Political" },
+    { value: "metrology", label: "Metrology" },
+    { value: "miscellaneous", label: "Miscellaneous" },
+    { value: "organisation-and-management", label: "Organisation and Management" },
+    { value: "training", label: "Training" },
+    { value: "intelligence", label: "Intelligence" },
+  ],
+};
 
 interface IMergeReportControllerResponse {
   getters: {
@@ -11,6 +37,9 @@ interface IMergeReportControllerResponse {
     keywords: string;
     topic: string;
     breadcrumbs: IBreadcrumbDisplay[];
+    reportCategory: string;
+    reportSubcategory: string;
+    availableSubcategories: { value: string; label: string }[];
   };
   handlers: {
     onDocumentNameChange: (event: ITextInputFieldData) => void;
@@ -18,6 +47,8 @@ interface IMergeReportControllerResponse {
     onKeywordsChange: (event: ITextInputFieldData) => void;
     onTopicChange: (event: ITextInputFieldData) => void;
     handleSubmit: () => Promise<void>;
+    handleReportCategoryChange: (event: SelectChangeEvent<string>) => void;
+    handleReportSubcategoryChange: (event: SelectChangeEvent<string>) => void;
   };
   ref: {
     documentNameRef: RefObject<ITextInputFieldRef | null>;
@@ -35,6 +66,21 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
   const [documentCategory, setDocumentCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
+  const [reportCategory, setReportCategory] = useState<string>("confidential");
+  const [reportSubcategory, setReportSubcategory] = useState<string>("");
+  const [availableSubcategories, setAvailableSubcategories] = useState(
+    REPORT_SUBCATEGORIES.confidential
+  );
+
+  // Update subcategories when report category changes
+  useEffect(() => {
+    if (reportCategory) {
+      setAvailableSubcategories(
+        REPORT_SUBCATEGORIES[reportCategory as keyof typeof REPORT_SUBCATEGORIES] || []
+      );
+      setReportSubcategory(""); // Reset subcategory when category changes
+    }
+  }, [reportCategory]);
 
   // Refs
   const documentNameRef = useRef<ITextInputFieldRef | null>(null);
@@ -80,6 +126,14 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
     setTopic(event.value);
   }, []);
 
+  const handleReportCategoryChange = useCallback((event: SelectChangeEvent<string>): void => {
+    setReportCategory(event.target.value);
+  }, []);
+
+  const handleReportSubcategoryChange = useCallback((event: SelectChangeEvent<string>): void => {
+    setReportSubcategory(event.target.value);
+  }, []);
+
   const handleSubmit = useCallback(async (): Promise<void> => {
     try {
       console.log({
@@ -87,12 +141,14 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
         documentCategory,
         keywords,
         topic,
+        reportCategory,
+        reportSubcategory,
       });
       enqueueSnackbar("Documents merged successfully", { variant: "success" });
     } catch (error) {
       enqueueSnackbar("Failed to merge documents", { variant: "error" });
     }
-  }, [documentName, documentCategory, keywords, topic, enqueueSnackbar]);
+  }, [documentName, documentCategory, keywords, topic, reportCategory, reportSubcategory, enqueueSnackbar]);
 
   return {
     getters: {
@@ -101,6 +157,9 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       keywords,
       topic,
       breadcrumbs,
+      reportCategory,
+      reportSubcategory,
+      availableSubcategories,
     },
     handlers: {
       onDocumentNameChange,
@@ -108,6 +167,8 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       onKeywordsChange,
       onTopicChange,
       handleSubmit,
+      handleReportCategoryChange,
+      handleReportSubcategoryChange,
     },
     ref: {
       documentNameRef,

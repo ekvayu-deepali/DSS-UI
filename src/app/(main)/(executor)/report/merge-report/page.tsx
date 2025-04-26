@@ -2,170 +2,121 @@
 
 import React from "react";
 import {
-  Box,
+  Card,
+  CardContent,
+  FormControl,
   Grid,
-  Button,
+  InputLabel,
+  MenuItem,
+  Select,
+  Typography,
 } from "@mui/material";
 
-import { CardComponent } from "@/components/common/card";
+import { PageHeader } from "@/components/common";
 import {
-  PageHeader,
-  TextInputField,
-  TableComponent,
-} from "@/components/common";
-import { useMergeReportController } from "./merge-report.controller";
+  useMergeReportController,
+  REPORT_CATEGORIES,
+} from "./merge-report.controller";
+import {
+  FormContainer,
+  FormSection,
+  SubmitButton,
+  ButtonContainer,
+} from "./merge-report.style";
 
 const MergeReport: React.FC = () => {
-  const { getters, handlers, ref, pagination } = useMergeReportController();
-  const { 
-    documentName, 
-    keywords, 
-    topic, 
-    breadcrumbs, 
-    mergedReports = [], // Provide default empty array
-    headers, 
-    height 
+  const { getters, handlers } = useMergeReportController();
+  const {
+    breadcrumbs,
+    reportCategory,
+    reportSubcategory,
+    availableSubcategories,
   } = getters;
-  const { 
-    onDocumentNameChange, 
-    onKeywordsChange, 
-    onTopicChange, 
-    handleSubmit, 
-    changePage, 
-    changeRows 
+  const {
+    handleReportCategoryChange,
+    handleReportSubcategoryChange,
+    handleSubmit,
   } = handlers;
+
+  const header = <PageHeader title="Merge Report" breadcrumbs={breadcrumbs} />;
 
   return (
     <>
-      <PageHeader
-        title="Merge Report"
-        breadcrumbs={breadcrumbs}
-      />
-      <CardComponent>
-        <Box sx={{ p: 2 }}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              <TextInputField
-                type="text"
-                fullWidth
-                required
-                placeholder="e.g., Combined Intelligence Report 2024"
-                label="Document Name"
-                onChange={onDocumentNameChange}
-                value={documentName}
-                ref={ref.documentNameRef}
-                validation={() => ({ isValid: true, message: "" })}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInputField
-                type="text"
-                fullWidth
-                required
-                placeholder="e.g., intelligence, strategic, confidential"
-                label="Keywords"
-                onChange={onKeywordsChange}
-                value={keywords}
-                ref={ref.keywordsRef}
-                validation={() => ({ isValid: true, message: "" })}
-              />
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <TextInputField
-                type="text"
-                fullWidth
-                required
-                placeholder="e.g., Border Security"
-                label="Topic"
-                onChange={onTopicChange}
-                value={topic}
-                ref={ref.topicRef}
-                validation={() => ({ isValid: true, message: "" })}
-              />
-            </Grid>
-            <Grid item xs={12}>
-              <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={handleSubmit}
-                  sx={{
-                    textTransform: 'none',
-                    px: 4,
-                    py: 1,
-                    borderRadius: 1,
-                  }}
-                >
-                  Submit Report
-                </Button>
-              </Box>
-            </Grid>
-          </Grid>
-        </Box>
-      </CardComponent>
+      {header}
+      <Card>
+        <CardContent>
+          <FormContainer>
+            <Typography variant="h6" gutterBottom>
+              Select Report Type
+            </Typography>
+            <Typography variant="body2" color="textSecondary" paragraph>
+              Choose the report category and subcategory to merge
+            </Typography>
 
-      {mergedReports.length > 0 && (
-        <Box sx={{ mt: 3 }} ref={ref.measureRef}>
-          <CardComponent>
-            <TableComponent<any>
-              isLoading={false}
-              headerField={[
-                { 
-                  id: 'documentName', 
-                  name: 'Document Name',
-                  hidden: false,
-                  type: 'text',
-                  width: 200 
-                },
-                { 
-                  id: 'keywords', 
-                  name: 'Keywords',
-                  hidden: false,
-                  type: 'text',
-                  width: 200 
-                },
-                { 
-                  id: 'topic', 
-                  name: 'Topic',
-                  hidden: false,
-                  type: 'text',
-                  width: 150 
-                },
-                { 
-                  id: 'createdAt', 
-                  name: 'Created At',
-                  hidden: false,
-                  type: 'text',
-                  width: 150 
-                }
-              ]}
-              tableBody={mergedReports || []}
-              paginationData={{
-                onPageChange: (page) => changePage(page - 1),
-                onRowsPerPageChange: changeRows,
-                total: mergedReports?.length || 0,
-                page: pagination.page + 1,
-                limit: pagination.limit
-              }}
-              translation={{
-                noDataTitle: "No Merged Reports Found"
-              }}
-              maxHeight={height}
-            />
-          </CardComponent>
-        </Box>
-      )}
+            <FormSection>
+              <Grid container spacing={3}>
+                <Grid item xs={12} md={3}>
+                  <FormControl fullWidth>
+                    <InputLabel id="report-category-label">
+                      Report Category
+                    </InputLabel>
+                    <Select
+                      labelId="report-category-label"
+                      id="report-category"
+                      value={reportCategory}
+                      label="Report Category"
+                      onChange={handleReportCategoryChange}
+                    >
+                      {REPORT_CATEGORIES.map((category) => (
+                        <MenuItem key={category.value} value={category.value}>
+                          {category.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+                <Grid item xs={12} md={3}>
+                  <FormControl fullWidth>
+                    <InputLabel id="report-subcategory-label">
+                      Report Subcategory
+                    </InputLabel>
+                    <Select
+                      labelId="report-subcategory-label"
+                      id="report-subcategory"
+                      value={reportSubcategory}
+                      label="Report Subcategory"
+                      onChange={handleReportSubcategoryChange}
+                      disabled={!reportCategory}
+                    >
+                      {availableSubcategories.map((subcategory) => (
+                        <MenuItem
+                          key={subcategory.value}
+                          value={subcategory.value}
+                        >
+                          {subcategory.label}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Grid>
+              </Grid>
+            </FormSection>
+
+            <ButtonContainer>
+              <SubmitButton
+                variant="contained"
+                color="primary"
+                onClick={handleSubmit}
+                disabled={!reportCategory || !reportSubcategory}
+              >
+                Merge Reports
+              </SubmitButton>
+            </ButtonContainer>
+          </FormContainer>
+        </CardContent>
+      </Card>
     </>
   );
 };
 
 export default MergeReport;
-
-
-
-
-
-
-
-
-
