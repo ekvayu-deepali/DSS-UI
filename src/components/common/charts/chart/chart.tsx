@@ -14,12 +14,6 @@ const ReactApexChart = dynamic(
 
 export const Chart = ({ options, ...rest }: Props) => {
   const { id } = useChart();
-
-  // Only run on client side
-  if (typeof window === 'undefined') {
-    return <div style={{ height: rest.height || 300 }}>Loading chart...</div>;
-  }
-
   const newOptions = _.update(options || {}, "chart.id", () => id);
 
   return <ReactApexChart {...rest} options={newOptions} />;

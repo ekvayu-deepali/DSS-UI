@@ -172,7 +172,6 @@ export default function Dashboard() {
           />
         </Grid>
 
-        <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
         {/* Journey Overview Chart - Takes 1/3 width on large screens */}
         <Grid
           item

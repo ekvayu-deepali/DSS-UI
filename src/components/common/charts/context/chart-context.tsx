@@ -19,39 +19,33 @@ export const ChartContext = createContext<IChartContext>({} as IChartContext);
  */
 export const ChartProvider: FC<IChartProvider> = ({ id, children }) => {
   const downloadSVG = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      // Only import and use ApexCharts on the client side
-      import('apexcharts').then((ApexChartsModule) => {
-        const ApexCharts = ApexChartsModule.default;
-        const { ctx } = ApexCharts.getChartByID(id)
-          ?.exports as unknown as IApexChartExport;
-        ctx.exports.exportToSVG();
-      });
-    }
+    // Dynamic import will only run on client side
+    import('apexcharts').then((ApexChartsModule) => {
+      const ApexCharts = ApexChartsModule.default;
+      const { ctx } = ApexCharts.getChartByID(id)
+        ?.exports as unknown as IApexChartExport;
+      ctx.exports.exportToSVG();
+    });
   }, [id]);
 
   const downloadPNG = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      // Only import and use ApexCharts on the client side
-      import('apexcharts').then((ApexChartsModule) => {
-        const ApexCharts = ApexChartsModule.default;
-        const { ctx } = ApexCharts.getChartByID(id)
-          ?.exports as unknown as IApexChartExport;
-        ctx.exports.exportToPng();
-      });
-    }
+    // Dynamic import will only run on client side
+    import('apexcharts').then((ApexChartsModule) => {
+      const ApexCharts = ApexChartsModule.default;
+      const { ctx } = ApexCharts.getChartByID(id)
+        ?.exports as unknown as IApexChartExport;
+      ctx.exports.exportToPng();
+    });
   }, [id]);
 
   const downloadCSV = useCallback(() => {
-    if (typeof window !== 'undefined') {
-      // Only import and use ApexCharts on the client side
-      import('apexcharts').then((ApexChartsModule) => {
-        const ApexCharts = ApexChartsModule.default;
-        const { ctx } = ApexCharts.getChartByID(id)
-          ?.exports as unknown as IApexChartExport;
-        ctx.exportToCSV();
-      });
-    }
+    // Dynamic import will only run on client side
+    import('apexcharts').then((ApexChartsModule) => {
+      const ApexCharts = ApexChartsModule.default;
+      const { ctx } = ApexCharts.getChartByID(id)
+        ?.exports as unknown as IApexChartExport;
+      ctx.exportToCSV();
+    });
   }, [id]);
 
   const value = useMemo(
