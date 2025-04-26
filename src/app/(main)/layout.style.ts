@@ -16,6 +16,7 @@ export const MainContent = styled('main')(({ theme }) => ({
   flexGrow: 1,
   marginLeft: '240px',
   marginTop: '64px',
+  marginBottom: '40px', // Add margin for footer
   padding: theme.spacing(3),
   backgroundColor: theme.palette.background.default,
   transition: 'none',
