@@ -4,7 +4,7 @@ import React, { JSX, useMemo } from "react";
 import { useRouter } from "next/navigation";
 import { Button, Box } from "@mui/material";
 
-import { useContactsController } from "./generated-report.controller";
+import { useContactsController } from "./consolidated-report.controller";
 
 import { Icon, PageHeader, TableComponent } from "@/components/common";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";

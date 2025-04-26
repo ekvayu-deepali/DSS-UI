@@ -306,7 +306,7 @@ export const useContactsController = () => {
       forwardParam: true,
     },
     {
-      name: "Generated Report",
+      name: "Consolidated Report",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },
