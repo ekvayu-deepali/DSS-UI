@@ -230,9 +230,9 @@ export default function UploadReport() {
               {/* Report Date Field */}
               <Box sx={{ flex: "0 0 50%" }}>
                 <FieldDescription>
-                  <Typography variant="subtitle2">Report Date</Typography>
+                  <Typography variant="subtitle2">Document Upload Date</Typography>
                   <Typography variant="body2" color="textSecondary">
-                    Select the report date
+                    Select the document upload date
                   </Typography>
                 </FieldDescription>
                 <StyledTextFieldWrapper>
@@ -658,7 +658,7 @@ export default function UploadReport() {
           {/* Severity Section */}
           <FormSection>
             <FormSectionTitle>
-              <Typography variant="h5">Severity Assessment</Typography>
+              <Typography variant="h5">Truth Score</Typography>
             </FormSectionTitle>
             <Typography variant="body2" color="textSecondary" sx={{ mb: 3 }}>
               Assess the severity of the report on a scale from 0 (low) to 10
@@ -673,7 +673,7 @@ export default function UploadReport() {
             >
               <Box sx={{ flex: 1 }}>
                 <SeveritySlider
-                  label="Source Severity"
+                  label="Original Truth Score"
                   description="Rate the severity level as reported by the source"
                   value={sourceSeverity}
                   onChange={onSourceSeverityChange}
@@ -681,7 +681,7 @@ export default function UploadReport() {
               </Box>
               <Box sx={{ flex: 1 }}>
                 <SeveritySlider
-                  label="Review Severity"
+                  label="Review Truth Score"
                   description="Rate the severity level based on your assessment"
                   value={reviewSeverity}
                   onChange={onReviewSeverityChange}
@@ -693,7 +693,7 @@ export default function UploadReport() {
           {/* Report Content Section */}
           <FormSection>
             <FormSectionTitle>
-              <Typography variant="h5">Report Content</Typography>
+              <Typography variant="h5">Document Content</Typography>
             </FormSectionTitle>
             {/* Summary and Description Fields in one row */}
             <Box

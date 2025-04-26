@@ -5,6 +5,7 @@ import React, { useState } from "react";
 import { LayoutContainer, MainContent } from "./layout.style"
 import { Header } from "@/components/common/header/header";
 import { Sidebar } from "@/components/common/sidebar/sidebar";
+import { Footer } from "@/components/common/footer/footer";
 
 interface ExecutorLayoutProps {
   children: React.ReactNode;
@@ -31,6 +32,7 @@ export default function ExecutorLayout({
           {children}
         </div>
       </MainContent>
+      <Footer />
     </LayoutContainer>
   );
 }
