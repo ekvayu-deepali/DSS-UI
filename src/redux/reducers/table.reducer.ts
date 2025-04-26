@@ -13,6 +13,7 @@ import {
 
 import { ReducerEnum } from "@/enum";
 import { LuxonHelper } from "@/helpers";
+import { DatePickerTimeEnum } from "@/components/common/datePicker";
 
 export interface IMetaData {
   isNextPage: boolean;
@@ -46,6 +47,20 @@ export interface ITablePayloadMetadata {
   value: IMetaData;
 }
 
+// Helper function to get initial time values without directly calling LuxonHelper in the initialState
+const getInitialTimeValues = () => {
+  const now = DateTime.now();
+  const startDate = now.minus({ day: 1 });
+  const endDate = now;
+
+  return {
+    from: startDate.toMillis(),
+    to: endDate.toMillis()
+  };
+};
+
+const initialTimeValues = getInitialTimeValues();
+
 const initialState: ITableState = {
   tickethistory: {
     metaData: { isNextPage: false, totalCount: 0 } as IMetaData,
@@ -55,8 +70,8 @@ const initialState: ITableState = {
       isLoading: true,
     },
     time: {
-      from: LuxonHelper.initialDate().startDate.toMillis(),
-      to: LuxonHelper.initialDate().endDate.toMillis(),
+      from: initialTimeValues.from,
+      to: initialTimeValues.to,
     },
   },
   metaData: { isNextPage: false, totalCount: 0 } as IMetaData,
@@ -66,8 +81,8 @@ const initialState: ITableState = {
     isLoading: true,
   },
   time: {
-    from: LuxonHelper.initialDate().startDate.toMillis(),
-    to: LuxonHelper.initialDate().endDate.toMillis(),
+    from: initialTimeValues.from,
+    to: initialTimeValues.to,
   },
   hasError: false,
 };
@@ -76,13 +91,16 @@ export const tableSlice = createSlice({
   name: ReducerEnum.TABLE,
   initialState,
   reducers: {
-    reset: () => ({
-      ...initialState,
-      time: {
-        from: LuxonHelper.initialDate().startDate.toMillis(),
-        to: LuxonHelper.initialDate().endDate.toMillis(),
-      },
-    }),
+    reset: () => {
+      const timeValues = getInitialTimeValues();
+      return {
+        ...initialState,
+        time: {
+          from: timeValues.from,
+          to: timeValues.to,
+        },
+      };
+    },
     setTableRows: (state: ITableState, action: PayloadAction<number>) => {
       state.table.limit = action.payload;
       state.table.page = initialState.table.page;
