@@ -127,7 +127,7 @@ const MergeReport: React.FC = () => {
                 onClick={handleSubmit}
                 disabled={!reportCategory || !reportSubcategory}
               >
-                Merge Reports
+                View Reports
               </SubmitButton>
             </ButtonContainer>
           </FormContainer>
