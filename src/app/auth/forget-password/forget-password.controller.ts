@@ -5,10 +5,7 @@ import {
   ITextInputFieldRef,
 } from "@/components/common/textInputField";
 import { SOMETHING_WENT_WRONG, VERIFICATION_CODE_SENT } from "@/constants";
-import {
-  AuthFormStateEnum,
-  SnackbarTypeEnum,
-} from "@/enum";
+import { AuthFormStateEnum, SnackbarTypeEnum } from "@/enum";
 import { useAppSnackbar } from "@/hooks/snackbar.hook";
 import { authActions, AuthenticationThunk, useAppDispatch } from "@/redux";
 import { IForgetPasswordRequest } from "@/interfaces";
@@ -67,10 +64,7 @@ export const ForgetPasswordController = (): IAuthControllerResponse => {
     try {
       StorageHelper.setLocalStorage("forgotPasswordEmail", email.trim());
       await dispatch(AuthenticationThunk.forgetPassword(payload)).unwrap();
-      enqueueSnackbar(
-        VERIFICATION_CODE_SENT,
-        SnackbarTypeEnum.SUCCESS
-      );
+      enqueueSnackbar(VERIFICATION_CODE_SENT, SnackbarTypeEnum.SUCCESS);
       dispatch(authActions.setFormState(AuthFormStateEnum.FORGOT_PASSWORD_OTP));
     } catch (error) {
       enqueueSnackbar(SOMETHING_WENT_WRONG, SnackbarTypeEnum.ERROR);

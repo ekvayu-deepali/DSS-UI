@@ -12,6 +12,7 @@ interface IPageHeader {
   actions?: ReactNode;
   showSearch?: boolean;
   onSearch?: (searchTerm: string, filters: string[]) => void;
+  subtitle?: string;
 }
 
 /**
@@ -20,7 +21,14 @@ interface IPageHeader {
  * @return {ReactElement}
  */
 export function PageHeader(props: IPageHeader): ReactElement {
-  const { title, actions, breadcrumbs, showSearch = false, onSearch } = props;
+  const {
+    title,
+    actions,
+    breadcrumbs,
+    showSearch = false,
+    onSearch,
+    subtitle,
+  } = props;
 
   return (
     <PageHeaderBox>
@@ -29,11 +37,16 @@ export function PageHeader(props: IPageHeader): ReactElement {
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {title}
           </Typography>
+          {subtitle && (
+            <Typography variant="body2" >
+              {subtitle}
+            </Typography>
+          )}
           {breadcrumbs && (
             <Breadcrumb breadcrumbs={breadcrumbs ? breadcrumbs : []} />
           )}
         </Grid>
-        <GridActionItem sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+        <GridActionItem sx={{ display: "flex", alignItems: "center", gap: 2 }}>
           {showSearch && <SearchBar onSearch={onSearch} />}
           {actions}
         </GridActionItem>
