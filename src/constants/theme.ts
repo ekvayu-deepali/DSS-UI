@@ -1,4 +1,5 @@
-import { darkThemeOptions, lightThemeOptions } from "@/theme";
+import { lightThemeOptions } from "@/theme/lightThemeOptions";
+import { darkThemeOptions } from "@/theme/darkThemeOptions";
 
 export const DEFAULT_THEME_LIST = [
   {

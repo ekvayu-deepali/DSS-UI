@@ -42,9 +42,10 @@
 
 import React, { useState } from "react";
 import { IconButton, Menu, MenuItem, Avatar, Typography, Box, Divider } from "@mui/material";
-import { faBars, faUser, faSignOutAlt, faCog } from "@fortawesome/free-solid-svg-icons";
+import { faBars, faUser, faSignOutAlt, faCog, faSun, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { Icon } from "../icon";
-import ThemeToggle from "../themeToggel";
+import { useTheme } from "@/context/ThemeContext";
+import { ThemeToggleEnum } from "../themeToggel/enum";
 import {
   HeaderActions,
   HeaderContainer,
@@ -59,13 +60,6 @@ const MenuItemContent = styled(Box)`
   gap: 12px;
 `;
 
-// Styled component for the theme toggle wrapper to ensure proper spacing
-const ThemeToggleWrapper = styled(Box)`
-  margin-left: 16px;
-  display: flex;
-  align-items: center;
-`;
-
 interface HeaderProps {
   title?: string;
   onToggleSidebar?: () => void;
@@ -76,20 +70,21 @@ interface HeaderProps {
 export const Header: React.FC<HeaderProps> = ({
   title,
   onToggleSidebar,
-  username = "Abhinandan",
+  username = "Abhinandan@gmail.com",
   role = "Admin",
 }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
-  
+  const { mode, toggleTheme } = useTheme();
+
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  
+
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-  
+
   const handleLogout = () => {
     // Add your logout logic here
     handleMenuClose();
@@ -99,6 +94,11 @@ export const Header: React.FC<HeaderProps> = ({
   const handleProfileSettings = () => {
     handleMenuClose();
     console.log("Navigate to profile settings");
+  };
+
+  const handleThemeToggle = () => {
+    toggleTheme();
+    // Don't close the menu so user can see the theme change
   };
 
   return (
@@ -116,15 +116,15 @@ export const Header: React.FC<HeaderProps> = ({
           <AppTitle variant="h6">Decision Support System</AppTitle>
         </div>
         <HeaderActions>
-          <Box sx={{ 
-            display: "flex", 
-            alignItems: "center", 
+          <Box sx={{
+            display: "flex",
+            alignItems: "center",
             justifyContent: "flex-end",
             gap: 3 // Add gap between elements
           }}>
             {/* User Profile Section */}
-            <Box sx={{ 
-              display: "flex", 
+            <Box sx={{
+              display: "flex",
               alignItems: "center"
             }}>
               <Box sx={{ textAlign: "right", mr: 1 }}>
@@ -140,7 +140,7 @@ export const Header: React.FC<HeaderProps> = ({
                   {username[0]}
                 </Avatar>
               </IconButton>
-              
+
               <Menu
                 anchorEl={anchorEl}
                 open={open}
@@ -177,25 +177,32 @@ export const Header: React.FC<HeaderProps> = ({
                   <Typography variant="body1" align="center" fontWeight="bold">{username}</Typography>
                   <Typography variant="caption" align="center" display="block" color="text.secondary">{role}</Typography>
                 </Box>
-                
+
                 <Divider />
-                
+
                 <MenuItem onClick={handleProfileSettings} sx={{ py: 1.5 }}>
                   <MenuItemContent>
                     <Icon icon={faUser} size="small" onlyIcon />
                     <Typography variant="body2">Profile</Typography>
                   </MenuItemContent>
                 </MenuItem>
-                
+
                 <MenuItem onClick={handleProfileSettings} sx={{ py: 1.5 }}>
                   <MenuItemContent>
                     <Icon icon={faCog} size="small" onlyIcon />
                     <Typography variant="body2">Settings</Typography>
                   </MenuItemContent>
                 </MenuItem>
-                
+
+                <MenuItem onClick={handleThemeToggle} sx={{ py: 1.5 }}>
+                  <MenuItemContent>
+                    <Icon icon={mode === ThemeToggleEnum.LIGHT ? faMoon : faSun} size="small" onlyIcon />
+                    <Typography variant="body2">{mode === ThemeToggleEnum.LIGHT ? "Dark Theme" : "Light Theme"}</Typography>
+                  </MenuItemContent>
+                </MenuItem>
+
                 <Divider />
-                
+
                 <MenuItem onClick={handleLogout} sx={{ py: 1.5 }}>
                   <MenuItemContent>
                     <Icon icon={faSignOutAlt} size="small" onlyIcon />
@@ -204,11 +211,6 @@ export const Header: React.FC<HeaderProps> = ({
                 </MenuItem>
               </Menu>
             </Box>
-            
-            {/* Theme Toggle */}
-            <ThemeToggleWrapper>
-              <ThemeToggle />
-            </ThemeToggleWrapper>
           </Box>
         </HeaderActions>
       </HeaderContent>

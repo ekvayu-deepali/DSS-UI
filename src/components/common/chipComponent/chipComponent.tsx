@@ -16,11 +16,10 @@ export interface IProps {
   value?: string;
   title?: string;
   label?: string;
-  variant?: string;
+  variant?: 'filled' | 'outlined';
   color?: string;
-  size?:
-    | OverridableStringUnion<'small' | 'medium', ChipPropsSizeOverrides>
-    | undefined;
+  size?: OverridableStringUnion<'small' | 'medium', ChipPropsSizeOverrides> | undefined;
+  onClick?: () => void;
 }
 
 /**
@@ -30,14 +29,21 @@ export interface IProps {
  * @return {ReactElement}
  */
 export const ChipComponent = (props: IProps) => {
-  const { title, variant, label, value = '', color, size } = props;
+  const { 
+    title, 
+    variant, 
+    label, 
+    value = '', 
+    color, 
+    size,
+    onClick 
+  } = props;
   const theme: Theme = useTheme();
 
   const labelValue = label || value.toLowerCase();
   const getColor = _.get(CHIP_COLOR, value.toUpperCase());
-  const colorvalue = color || getColor;
-  const themeVariant =
-    variant || theme.palette.mode === 'dark' ? 'outlined' : 'filled';
+  const colorValue = color || getColor;
+  const themeVariant = variant || theme.palette.mode === 'dark' ? 'outlined' : 'filled';
 
   return (
     <Tooltip disableHoverListener={!title} arrow title={title || ''}>
@@ -45,7 +51,15 @@ export const ChipComponent = (props: IProps) => {
         size={size || 'medium'}
         label={labelValue}
         variant={themeVariant}
-        color={colorvalue || 'default'}
+        color={colorValue || 'default'}
+        onClick={onClick}
+        clickable={!!onClick}
+        sx={{
+          cursor: onClick ? 'pointer' : 'default',
+          '&:hover': onClick ? {
+            backgroundColor: theme.palette.action.hover,
+          } : {},
+        }}
       />
     </Tooltip>
   );

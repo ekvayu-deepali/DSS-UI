@@ -17,8 +17,10 @@ export const ListAvatar = styled(ListItemAvatar)(({ theme }) => ({
   minWidth: theme.spacing(5),
 }));
 
-export const UserPrefix = styled(Avatar)(({ theme }) => ({
+export const UserPrefix = styled(Avatar)(() => ({
   width: "24px",
   height: "24px",
+  fontSize: "0.75rem", // Smaller font size for the avatar letter
+  fontWeight: 500,
 }));
 

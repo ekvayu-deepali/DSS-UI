@@ -10,4 +10,16 @@ export const CustomChip = styled(Chip)(({ theme }) => ({
   margin: theme.spacing(0.3),
   textAlign: 'center',
   padding: theme.spacing(0.3, 0.5, 0.3),
+  transition: theme.transitions.create(['background-color', 'box-shadow', 'border-color', 'color']),
+  
+  '&.MuiChip-filled': {
+    boxShadow: theme.shadows[1],
+  },
+  
+  '&.MuiChip-outlined': {
+    backgroundColor: 'transparent',
+    '&:hover': {
+      backgroundColor: theme.palette.action.hover,
+    },
+  },
 }));

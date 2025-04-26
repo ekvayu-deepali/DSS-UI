@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const defaultTheme = "light";
+  const defaultTheme = "dark";
   return (
     <html lang="en" data-toolpad-color-scheme={defaultTheme}>
       <body
