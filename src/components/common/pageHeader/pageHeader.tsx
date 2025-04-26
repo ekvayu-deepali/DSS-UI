@@ -37,11 +37,7 @@ export function PageHeader(props: IPageHeader): ReactElement {
           <Typography variant="h5" sx={{ fontWeight: 600 }}>
             {title}
           </Typography>
-          {subtitle && (
-            <Typography variant="body2" >
-              {subtitle}
-            </Typography>
-          )}
+          {subtitle && <Typography variant="body2">{subtitle}</Typography>}
           {breadcrumbs && (
             <Breadcrumb breadcrumbs={breadcrumbs ? breadcrumbs : []} />
           )}

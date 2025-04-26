@@ -138,4 +138,26 @@
   .dark * {
     scrollbar-color: rgba(255, 255, 255, 0.1) transparent; /* Firefox */
   }
+
+  /* Sticky header styles */
+  .page-header-wrapper {
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+    background-color: inherit;
+    backdrop-filter: blur(8px);
+  }
+
+  /* Ensure the PageHeaderBox is sticky */
+  .MuiBox-root[class*="PageHeaderBox"] {
+    position: sticky !important;
+    top: 0 !important;
+    z-index: 1100 !important;
+    backdrop-filter: blur(8px) !important;
+  }
+
+  .page-content-wrapper {
+    flex: 1;
+    overflow: auto;
+  }
 }

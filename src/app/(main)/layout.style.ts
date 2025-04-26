@@ -34,6 +34,12 @@ export const MainContent = styled('main')(({ theme }) => ({
   '& .content-wrapper': {
     height: '100%',
     overflow: 'auto',
+    display: 'flex',
+    flexDirection: 'column',
+    '& .page-content': {
+      flex: 1,
+      overflow: 'auto',
+    },
     '& .table-container': {
       overflow: 'auto',
       maxWidth: '100%',
