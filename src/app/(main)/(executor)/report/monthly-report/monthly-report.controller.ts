@@ -4,6 +4,7 @@ import { Theme, useMediaQuery, useTheme } from "@mui/material";
 
 import { IHeader, TableComponentEnum } from "@/components/common";
 import { ChipComponent } from "@/components/common/chipComponent";
+import { ViewButton } from "@/components/common/viewButton/viewButton";
 import { RoutePathEnum } from "@/enum";
 import { MeasureRefType } from "@/interfaces";
 import {
@@ -14,6 +15,7 @@ import {
 } from "@/redux";
 
 import { AvatarMenu } from "@/components/common";
+import { DownloadButton } from "@/components/common/downloadButton/downloadButton";
 
 export const useContactsController = () => {
   // Static data for the table
@@ -201,21 +203,18 @@ export const useContactsController = () => {
     [searchTerm, activeFilters]
   );
 
-  const newApplication = useMemo(
-    () =>
-      filteredData.map((item) => ({
-        sn: item.sn,
-        documentId: item.documentId,
-        documentType: item.documentType,
-        // creatorName: item.creatorName,
-        // creatorId: item.creatorId,
-        uploadedDate: item.uploadedDate,
-        // approverId: item.approverId,
-        createdDate: item.createdDate,
-        // status: item.status,
-      })),
-    [filteredData]
-  );
+  // Remove this first declaration of newApplication
+  // const newApplication = useMemo(
+  //   () =>
+  //     filteredData.map((item) => ({
+  //       sn: item.sn,
+  //       documentId: item.documentId,
+  //       documentType: item.documentType,
+  //       uploadedDate: item.uploadedDate,
+  //       createdDate: item.createdDate,
+  //     })),
+  //   [filteredData]
+  // );
 
   const tablePaginationData = useAppSelector(GET_TABLE_PAGINATION_DATA);
   // Static pagination data
@@ -226,74 +225,6 @@ export const useContactsController = () => {
   };
 
   // Rest of your code remains same
-  const headers: IHeader[] = [
-    {
-      id: "sn",
-      name: "SN",
-      hidden: false,
-      width: 60,
-      type: TableComponentEnum.STRING,
-    },
-    {
-      id: "documentId",
-      name: "Document ID",
-      hidden: false,
-      width: 120,
-      type: TableComponentEnum.STRING,
-    },
-    {
-      id: "documentType",
-      name: "Document Type",
-      hidden: false,
-      width: 150,
-      type: TableComponentEnum.STRING,
-    },
-    // {
-    //   id: "creatorName",
-    //   name: "Creator Name",
-    //   hidden: false,
-    //   width: 180,
-    //   type: TableComponentEnum.COMPONENT,
-    //   component: AvatarMenu,
-    // },
-    // {
-    //   id: "creatorId",
-    //   name: "Creator ID",
-    //   hidden: false,
-    //   width: 120,
-    //   type: TableComponentEnum.STRING,
-    // },
-    {
-      id: "uploadedDate",
-      name: "Uploaded Date",
-      hidden: false,
-      width: 180,
-      type: TableComponentEnum.DATE,
-    },
-    // {
-    //   id: "approverId",
-    //   name: "Approver ID",
-    //   hidden: false,
-    //   width: 120,
-    //   type: TableComponentEnum.STRING,
-    // },
-    {
-      id: "createdDate",
-      name: "Created Date",
-      hidden: false,
-      width: 180,
-      type: TableComponentEnum.DATE,
-    },
-    // {
-    //   id: "status",
-    //   name: "Status",
-    //   hidden: false,
-    //   width: 100,
-    //   type: TableComponentEnum.COMPONENT,
-    //   component: ChipComponent,
-    // },
-  ];
-
   const breadcrumbs = [
     {
       name: "Dashboard",
@@ -306,7 +237,7 @@ export const useContactsController = () => {
       forwardParam: true,
     },
     {
-      name: "Generated Report",
+      name: "Monthly Report",
       path: RoutePathEnum.NONE,
       forwardParam: true,
     },
@@ -318,6 +249,102 @@ export const useContactsController = () => {
     // Reset to first page when searching
     dispatch(tableActions.setTablePage(0));
   }, [dispatch]);
+
+  const handleView = useCallback((documentId: string) => {
+    console.log("Viewing document:", documentId);
+    // Implement your view logic here
+  }, []);
+
+  const handleDownload = useCallback((documentId: string) => {
+    console.log("Downloading document:", documentId);
+    // Implement your download logic here
+  }, []);
+
+  const headers: IHeader[] = [
+    {
+      id: "sn",
+      name: "SN",
+      hidden: false,
+      width: 60,
+      type: TableComponentEnum.STRING,
+    },
+    {
+      id: "documentId",
+      name: "Report ID",
+      hidden: false,
+      width: 150,
+      type: TableComponentEnum.STRING,
+    },
+    {
+      id: "reportName",
+      name: "Report Name",
+      hidden: false,
+      width: 180,
+      type: TableComponentEnum.STRING,
+    },
+    {
+      id: "documentType",
+      name: "Report Type",
+      hidden: false,
+      width: 180,
+      type: TableComponentEnum.STRING,
+    },
+    // {
+    //   id: "uploadedDate",
+    //   name: "Uploaded Date",
+    //   hidden: false,
+    //   width: 180,
+    //   type: TableComponentEnum.DATE,
+    // },
+    {
+      id: "createdDate",
+      name: "Generated Date",
+      hidden: false,
+      width: 180,
+      type: TableComponentEnum.DATE,
+    },
+    {
+      id: "view",
+      name: "View",
+      hidden: false,
+      width: 70,
+      type: TableComponentEnum.COMPONENT,
+      component: ViewButton,
+    },
+    {
+      id: "download",
+      name: "Download",
+      hidden: false,
+      width: 70,
+      type: TableComponentEnum.COMPONENT,
+      component: DownloadButton,
+    }
+  ];
+
+  const newApplication = useMemo(
+    () =>
+      filteredData.map((item) => ({
+        sn: item.sn,
+        documentId: item.documentId,
+        reportName: `Report ${item.documentId}`,
+        documentType: item.documentType,
+        // uploadedDate: item.uploadedDate,
+        createdDate: item.createdDate,
+        view: {
+          component: ViewButton,
+          props: {
+            onClick: () => handleView(item.documentId)
+          }
+        },
+        download: {
+          component: DownloadButton,
+          props: {
+            onClick: () => handleDownload(item.documentId)
+          }
+        }
+      })),
+    [filteredData, handleView, handleDownload]
+  );
 
   return {
     getters: {
@@ -336,9 +363,10 @@ export const useContactsController = () => {
       changePage,
       changeRows,
       handleSearch,
+      handleView,
+      handleDownload,
       getContactInformation: async () => () => {},
     },
-
     ref: ref as MeasureRefType,
   };
 };

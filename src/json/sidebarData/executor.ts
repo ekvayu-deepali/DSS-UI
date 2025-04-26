@@ -96,14 +96,19 @@ export const executorMenuItems: IMenuItem[] = [
     icon: faFile,
     submenu: [
       {
+        title: "Monthly Report",
+        path: "/report/monthly-report",
+        icon: faFileLines,
+      },
+      {
+        title: "Consolidated Report",
+        path: "/report/consolidated-report",
+        icon: faFileLines,
+      },
+      {
         title: "Merge Report",
         path: "/report/merge-report",
         icon: faGlobe,
-      },
-      {
-        title: "Generated Report",
-        path: "/report/generated-report",
-        icon: faFileLines,
       },
     ],
   },
