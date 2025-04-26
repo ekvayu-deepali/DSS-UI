@@ -1,4 +1,11 @@
-import { RefObject, useCallback, useMemo, useRef, useState, useEffect } from "react";
+import {
+  RefObject,
+  useCallback,
+  useMemo,
+  useRef,
+  useState,
+  useEffect,
+} from "react";
 import { useSnackbar } from "notistack";
 import { SelectChangeEvent } from "@mui/material";
 import { ITextInputFieldData, ITextInputFieldRef } from "@/components/common";
@@ -17,7 +24,10 @@ export const REPORT_SUBCATEGORIES = {
     { value: "geo-political", label: "Geo Political" },
     { value: "metrology", label: "Metrology" },
     { value: "miscellaneous", label: "Miscellaneous" },
-    { value: "organisation-and-management", label: "Organisation and Management" },
+    {
+      value: "organisation-and-management",
+      label: "Organisation and Management",
+    },
     { value: "training", label: "Training" },
     { value: "intelligence", label: "Intelligence" },
   ],
@@ -25,7 +35,10 @@ export const REPORT_SUBCATEGORIES = {
     { value: "geo-political", label: "Geo Political" },
     { value: "metrology", label: "Metrology" },
     { value: "miscellaneous", label: "Miscellaneous" },
-    { value: "organisation-and-management", label: "Organisation and Management" },
+    {
+      value: "organisation-and-management",
+      label: "Organisation and Management",
+    },
     { value: "training", label: "Training" },
     { value: "intelligence", label: "Intelligence" },
   ],
@@ -69,18 +82,22 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
   const [documentCategory, setDocumentCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
-  const [reportCategory, setReportCategory] = useState<string>("confidential");
+  const [reportCategory, setReportCategory] = useState<string>("");
   const [reportSubcategory, setReportSubcategory] = useState<string>("");
   const [availableSubcategories, setAvailableSubcategories] = useState(
     REPORT_SUBCATEGORIES.confidential
   );
-  const [selectedMonth, setSelectedMonth] = useState<DateTime | null>(DateTime.now());
+  const [selectedMonth, setSelectedMonth] = useState<DateTime | null>(
+    DateTime.now()
+  );
 
   // Update subcategories when report category changes
   useEffect(() => {
     if (reportCategory) {
       setAvailableSubcategories(
-        REPORT_SUBCATEGORIES[reportCategory as keyof typeof REPORT_SUBCATEGORIES] || []
+        REPORT_SUBCATEGORIES[
+          reportCategory as keyof typeof REPORT_SUBCATEGORIES
+        ] || []
       );
       setReportSubcategory(""); // Reset subcategory when category changes
     }
@@ -114,13 +131,19 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
     []
   );
 
-  const onDocumentNameChange = useCallback((event: ITextInputFieldData): void => {
-    setDocumentName(event.value);
-  }, []);
+  const onDocumentNameChange = useCallback(
+    (event: ITextInputFieldData): void => {
+      setDocumentName(event.value);
+    },
+    []
+  );
 
-  const onDocumentCategoryChange = useCallback((event: ITextInputFieldData): void => {
-    setDocumentCategory(event.value);
-  }, []);
+  const onDocumentCategoryChange = useCallback(
+    (event: ITextInputFieldData): void => {
+      setDocumentCategory(event.value);
+    },
+    []
+  );
 
   const onKeywordsChange = useCallback((event: ITextInputFieldData): void => {
     setKeywords(event.value);
@@ -130,13 +153,19 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
     setTopic(event.value);
   }, []);
 
-  const handleReportCategoryChange = useCallback((event: SelectChangeEvent<string>): void => {
-    setReportCategory(event.target.value);
-  }, []);
+  const handleReportCategoryChange = useCallback(
+    (event: SelectChangeEvent<string>): void => {
+      setReportCategory(event.target.value);
+    },
+    []
+  );
 
-  const handleReportSubcategoryChange = useCallback((event: SelectChangeEvent<string>): void => {
-    setReportSubcategory(event.target.value);
-  }, []);
+  const handleReportSubcategoryChange = useCallback(
+    (event: SelectChangeEvent<string>): void => {
+      setReportSubcategory(event.target.value);
+    },
+    []
+  );
 
   const handleMonthChange = useCallback((date: DateTime | null): void => {
     setSelectedMonth(date);
@@ -151,13 +180,24 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
         topic,
         reportCategory,
         reportSubcategory,
-        selectedMonth: selectedMonth ? selectedMonth.toFormat('MMMM yyyy') : null,
+        selectedMonth: selectedMonth
+          ? selectedMonth.toFormat("MMMM yyyy")
+          : null,
       });
       enqueueSnackbar("Documents merged successfully", { variant: "success" });
     } catch (error) {
       enqueueSnackbar("Failed to merge documents", { variant: "error" });
     }
-  }, [documentName, documentCategory, keywords, topic, reportCategory, reportSubcategory, selectedMonth, enqueueSnackbar]);
+  }, [
+    documentName,
+    documentCategory,
+    keywords,
+    topic,
+    reportCategory,
+    reportSubcategory,
+    selectedMonth,
+    enqueueSnackbar,
+  ]);
 
   return {
     getters: {
