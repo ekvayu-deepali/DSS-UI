@@ -10,11 +10,12 @@ import {
   MenuItem,
   Select,
   Typography,
+  Box,
 } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
-import { PageHeader } from "@/components/common";
+import { PageHeader, ProcessingDashboard } from "@/components/common";
 import {
   useMergeReportController,
   REPORT_CATEGORIES,
@@ -24,35 +25,39 @@ import {
   FormSection,
   SubmitButton,
   ButtonContainer,
+  ReportContainer,
 } from "./merge-report.style";
 
-const MergeReport: React.FC = () => {
-  const { getters, handlers } = useMergeReportController();
+const ReportExplorer: React.FC = () => {
+  const { getters, handlers, ref } = useMergeReportController();
   const {
     breadcrumbs,
     reportCategory,
     reportSubcategory,
     availableSubcategories,
     selectedMonth,
+    showReports,
+    processingQueue,
   } = getters;
   const {
     handleReportCategoryChange,
     handleReportSubcategoryChange,
     handleSubmit,
     handleMonthChange,
+    handleProcessingItemClick,
   } = handlers;
 
   return (
     <>
-      <PageHeader title="Merge Report" breadcrumbs={breadcrumbs} />
+      <PageHeader title="Report Explorer" breadcrumbs={breadcrumbs} />
       <Card>
         <CardContent>
           <FormContainer>
             <Typography variant="h6" gutterBottom>
-              Select Report Type
+              Select Report Parameters
             </Typography>
             <Typography variant="body2" color="textSecondary" paragraph>
-              Choose the report category and subcategory to merge
+              Choose the report category, subcategory, and month to view reports
             </Typography>
 
             <FormSection>
@@ -133,8 +138,29 @@ const MergeReport: React.FC = () => {
           </FormContainer>
         </CardContent>
       </Card>
+
+      {showReports && (
+        <ReportContainer>
+          <Card>
+            <CardContent>
+              <Typography variant="h6" gutterBottom>
+                {reportCategory === "confidential" ? "Confidential" : "OSINT"} Reports - {reportSubcategory.replace(/-/g, " ")}
+              </Typography>
+              <Typography variant="body2" color="textSecondary" paragraph>
+                {selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : ""}
+              </Typography>
+              <Box sx={{ mt: 2 }} ref={ref.dashboardRef}>
+                <ProcessingDashboard
+                  processingQueue={processingQueue}
+                  onProcessingItemClick={handleProcessingItemClick}
+                />
+              </Box>
+            </CardContent>
+          </Card>
+        </ReportContainer>
+      )}
     </>
   );
 };
 
-export default MergeReport;
+export default ReportExplorer;

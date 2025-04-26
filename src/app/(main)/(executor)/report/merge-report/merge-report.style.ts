@@ -59,3 +59,11 @@ export const StyledTextFieldWrapper = styled(Box)(({ theme }) => ({
     },
   },
 }));
+
+export const ReportContainer = styled(Box)(({ theme }) => ({
+  marginTop: theme.spacing(4),
+  "& .MuiPaper-root": {
+    borderRadius: theme.shape.borderRadius,
+    boxShadow: theme.shadows[2],
+  },
+}));

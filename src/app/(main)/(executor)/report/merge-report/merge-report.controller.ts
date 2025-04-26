@@ -12,6 +12,7 @@ import { ITextInputFieldData, ITextInputFieldRef } from "@/components/common";
 import { IBreadcrumbDisplay } from "@/components/common/breadcrumb/interface";
 import { RoutePathEnum } from "@/enum";
 import { DateTime } from "luxon";
+import useMeasure from "react-use-measure";
 
 // Report categories and subcategories based on sidebar structure
 export const REPORT_CATEGORIES = [
@@ -44,6 +45,14 @@ export const REPORT_SUBCATEGORIES = {
   ],
 };
 
+// Processing queue item structure
+export interface ProcessingItem {
+  id: string;
+  name: string;
+  status: "completed" | "processing" | "failed";
+  time: string;
+}
+
 interface IMergeReportControllerResponse {
   getters: {
     documentName: string;
@@ -55,6 +64,9 @@ interface IMergeReportControllerResponse {
     reportSubcategory: string;
     availableSubcategories: { value: string; label: string }[];
     selectedMonth: DateTime | null;
+    showReports: boolean;
+    processingQueue: ProcessingItem[];
+    height: number;
   };
   handlers: {
     onDocumentNameChange: (event: ITextInputFieldData) => void;
@@ -65,24 +77,27 @@ interface IMergeReportControllerResponse {
     handleReportCategoryChange: (event: SelectChangeEvent<string>) => void;
     handleReportSubcategoryChange: (event: SelectChangeEvent<string>) => void;
     handleMonthChange: (date: DateTime | null) => void;
+    handleProcessingItemClick: (id: string) => void;
   };
   ref: {
     documentNameRef: RefObject<ITextInputFieldRef | null>;
     documentCategoryRef: RefObject<ITextInputFieldRef | null>;
     keywordsRef: RefObject<ITextInputFieldRef | null>;
     topicRef: RefObject<ITextInputFieldRef | null>;
+    dashboardRef: RefObject<HTMLDivElement| null>;
   };
 }
 
 export const useMergeReportController = (): IMergeReportControllerResponse => {
   const { enqueueSnackbar } = useSnackbar();
+  const [ref, { height }] = useMeasure();
 
   // States
   const [documentName, setDocumentName] = useState<string>("");
   const [documentCategory, setDocumentCategory] = useState<string>("");
   const [keywords, setKeywords] = useState<string>("");
   const [topic, setTopic] = useState<string>("");
-  const [reportCategory, setReportCategory] = useState<string>("");
+  const [reportCategory, setReportCategory] = useState<string>("confidential");
   const [reportSubcategory, setReportSubcategory] = useState<string>("");
   const [availableSubcategories, setAvailableSubcategories] = useState(
     REPORT_SUBCATEGORIES.confidential
@@ -90,6 +105,8 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
   const [selectedMonth, setSelectedMonth] = useState<DateTime | null>(
     DateTime.now()
   );
+  const [showReports, setShowReports] = useState<boolean>(false);
+  const [processingQueue, setProcessingQueue] = useState<ProcessingItem[]>([]);
 
   // Update subcategories when report category changes
   useEffect(() => {
@@ -100,6 +117,7 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
         ] || []
       );
       setReportSubcategory(""); // Reset subcategory when category changes
+      setShowReports(false); // Hide reports when category changes
     }
   }, [reportCategory]);
 
@@ -108,6 +126,7 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
   const documentCategoryRef = useRef<ITextInputFieldRef | null>(null);
   const keywordsRef = useRef<ITextInputFieldRef | null>(null);
   const topicRef = useRef<ITextInputFieldRef | null>(null);
+  const dashboardRef = useRef<HTMLDivElement | null>(null);
 
   // Breadcrumbs
   const breadcrumbs: IBreadcrumbDisplay[] = useMemo(
@@ -171,8 +190,21 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
     setSelectedMonth(date);
   }, []);
 
+  // Handler for processing item click
+  const handleProcessingItemClick = useCallback((id: string): void => {
+    console.log(`Processing item clicked: ${id}`);
+    // In a real application, you might navigate to a details page or open a modal
+    enqueueSnackbar(`Viewing details for document ${id}`, { variant: "info" });
+  }, [enqueueSnackbar]);
+
   const handleSubmit = useCallback(async (): Promise<void> => {
     try {
+      // Validate required fields
+      if (!reportCategory || !reportSubcategory || !selectedMonth) {
+        enqueueSnackbar("Please select all required fields", { variant: "warning" });
+        return;
+      }
+
       console.log({
         documentName,
         documentCategory,
@@ -180,13 +212,57 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
         topic,
         reportCategory,
         reportSubcategory,
-        selectedMonth: selectedMonth
-          ? selectedMonth.toFormat("MMMM yyyy")
-          : null,
+        selectedMonth: selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : null,
       });
-      enqueueSnackbar("Documents merged successfully", { variant: "success" });
+
+      // Generate sample processing queue data based on selected filters
+      const monthStr = selectedMonth ? selectedMonth.toFormat('MMMM') : '';
+      const yearStr = selectedMonth ? selectedMonth.toFormat('yyyy') : '';
+
+      // Generate dynamic processing queue based on selections
+      const newProcessingQueue: ProcessingItem[] = [
+        {
+          id: "1",
+          name: `${reportCategory === "confidential" ? "Confidential" : "OSINT"} - ${reportSubcategory.replace(/-/g, " ")} Report (${monthStr} ${yearStr})`,
+          status: "completed",
+          time: "2 hours ago",
+        },
+        {
+          id: "2",
+          name: `${reportSubcategory.replace(/-/g, " ")} Analysis Document`,
+          status: "completed",
+          time: "15 minutes ago",
+        },
+        {
+          id: "3",
+          name: `${monthStr} ${yearStr} Summary Report`,
+          status: "completed",
+          time: "1 day ago",
+        },
+        {
+          id: "4",
+          name: `${reportSubcategory.replace(/-/g, " ")} Data Collection`,
+          status: "completed",
+          time: "3 days ago",
+        },
+        {
+          id: "5",
+          name: `${reportCategory === "confidential" ? "Confidential" : "OSINT"} Quarterly Review`,
+          status: "completed",
+          time: "1 week ago",
+        },
+      ];
+
+      setProcessingQueue(newProcessingQueue);
+
+      // Show reports after successful submission
+      setShowReports(true);
+
+      enqueueSnackbar("Reports retrieved successfully", { variant: "success" });
     } catch (error) {
-      enqueueSnackbar("Failed to merge documents", { variant: "error" });
+      console.error("Error retrieving reports:", error);
+      setShowReports(false);
+      enqueueSnackbar("Failed to retrieve reports", { variant: "error" });
     }
   }, [
     documentName,
@@ -210,6 +286,9 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       reportSubcategory,
       availableSubcategories,
       selectedMonth,
+      showReports,
+      processingQueue,
+      height,
     },
     handlers: {
       onDocumentNameChange,
@@ -220,12 +299,14 @@ export const useMergeReportController = (): IMergeReportControllerResponse => {
       handleReportCategoryChange,
       handleReportSubcategoryChange,
       handleMonthChange,
+      handleProcessingItemClick,
     },
     ref: {
       documentNameRef,
       documentCategoryRef,
       keywordsRef,
       topicRef,
+      dashboardRef,
     },
   };
 };
