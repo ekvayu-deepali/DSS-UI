@@ -27,4 +27,6 @@ export * from "./fileSize.enum";
 export * from "./profile.enum";
 export * from "./authentication.enum";
 export * from "./apiMethod.enum";
+export * from "./theme.enums";
+
 
