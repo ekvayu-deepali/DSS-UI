@@ -15,6 +15,7 @@ import {
 } from "@/redux";
 
 import { AvatarMenu } from "@/components/common";
+import { DownloadButton } from "@/components/common/downloadButton/downloadButton";
 
 export const useContactsController = () => {
   // Static data for the table
@@ -254,57 +255,69 @@ export const useContactsController = () => {
     // Implement your view logic here
   }, []);
 
+  const handleDownload = useCallback((documentId: string) => {
+    console.log("Downloading document:", documentId);
+    // Implement your download logic here
+  }, []);
+
   const headers: IHeader[] = [
     {
       id: "sn",
       name: "SN",
       hidden: false,
-      width: 60,  // Keep this smaller for serial number
+      width: 60,
       type: TableComponentEnum.STRING,
     },
     {
       id: "documentId",
       name: "Report ID",
       hidden: false,
-      width: 150,  // Adjusted width
+      width: 150,
       type: TableComponentEnum.STRING,
     },
     {
       id: "reportName",
       name: "Report Name",
       hidden: false,
-      width: 180,  // Adjusted width
+      width: 180,
       type: TableComponentEnum.STRING,
     },
     {
       id: "documentType",
       name: "Report Type",
       hidden: false,
-      width: 180,  // Adjusted width
+      width: 180,
       type: TableComponentEnum.STRING,
     },
-  
-    {
-      id: "uploadedDate",
-      name: "Uploaded Date",
-      hidden: false,
-      width: 180,  // Consistent width
-      type: TableComponentEnum.DATE,
-    },
+    // {
+    //   id: "uploadedDate",
+    //   name: "Uploaded Date",
+    //   hidden: false,
+    //   width: 180,
+    //   type: TableComponentEnum.DATE,
+    // },
     {
       id: "createdDate",
       name: "Generated Date",
       hidden: false,
-      width: 180,  // Consistent width
+      width: 180,
       type: TableComponentEnum.DATE,
     },
     {
-      id: "action",
+      id: "view",
       name: "View",
       hidden: false,
-      width: 100,  // Keep this smaller for action buttons
+      width: 70,
       type: TableComponentEnum.COMPONENT,
       component: ViewButton,
+    },
+    {
+      id: "download",
+      name: "Download",
+      hidden: false,
+      width: 70,
+      type: TableComponentEnum.COMPONENT,
+      component: DownloadButton,
     }
   ];
 
@@ -313,19 +326,24 @@ export const useContactsController = () => {
       filteredData.map((item) => ({
         sn: item.sn,
         documentId: item.documentId,
-        reportName: `Report ${item.documentId}`, // Add a default report name
+        reportName: `Report ${item.documentId}`,
         documentType: item.documentType,
-        // creatorName: item.creatorName,
-        uploadedDate: item.uploadedDate,
+        // uploadedDate: item.uploadedDate,
         createdDate: item.createdDate,
-        action: {
+        view: {
           component: ViewButton,
           props: {
             onClick: () => handleView(item.documentId)
           }
+        },
+        download: {
+          component: DownloadButton,
+          props: {
+            onClick: () => handleDownload(item.documentId)
+          }
         }
       })),
-    [filteredData, handleView]
+    [filteredData, handleView, handleDownload]
   );
 
   return {
@@ -346,6 +364,7 @@ export const useContactsController = () => {
       changeRows,
       handleSearch,
       handleView,
+      handleDownload,
       getContactInformation: async () => () => {},
     },
     ref: ref as MeasureRefType,
