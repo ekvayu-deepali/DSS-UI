@@ -84,6 +84,28 @@ export default function Dashboard() {
     []
   );
 
+  // Sample recent searches data
+  const recentSearches = useMemo(
+    () => [
+      {
+        id: "1",
+        query: "financial report 2023",
+        time: "1 hour ago",
+      },
+      {
+        id: "2",
+        query: "project timeline",
+        time: "3 hours ago",
+      },
+      {
+        id: "3",
+        query: "budget allocation",
+        time: "2 days ago",
+      },
+    ],
+    []
+  );
+
   // Handler for processing item click
   const handleProcessingItemClick = (id: string) => {
     console.log(`Processing item clicked: ${id}`);
@@ -118,6 +140,7 @@ export default function Dashboard() {
       {/* Processing Dashboard */}
       <ProcessingDashboard
         processingQueue={processingQueue}
+        recentSearches={recentSearches}
         onProcessingItemClick={handleProcessingItemClick}
       />
     </>

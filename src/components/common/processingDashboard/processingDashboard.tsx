@@ -31,6 +31,10 @@ import {
   ItemActions,
   TimeText,
   ActionButton,
+  SearchItemContainer,
+  SearchQueryContainer,
+  SearchQuery,
+  SearchTime,
   FooterLink,
 } from "./processingDashboard.style";
 
@@ -50,6 +54,7 @@ interface SearchItem {
 
 interface ProcessingDashboardProps {
   processingQueue: ProcessingItem[];
+  recentSearches: SearchItem[];
   onProcessingItemClick: (id: string) => void;
 }
 
@@ -60,6 +65,7 @@ interface ProcessingDashboardProps {
  */
 const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
   processingQueue,
+  recentSearches,
   onProcessingItemClick,
 }) => {
   // Helper function to render status icon based on status
@@ -103,10 +109,10 @@ const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
     <DashboardContainer>
       {/* Processing Queue Card */}
       <Card>
-        <CardHeader>
-          <CardTitle>Processing Queue</CardTitle>
-          <CardDescription>Recent document processing activity</CardDescription>
-        </CardHeader>
+        <CardHeader
+          title={<CardTitle>Processing Queue</CardTitle>}
+          subheader={<CardDescription>Recent document processing activity</CardDescription>}
+        />
         <CardContent>
           {processingQueue.map((item) => (
             <QueueItemContainer
@@ -149,6 +155,36 @@ const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
         <CardFooter>
           <FooterLink href="/documents">
             View all documents
+            <Icon
+              icon={faArrowUpRightFromSquare}
+              size="small"
+              color="#1976d2"
+              onlyIcon
+            />
+          </FooterLink>
+        </CardFooter>
+      </Card>
+
+      {/* Recent Searches Card */}
+      <Card>
+        <CardHeader
+          title={<CardTitle>Recent Searches</CardTitle>}
+          subheader={<CardDescription>Your recent document queries</CardDescription>}
+        />
+        <CardContent>
+          {recentSearches.map((search) => (
+            <SearchItemContainer key={search.id}>
+              <SearchQueryContainer>
+                <Icon icon={faSearch} size="small" color="#1976d2" onlyIcon />
+                <SearchQuery>{search.query}</SearchQuery>
+              </SearchQueryContainer>
+              <SearchTime>{search.time}</SearchTime>
+            </SearchItemContainer>
+          ))}
+        </CardContent>
+        <CardFooter>
+          <FooterLink href="#">
+            View search history
             <Icon
               icon={faArrowUpRightFromSquare}
               size="small"

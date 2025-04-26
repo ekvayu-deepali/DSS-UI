@@ -142,6 +142,41 @@ export const ActionButton = styled(Box)(({ theme }) => ({
   justifyContent: "center",
 }));
 
+// Recent searches
+export const SearchItemContainer = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1.5),
+  borderRadius: theme.shape.borderRadius,
+  backgroundColor: theme.palette.action.hover,
+  transition: theme.transitions.create(['background-color']),
+  '&:hover': {
+    backgroundColor: theme.palette.action.selected,
+  },
+  marginBottom: theme.spacing(2),
+  '&:last-child': {
+    marginBottom: 0,
+  },
+}));
+
+export const SearchQueryContainer = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  gap: theme.spacing(1),
+  marginBottom: theme.spacing(0.5),
+}));
+
+export const SearchQuery = styled(Typography)(({ theme }) => ({
+  fontSize: '0.875rem',
+  fontWeight: 500,
+  overflow: 'hidden',
+  textOverflow: 'ellipsis',
+  whiteSpace: 'nowrap',
+}));
+
+export const SearchTime = styled(Typography)(({ theme }) => ({
+  fontSize: '0.75rem',
+  color: theme.palette.text.secondary,
+}));
+
 // Footer link
 export const FooterLink = styled(MuiLink)(({ theme }) => ({
   fontSize: "0.875rem",
