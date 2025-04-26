@@ -1,6 +1,8 @@
 "use client";
 
 import React from "react";
+import dynamic from "next/dynamic";
+import { Box, CircularProgress } from "@mui/material";
 import {
   faFileLines,
   faCheckCircle,
@@ -12,6 +14,29 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import { Icon } from "@/components/common";
+
+// Dynamically import JourneyOverview with SSR disabled
+const JourneyOverview = dynamic(
+  () => import("@/components/pages/dashboard/charts/journeyOverview/journeyOverview"),
+  { ssr: false, loading: () => <ChartLoader height={435} /> }
+);
+
+// Loading component for charts
+const ChartLoader = ({ height }: { height: number }) => (
+  <Box
+    sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: height,
+      bgcolor: 'background.paper',
+      borderRadius: 1,
+      boxShadow: 1
+    }}
+  >
+    <CircularProgress />
+  </Box>
+);
 
 import {
   DashboardContainer,
@@ -31,10 +56,6 @@ import {
   ItemActions,
   TimeText,
   ActionButton,
-  SearchItemContainer,
-  SearchQueryContainer,
-  SearchQuery,
-  SearchTime,
   FooterLink,
 } from "./processingDashboard.style";
 
@@ -46,26 +67,20 @@ interface ProcessingItem {
   time: string;
 }
 
-interface SearchItem {
-  id: string;
-  query: string;
-  time: string;
-}
+
 
 interface ProcessingDashboardProps {
   processingQueue: ProcessingItem[];
-  recentSearches: SearchItem[];
   onProcessingItemClick: (id: string) => void;
 }
 
-/**
+/*
  * ProcessingDashboard Component
  *
  * Displays a dashboard with processing queue and recent searches
  */
 const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
   processingQueue,
-  recentSearches,
   onProcessingItemClick,
 }) => {
   // Helper function to render status icon based on status
@@ -111,7 +126,11 @@ const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
       <Card>
         <CardHeader
           title={<CardTitle>Processing Queue</CardTitle>}
-          subheader={<CardDescription>Recent document processing activity</CardDescription>}
+          subheader={
+            <CardDescription>
+              Recent document processing activity
+            </CardDescription>
+          }
         />
         <CardContent>
           {processingQueue.map((item) => (
@@ -155,36 +174,6 @@ const ProcessingDashboard: React.FC<ProcessingDashboardProps> = ({
         <CardFooter>
           <FooterLink href="/documents">
             View all documents
-            <Icon
-              icon={faArrowUpRightFromSquare}
-              size="small"
-              color="#1976d2"
-              onlyIcon
-            />
-          </FooterLink>
-        </CardFooter>
-      </Card>
-
-      {/* Recent Searches Card */}
-      <Card>
-        <CardHeader
-          title={<CardTitle>Recent Searches</CardTitle>}
-          subheader={<CardDescription>Your recent document queries</CardDescription>}
-        />
-        <CardContent>
-          {recentSearches.map((search) => (
-            <SearchItemContainer key={search.id}>
-              <SearchQueryContainer>
-                <Icon icon={faSearch} size="small" color="#1976d2" onlyIcon />
-                <SearchQuery>{search.query}</SearchQuery>
-              </SearchQueryContainer>
-              <SearchTime>{search.time}</SearchTime>
-            </SearchItemContainer>
-          ))}
-        </CardContent>
-        <CardFooter>
-          <FooterLink href="#">
-            View search history
             <Icon
               icon={faArrowUpRightFromSquare}
               size="small"

@@ -10,22 +10,17 @@ import {
 } from "@mui/material";
 
 // Main container
-export const DashboardContainer = styled(Box)(({ theme }) => ({
-  display: "grid",
-  gridTemplateColumns: "1fr",
-  gap: theme.spacing(4),
-  marginBottom: theme.spacing(4),
-  [theme.breakpoints.up("lg")]: {
-    gridTemplateColumns: "2fr 1fr",
-  },
-}));
+export const DashboardContainer = styled(Box)({
+  width: "100%",
+  height: "100%",
+});
 
 // Card components
-export const Card = styled(MuiCard)(({ theme }) => ({
+export const Card = styled(MuiCard)({
   height: "100%",
   display: "flex",
   flexDirection: "column",
-}));
+});
 
 export const CardHeader = styled(MuiCardHeader)(({ theme }) => ({
   padding: theme.spacing(3),
@@ -75,6 +70,12 @@ export const QueueItemContainer = styled(Box, {
     "&:last-child": {
       marginBottom: 0,
     },
+    ...(isCompleted && {
+      borderLeft: `4px solid ${theme.palette.success.main}`,
+    }),
+    ...(isProcessing && {
+      borderLeft: `4px solid ${theme.palette.warning.main}`,
+    }),
   })
 );
 
@@ -95,15 +96,15 @@ export const IconContainer = styled(Box)(({ theme }) => ({
   justifyContent: "center",
 }));
 
-export const ItemDetails = styled(Box)(({ theme }) => ({
+export const ItemDetails = styled(Box)({
   display: "flex",
   flexDirection: "column",
-}));
+});
 
-export const ItemName = styled(Typography)(({ theme }) => ({
+export const ItemName = styled(Typography)({
   fontSize: "0.875rem",
   fontWeight: 500,
-}));
+});
 
 export const StatusContainer = styled(Box)(({ theme }) => ({
   display: "flex",
@@ -117,12 +118,12 @@ export const StatusText = styled(Typography)(({ theme }) => ({
   color: theme.palette.text.secondary,
 }));
 
-export const ItemActions = styled(Box)(({ theme }) => ({
+export const ItemActions = styled(Box)({
   textAlign: "right",
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-end",
-}));
+});
 
 export const TimeText = styled(Typography)(({ theme }) => ({
   fontSize: "0.75rem",
@@ -140,41 +141,6 @@ export const ActionButton = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
-}));
-
-// Recent searches
-export const SearchItemContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(1.5),
-  borderRadius: theme.shape.borderRadius,
-  backgroundColor: theme.palette.action.hover,
-  transition: theme.transitions.create(['background-color']),
-  '&:hover': {
-    backgroundColor: theme.palette.action.selected,
-  },
-  marginBottom: theme.spacing(2),
-  '&:last-child': {
-    marginBottom: 0,
-  },
-}));
-
-export const SearchQueryContainer = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(1),
-  marginBottom: theme.spacing(0.5),
-}));
-
-export const SearchQuery = styled(Typography)(({ theme }) => ({
-  fontSize: '0.875rem',
-  fontWeight: 500,
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  whiteSpace: 'nowrap',
-}));
-
-export const SearchTime = styled(Typography)(({ theme }) => ({
-  fontSize: '0.75rem',
-  color: theme.palette.text.secondary,
 }));
 
 // Footer link

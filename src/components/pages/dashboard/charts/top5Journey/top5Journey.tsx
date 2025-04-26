@@ -1,8 +1,8 @@
 "use client";
 
 import React, { ReactElement } from "react";
-import { CardContent } from "@mui/material";
 
+import { ChartBox } from "./top5Journey.style";
 import { Top5JournerysController } from "./top5Journey.controller";
 import { ChartContainer, Chart, NoDataFound } from "@/components/common";
 import ChartProvider from "@/components/common/charts/context/chart-context";
@@ -24,10 +24,10 @@ export function Top5Journerys(): ReactElement {
         description="This chart shows the count of top 5 most visited parts of the journey."
         disableAction={enableButton}
       >
-        <CardContent sx={{ px: 0 }}>
+        <ChartBox>
           {chartSeries[0]?.name !== NoDataEnum.NO_DATA ? (
             <Chart
-              height={400}
+              height={300}
               options={chartOptions}
               series={chartSeries}
               type="line"
@@ -35,7 +35,7 @@ export function Top5Journerys(): ReactElement {
           ) : (
             <NoDataFound title="No data found in selected time period" />
           )}
-        </CardContent>
+        </ChartBox>
       </ChartContainer>
     </ChartProvider>
   );

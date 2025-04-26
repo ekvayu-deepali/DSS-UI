@@ -21,7 +21,7 @@ import QuickDetails from "@/components/pages/dashboard/quickDetail";
 // Dynamically import chart components with SSR disabled
 const Top5Journerys = dynamic(
   () => import("@/components/pages/dashboard/charts/top5Journey/top5Journey"),
-  { ssr: false, loading: () => <ChartLoader height={400} /> }
+  { ssr: false, loading: () => <ChartLoader height={300} /> }
 );
 
 const TotalMessage = dynamic(
@@ -30,7 +30,10 @@ const TotalMessage = dynamic(
 );
 
 const JourneyOverview = dynamic(
-  () => import("@/components/pages/dashboard/charts/journeyOverview/journeyOverview"),
+  () =>
+    import(
+      "@/components/pages/dashboard/charts/journeyOverview/journeyOverview"
+    ),
   { ssr: false, loading: () => <ChartLoader height={435} /> }
 );
 
@@ -38,13 +41,13 @@ const JourneyOverview = dynamic(
 const ChartLoader = ({ height }: { height: number }) => (
   <Box
     sx={{
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
       height: height,
-      bgcolor: 'background.paper',
+      bgcolor: "background.paper",
       borderRadius: 1,
-      boxShadow: 1
+      boxShadow: 1,
     }}
   >
     <CircularProgress />
@@ -118,28 +121,6 @@ export default function Dashboard() {
     []
   );
 
-  // Sample recent searches data
-  const recentSearches = useMemo(
-    () => [
-      {
-        id: "1",
-        query: "financial report 2023",
-        time: "1 hour ago",
-      },
-      {
-        id: "2",
-        query: "project timeline",
-        time: "3 hours ago",
-      },
-      {
-        id: "3",
-        query: "budget allocation",
-        time: "2 days ago",
-      },
-    ],
-    []
-  );
-
   // Handler for processing item click
   const handleProcessingItemClick = (id: string) => {
     console.log(`Processing item clicked: ${id}`);
@@ -171,6 +152,28 @@ export default function Dashboard() {
 
       <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
 
+      {/* Processing Queue and Journey Overview Section */}
+      <Grid container spacing={0}>
+        {/* Processing Queue - Takes 2/3 width on large screens */}
+        <Grid item xs={12} lg={8} sx={{ pr: { xs: 0, lg: 2 } }}>
+          <ProcessingDashboard
+            processingQueue={processingQueue}
+            onProcessingItemClick={handleProcessingItemClick}
+          />
+        </Grid>
+
+        {/* Journey Overview Chart - Takes 1/3 width on large screens */}
+        <Grid
+          item
+          xs={12}
+          lg={4}
+          sx={{ pl: { xs: 0, lg: 0 }, mt: { xs: 3, lg: 0 } }}
+        >
+          <JourneyOverview />
+        </Grid>
+      </Grid>
+
+      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
       {/* Charts Section */}
       <Grid container spacing={3}>
         {/* Top 5 Journeys Chart - Takes 2/3 width on large screens */}
@@ -188,15 +191,6 @@ export default function Dashboard() {
           <TotalMessage />
         </Grid>
       </Grid>
-
-      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
-
-      {/* Processing Dashboard */}
-      <ProcessingDashboard
-        processingQueue={processingQueue}
-        recentSearches={recentSearches}
-        onProcessingItemClick={handleProcessingItemClick}
-      />
     </>
   );
 }
