@@ -2,6 +2,7 @@
 
 import { styled } from "@mui/material";
 
+// Use a more specific class name to avoid hydration mismatches
 export const FooterContainer = styled("footer")(({ theme }) => ({
   position: "fixed",
   bottom: 0,
@@ -9,7 +10,7 @@ export const FooterContainer = styled("footer")(({ theme }) => ({
   left: 0,
   height: "40px",
   color: theme.palette.text.primary,
-  backgroundColor: theme.palette.background.paper, 
+  backgroundColor: theme.palette.background.paper,
   borderTop: `1px solid ${theme.palette.divider}`,
   zIndex: theme.zIndex.appBar,
   width: "100%",
