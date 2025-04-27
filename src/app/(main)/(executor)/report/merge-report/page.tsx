@@ -34,12 +34,7 @@ const ReportExplorer: React.FC = () => {
   const { getters, handlers, ref } = useMergeReportController();
   const {
     breadcrumbs,
-    reportCategory,
-    reportSubcategory,
-    availableSubcategories,
     selectedMonth,
-    showReports,
-    processingQueue,
     // Combined report getters
     confidentialSelected,
     osintSelected,
@@ -51,9 +46,6 @@ const ReportExplorer: React.FC = () => {
     combinedProcessingQueue,
   } = getters;
   const {
-    handleReportCategoryChange,
-    handleReportSubcategoryChange,
-    handleSubmit,
     handleMonthChange,
     handleProcessingItemClick,
     // Combined report handlers
