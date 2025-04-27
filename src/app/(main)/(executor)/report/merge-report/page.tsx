@@ -11,11 +11,14 @@ import {
   Select,
   Typography,
   Box,
+  Checkbox,
+  FormControlLabel,
+  Divider,
 } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 
-import { PageHeader, ProcessingDashboard, Spacing, SpacingEnum } from "@/components/common";
+import { PageHeader, ProcessingDashboard } from "@/components/common";
 import {
   useMergeReportController,
   REPORT_CATEGORIES,
@@ -37,6 +40,15 @@ const ReportExplorer: React.FC = () => {
     selectedMonth,
     showReports,
     processingQueue,
+    // Combined report getters
+    confidentialSelected,
+    osintSelected,
+    confidentialSubcategory,
+    osintSubcategory,
+    availableConfidentialSubcategories,
+    availableOsintSubcategories,
+    showCombinedReports,
+    combinedProcessingQueue,
   } = getters;
   const {
     handleReportCategoryChange,
@@ -44,71 +56,196 @@ const ReportExplorer: React.FC = () => {
     handleSubmit,
     handleMonthChange,
     handleProcessingItemClick,
+    // Combined report handlers
+    handleConfidentialCheckboxChange,
+    handleOsintCheckboxChange,
+    handleConfidentialSubcategoryChange,
+    handleOsintSubcategoryChange,
+    handleCombinedSubmit,
   } = handlers;
 
   return (
     <>
-      <PageHeader title="Report Explorer" breadcrumbs={breadcrumbs} />
-      <Card>
-        <CardContent>
-          <FormContainer>
-            <Typography variant="h6" gutterBottom>
-              Select Report Parameters
-            </Typography>
-            <Typography variant="body2" color="textSecondary" paragraph>
-              Choose the report category, subcategory, and month to view reports
-            </Typography>
+      <PageHeader title="Generate Report" breadcrumbs={breadcrumbs} />
 
-            <FormSection>
+      {/* Combined Report Section */}
 
-              <Grid container spacing={3} alignItems="center" paddingTop={"16px"}>
+      <FormContainer>
+        <Card
+          sx={{
+            bgcolor: "#f8fafc",
+            borderRadius: "8px",
+            boxShadow:
+              "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+          }}
+        >
+          <CardContent sx={{ p: 3 }}>
+            <Grid container spacing={4}>
+              {/* Left Column */}
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontWeight: 500, color: "#334155" }}
+                >
+                  Intelligence Sources
+                </Typography>
 
-                <Grid item xs={12} sm={6} md={3}>
+                <Box
+                  sx={{
+                    mt: 2,
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: 3,
+                  }}
+                >
+                  {/* Confidential Intelligence */}
+                  <Box>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={confidentialSelected}
+                          onChange={(e) =>
+                            handleConfidentialCheckboxChange(e.target.checked)
+                          }
+                          sx={{
+                            color: "#94a3b8",
+                            "&.Mui-checked": {
+                              color: "#3b82f6",
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontWeight: 500, color: "#334155" }}>
+                          Confidential Intelligence
+                        </Typography>
+                      }
+                    />
 
-                  <FormControl fullWidth>
-                    <InputLabel id="report-category-label">
-                      Report Category
-                    </InputLabel>
-                    <Select
-                      labelId="report-category-label"
-                      id="report-category"
-                      value={reportCategory}
-                      label="Report Category"
-                      onChange={handleReportCategoryChange}
-                    >
-                      {REPORT_CATEGORIES.map((category) => (
-                        <MenuItem key={category.value} value={category.value}>
-                          {category.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <FormControl fullWidth>
-                    <InputLabel id="report-subcategory-label">
-                      Report Subcategory
-                    </InputLabel>
-                    <Select
-                      labelId="report-subcategory-label"
-                      id="report-subcategory"
-                      value={reportSubcategory}
-                      label="Report Subcategory"
-                      onChange={handleReportSubcategoryChange}
-                      disabled={!reportCategory}
-                    >
-                      {availableSubcategories.map((subcategory) => (
-                        <MenuItem
-                          key={subcategory.value}
-                          value={subcategory.value}
-                        >
-                          {subcategory.label}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
+                    {confidentialSelected && (
+                      <Box sx={{ ml: 4, mt: 1 }}>
+                        <FormControl fullWidth variant="outlined" size="small">
+                          <InputLabel
+                            id="confidential-category-label"
+                            sx={{ color: "#64748b" }}
+                          >
+                            Confidential Category
+                          </InputLabel>
+                          <Select
+                            labelId="confidential-category-label"
+                            value={confidentialSubcategory}
+                            onChange={handleConfidentialSubcategoryChange}
+                            label="Confidential Category"
+                            sx={{
+                              bgcolor: "white",
+                              ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#e2e8f0",
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#cbd5e1",
+                              },
+                              "&.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "#3b82f6",
+                                },
+                            }}
+                          >
+                            {availableConfidentialSubcategories.map(
+                              (subcategory) => (
+                                <MenuItem
+                                  key={subcategory.value}
+                                  value={subcategory.value}
+                                >
+                                  {subcategory.label}
+                                </MenuItem>
+                              )
+                            )}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    )}
+                  </Box>
+
+                  {/* OSINT Intelligence */}
+                  <Box>
+                    <FormControlLabel
+                      control={
+                        <Checkbox
+                          checked={osintSelected}
+                          onChange={(e) =>
+                            handleOsintCheckboxChange(e.target.checked)
+                          }
+                          sx={{
+                            color: "#94a3b8",
+                            "&.Mui-checked": {
+                              color: "#3b82f6",
+                            },
+                          }}
+                        />
+                      }
+                      label={
+                        <Typography sx={{ fontWeight: 500, color: "#334155" }}>
+                          OSINT Intelligence
+                        </Typography>
+                      }
+                    />
+
+                    {osintSelected && (
+                      <Box sx={{ ml: 4, mt: 1 }}>
+                        <FormControl fullWidth variant="outlined" size="small">
+                          <InputLabel
+                            id="osint-category-label"
+                            sx={{ color: "#64748b" }}
+                          >
+                            OSINT Category
+                          </InputLabel>
+                          <Select
+                            labelId="osint-category-label"
+                            value={osintSubcategory}
+                            onChange={handleOsintSubcategoryChange}
+                            label="OSINT Category"
+                            sx={{
+                              bgcolor: "white",
+                              ".MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#e2e8f0",
+                              },
+                              "&:hover .MuiOutlinedInput-notchedOutline": {
+                                borderColor: "#cbd5e1",
+                              },
+                              "&.Mui-focused .MuiOutlinedInput-notchedOutline":
+                                {
+                                  borderColor: "#3b82f6",
+                                },
+                            }}
+                          >
+                            {availableOsintSubcategories.map((subcategory) => (
+                              <MenuItem
+                                key={subcategory.value}
+                                value={subcategory.value}
+                              >
+                                {subcategory.label}
+                              </MenuItem>
+                            ))}
+                          </Select>
+                        </FormControl>
+                      </Box>
+                    )}
+                  </Box>
+                </Box>
+              </Grid>
+
+              {/* Right Column */}
+              <Grid item xs={12} md={6}>
+                <Typography
+                  variant="h6"
+                  gutterBottom
+                  sx={{ fontWeight: 500, color: "#334155" }}
+                >
+                  Time Period
+                </Typography>
+
+                <Box sx={{ mt: 2 }}>
                   <LocalizationProvider dateAdapter={AdapterLuxon}>
                     <DatePicker
                       label="Select Month"
@@ -119,50 +256,112 @@ const ReportExplorer: React.FC = () => {
                       slotProps={{
                         textField: {
                           fullWidth: true,
+                          size: "small",
+                          sx: {
+                            bgcolor: "white",
+                            ".MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#e2e8f0",
+                            },
+                            "&:hover .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#cbd5e1",
+                            },
+                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                              borderColor: "#3b82f6",
+                            },
+                          },
                         },
                       }}
                     />
                   </LocalizationProvider>
-                </Grid>
-                <Grid item xs={12} sm={6} md={3}>
-                  <Box
-                    sx={{
-                      height: "56px",
-                      display: "flex",
-                      alignItems: "center",
-                    }}
-                  >
+
+                  <Box sx={{ mt: 4 }}>
                     <SubmitButton
                       variant="contained"
-                      color="primary"
-                      onClick={handleSubmit}
-                      disabled={!reportCategory || !reportSubcategory}
+                      onClick={handleCombinedSubmit}
+                      disabled={
+                        (!confidentialSelected && !osintSelected) ||
+                        (confidentialSelected && !confidentialSubcategory) ||
+                        (osintSelected && !osintSubcategory)
+                      }
                       fullWidth
+                      sx={{
+                        bgcolor: "#3b82f6",
+                        "&:hover": {
+                          bgcolor: "#2563eb",
+                        },
+                        "&.Mui-disabled": {
+                          bgcolor: "#e2e8f0",
+                          color: "#94a3b8",
+                        },
+                        borderRadius: "6px",
+                        textTransform: "none",
+                        fontWeight: 500,
+                        py: 1,
+                        boxShadow:
+                          "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+                      }}
                     >
-                      View Reports
+                      Generate Report
                     </SubmitButton>
                   </Box>
-                </Grid>
+                </Box>
               </Grid>
-            </FormSection>
-          </FormContainer>
-        </CardContent>
-      </Card>
+            </Grid>
+          </CardContent>
+        </Card>
+      </FormContainer>
 
-      {showReports && (
+      {/* Combined Reports Results */}
+      {showCombinedReports && (
         <ReportContainer>
-          <Card>
-            <CardContent>
-              <Typography variant="h6" gutterBottom>
-                {reportCategory === "confidential" ? "Confidential" : "OSINT"}{" "}
-                Reports - {reportSubcategory.replace(/-/g, " ")}
-              </Typography>
-              <Typography variant="body2" color="textSecondary" paragraph>
-                {selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : ""}
-              </Typography>
-              <Box sx={{ mt: 2 }} ref={ref.dashboardRef}>
+          <Card
+            sx={{
+              bgcolor: "#f8fafc",
+              borderRadius: "8px",
+              boxShadow:
+                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+              mt: 3,
+            }}
+          >
+            <CardContent sx={{ p: 3 }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  mb: 2,
+                }}
+              >
+                <Box>
+                  <Typography
+                    variant="h6"
+                    sx={{ fontWeight: 600, color: "#334155" }}
+                  >
+                    Combined Intelligence Report
+                  </Typography>
+                  <Typography variant="body2" sx={{ color: "#64748b" }}>
+                    {selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : ""}
+                  </Typography>
+                </Box>
+                <Box>
+                  <Typography
+                    variant="caption"
+                    sx={{
+                      color: "#3b82f6",
+                      bgcolor: "#eff6ff",
+                      px: 2,
+                      py: 0.5,
+                      borderRadius: "16px",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Generated
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ mt: 3 }}>
                 <ProcessingDashboard
-                  processingQueue={processingQueue}
+                  processingQueue={combinedProcessingQueue}
                   onProcessingItemClick={handleProcessingItemClick}
                 />
               </Box>
