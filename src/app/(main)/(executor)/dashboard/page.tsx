@@ -148,7 +148,7 @@ export default function Dashboard() {
           </Grid>
         ))}
       </Grid>
-      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
+      <Spacing spacing={1} variant={SpacingEnum.VERTICAL} />
       {/* Charts Section */}
       <Grid container spacing={3}>
         {/* Top 5 Journeys Chart - Takes 2/3 width on large screens */}
@@ -161,7 +161,7 @@ export default function Dashboard() {
           <TotalMessage />
         </Grid>
       </Grid>
-      <Spacing spacing={4} variant={SpacingEnum.VERTICAL} />
+      <Spacing spacing={1} variant={SpacingEnum.VERTICAL} />
       {/* Processing Queue and Journey Overview Section */}
       <Grid container spacing={0}>
         {/* Processing Queue - Takes 2/3 width on large screens */}

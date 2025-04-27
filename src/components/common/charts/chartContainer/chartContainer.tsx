@@ -67,7 +67,7 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
         subheader={description && <ChartDescription>{description}</ChartDescription>}
         action={
           <>
-            {disableAction && (
+            {/* {disableAction && (
               <Icon
                 icon={faEllipsisVertical}
                 onClick={handleClick}
@@ -116,7 +116,7 @@ export function ChartContainer(props: IChartsContainerProps): JSX.Element {
                   "Download Data",
                 </MenuItem>
               )}
-            </Menu>
+            </Menu> */}
           </>
         }
       />
