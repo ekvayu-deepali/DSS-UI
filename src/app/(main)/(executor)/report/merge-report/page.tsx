@@ -14,6 +14,8 @@ import {
   Checkbox,
   FormControlLabel,
   Divider,
+  useTheme,
+  alpha,
 } from "@mui/material";
 import { AdapterLuxon } from "@mui/x-date-pickers/AdapterLuxon";
 import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
@@ -21,17 +23,16 @@ import { LocalizationProvider, DatePicker } from "@mui/x-date-pickers";
 import { PageHeader, ProcessingDashboard } from "@/components/common";
 import {
   useMergeReportController,
-  REPORT_CATEGORIES,
 } from "./merge-report.controller";
 import {
   FormContainer,
-  FormSection,
   SubmitButton,
   ReportContainer,
 } from "./merge-report.style";
 
 const ReportExplorer: React.FC = () => {
-  const { getters, handlers, ref } = useMergeReportController();
+  const theme = useTheme();
+  const { getters, handlers } = useMergeReportController();
   const {
     breadcrumbs,
     selectedMonth,
@@ -65,10 +66,9 @@ const ReportExplorer: React.FC = () => {
       <FormContainer>
         <Card
           sx={{
-            bgcolor: "#f8fafc",
+            bgcolor: theme.palette.background.paper,
             borderRadius: "8px",
-            boxShadow:
-              "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+            boxShadow: theme.shadows[1],
           }}
         >
           <CardContent sx={{ p: 3 }}>
@@ -78,7 +78,7 @@ const ReportExplorer: React.FC = () => {
                 <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{ fontWeight: 500, color: "#334155" }}
+                  sx={{ fontWeight: 500, color: theme.palette.text.primary }}
                 >
                   Intelligence Sources
                 </Typography>
@@ -100,16 +100,11 @@ const ReportExplorer: React.FC = () => {
                           onChange={(e) =>
                             handleConfidentialCheckboxChange(e.target.checked)
                           }
-                          sx={{
-                            color: "#94a3b8",
-                            "&.Mui-checked": {
-                              color: "#3b82f6",
-                            },
-                          }}
+                          color="primary"
                         />
                       }
                       label={
-                        <Typography sx={{ fontWeight: 500, color: "#334155" }}>
+                        <Typography sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
                           Confidential Intelligence
                         </Typography>
                       }
@@ -118,10 +113,7 @@ const ReportExplorer: React.FC = () => {
                     {confidentialSelected && (
                       <Box sx={{ ml: 4, mt: 1 }}>
                         <FormControl fullWidth variant="outlined" size="small">
-                          <InputLabel
-                            id="confidential-category-label"
-                            sx={{ color: "#64748b" }}
-                          >
+                          <InputLabel id="confidential-category-label">
                             Confidential Category
                           </InputLabel>
                           <Select
@@ -129,19 +121,6 @@ const ReportExplorer: React.FC = () => {
                             value={confidentialSubcategory}
                             onChange={handleConfidentialSubcategoryChange}
                             label="Confidential Category"
-                            sx={{
-                              bgcolor: "white",
-                              ".MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#e2e8f0",
-                              },
-                              "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#cbd5e1",
-                              },
-                              "&.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                {
-                                  borderColor: "#3b82f6",
-                                },
-                            }}
                           >
                             {availableConfidentialSubcategories.map(
                               (subcategory) => (
@@ -168,16 +147,11 @@ const ReportExplorer: React.FC = () => {
                           onChange={(e) =>
                             handleOsintCheckboxChange(e.target.checked)
                           }
-                          sx={{
-                            color: "#94a3b8",
-                            "&.Mui-checked": {
-                              color: "#3b82f6",
-                            },
-                          }}
+                          color="primary"
                         />
                       }
                       label={
-                        <Typography sx={{ fontWeight: 500, color: "#334155" }}>
+                        <Typography sx={{ fontWeight: 500, color: theme.palette.text.primary }}>
                           OSINT Intelligence
                         </Typography>
                       }
@@ -186,10 +160,7 @@ const ReportExplorer: React.FC = () => {
                     {osintSelected && (
                       <Box sx={{ ml: 4, mt: 1 }}>
                         <FormControl fullWidth variant="outlined" size="small">
-                          <InputLabel
-                            id="osint-category-label"
-                            sx={{ color: "#64748b" }}
-                          >
+                          <InputLabel id="osint-category-label">
                             OSINT Category
                           </InputLabel>
                           <Select
@@ -197,19 +168,6 @@ const ReportExplorer: React.FC = () => {
                             value={osintSubcategory}
                             onChange={handleOsintSubcategoryChange}
                             label="OSINT Category"
-                            sx={{
-                              bgcolor: "white",
-                              ".MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#e2e8f0",
-                              },
-                              "&:hover .MuiOutlinedInput-notchedOutline": {
-                                borderColor: "#cbd5e1",
-                              },
-                              "&.Mui-focused .MuiOutlinedInput-notchedOutline":
-                                {
-                                  borderColor: "#3b82f6",
-                                },
-                            }}
                           >
                             {availableOsintSubcategories.map((subcategory) => (
                               <MenuItem
@@ -232,7 +190,7 @@ const ReportExplorer: React.FC = () => {
                 <Typography
                   variant="h6"
                   gutterBottom
-                  sx={{ fontWeight: 500, color: "#334155" }}
+                  sx={{ fontWeight: 500, color: theme.palette.text.primary }}
                 >
                   Time Period
                 </Typography>
@@ -249,18 +207,6 @@ const ReportExplorer: React.FC = () => {
                         textField: {
                           fullWidth: true,
                           size: "small",
-                          sx: {
-                            bgcolor: "white",
-                            ".MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#e2e8f0",
-                            },
-                            "&:hover .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#cbd5e1",
-                            },
-                            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-                              borderColor: "#3b82f6",
-                            },
-                          },
                         },
                       }}
                     />
@@ -276,21 +222,12 @@ const ReportExplorer: React.FC = () => {
                         (osintSelected && !osintSubcategory)
                       }
                       fullWidth
+                      color="primary"
                       sx={{
-                        bgcolor: "#3b82f6",
-                        "&:hover": {
-                          bgcolor: "#2563eb",
-                        },
-                        "&.Mui-disabled": {
-                          bgcolor: "#e2e8f0",
-                          color: "#94a3b8",
-                        },
                         borderRadius: "6px",
                         textTransform: "none",
                         fontWeight: 500,
                         py: 1,
-                        boxShadow:
-                          "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
                       }}
                     >
                       Generate Report
@@ -308,10 +245,9 @@ const ReportExplorer: React.FC = () => {
         <ReportContainer>
           <Card
             sx={{
-              bgcolor: "#f8fafc",
+              bgcolor: theme.palette.background.paper,
               borderRadius: "8px",
-              boxShadow:
-                "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+              boxShadow: theme.shadows[1],
               mt: 3,
             }}
           >
@@ -327,11 +263,11 @@ const ReportExplorer: React.FC = () => {
                 <Box>
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: 600, color: "#334155" }}
+                    sx={{ fontWeight: 600, color: theme.palette.text.primary }}
                   >
                     Combined Intelligence Report
                   </Typography>
-                  <Typography variant="body2" sx={{ color: "#64748b" }}>
+                  <Typography variant="body2" sx={{ color: theme.palette.text.secondary }}>
                     {selectedMonth ? selectedMonth.toFormat("MMMM yyyy") : ""}
                   </Typography>
                 </Box>
@@ -339,8 +275,10 @@ const ReportExplorer: React.FC = () => {
                   <Typography
                     variant="caption"
                     sx={{
-                      color: "#3b82f6",
-                      bgcolor: "#eff6ff",
+                      color: theme.palette.primary.main,
+                      bgcolor: theme.palette.mode === 'dark'
+                        ? alpha(theme.palette.primary.main, 0.2)
+                        : alpha(theme.palette.primary.main, 0.1),
                       px: 2,
                       py: 0.5,
                       borderRadius: "16px",
